@@ -1,4 +1,8 @@
 # Byte-compiled / optimized / DLL files
+*_local.bash
+daou_*
+*.swp
+
 __pycache__/
 *.py[cod]
 *$py.class
