@@ -27,3 +27,12 @@
 * 설치 대상 : 하나의 표준 파티션으로 재설정 (/, 8192MiB, xfs, /dev/sda)
 * User : CentOS 설치시 centos 사용자를 생성 한다.
 
+## 작업 순서
+
+* initialize.bash : CentOS 초기 환경 설정
+* make_image.bash : 이미지 작성
+* create_image.bash  : 배포를 위한 이미지 생성
+
+* convert_image.bash : 이미지 포맷 변경
+* register_image.bash : 이미지를 OpenStack에 등록
+

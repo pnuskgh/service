@@ -2,19 +2,24 @@
 
 ## History
 
-* 2017.03.10 ~ 2017.03.10, Version 0.00.002
+* 2017.03.10 ~ 2017.03.10, Version 0.00.003
 
-## Environment
+## 작업 환경 설정
+
+yum -y install epel-release  
+yum -y git  
+
+cd /  
+git clone https://github.com/pnuskgh/service.git  
+source /service/bin/bash_profile.bash  
+
+## CentOS 7 환경 설정
 
 * CentOS 7
 * Python 2.7.5
 * Git 1.8.3.1
 
-## ~/.bash_profile 설정
-
-source /service/bin/bash_profile.bash
-
-## Git
+## Git 주요 명령어
 
 cd /  
 git clone https://github.com/pnuskgh/service.git  

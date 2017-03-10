@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : config.bash, Version 0.00.006
-###     프로그램 설명   : Linux bash Script의 설정 파일
+###     프로그램 명     : create_image.bash, Version 0.00.001
+###     프로그램 설명   : 이미지를 최종 정리 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2013.05.12 ~ 2017.03.10
+###     작성일          : 2017.01.06 ~ 2017.01.06
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -14,28 +14,39 @@
 ### ================================================================================================
 
 ### ------------------------------------------------------------------------------------------------
-###     Local 환경 변수 설정
+###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
-if [[ -f ${BIN_DIR}/config_pre_local.bash ]]; then
-    source ${BIN_DIR}/config_pre_local.bash > /dev/null 2>&1
-fi
+source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
+source ${UTIL_DIR}/common.bash > /dev/null 2>&1
+
+WORKING_DIR=`dirname $0`
+WORKING_DIR=${WORKING_DIR}/..
+source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
-###     환경 변수 설정
+###     이미지를 최종 정리 한다.
 ### ------------------------------------------------------------------------------------------------
-if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
-    export HOME_SERVICE="/service"
-fi
+rm -rf /var/cache/yum/*
 
-BIN_DIR=${HOME_SERVICE}/bin
-UTIL_DIR=${HOME_SERVICE}/util
+history -c
+rm -f ~root/.bash_history
+rm -f ~root/.ssh/authorized_keys
+rm -f ~centos/.bash_history
+rm -f ~centos/.ssh/authorized_keys
 
-### ------------------------------------------------------------------------------------------------
-###     Local 환경 변수 설정
-### ------------------------------------------------------------------------------------------------
-if [[ -f ${BIN_DIR}/config_local.bash ]]; then
-    source ${BIN_DIR}/config_local.bash > /dev/null 2>&1
-fi
+rm -fr /var/lib/cloud/*
+
+#--- 사용자의 비밀번호를 제거 한다.
+passwd -d root
+passwd -d centos
+
+rm -rf /service
+#--- shutdown -h now
+
+echo " "
+echo " "
+echo "shutdown -h now 명령을 사용하여 종료 하세요."
+echo " "
 
 ### ================================================================================================
 

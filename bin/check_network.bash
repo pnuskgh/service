@@ -23,6 +23,9 @@ if [[ $? = 0 ]]; then
 fi
 
 cd /etc/sysconfig/network-scripts
+#--- eth0 : Hyper-V 가상 서버, ifcfg-enp0s3 : Virtual Box 가상 서버
+ifdown ifcfg-eth0
+ifup   ifcfg-eth0
 ifdown ifcfg-enp0s3
 ifup   ifcfg-enp0s3
 
