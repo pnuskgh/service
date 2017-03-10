@@ -31,6 +31,7 @@ rm -rf /var/cache/yum/*
 history -c
 rm -f ~root/.bash_history
 rm -f ~root/.ssh/authorized_keys
+rm -f ~root/.gitconfig
 rm -f ~centos/.bash_history
 rm -f ~centos/.ssh/authorized_keys
 

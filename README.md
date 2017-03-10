@@ -11,6 +11,8 @@ yum -y git
 
 cd /  
 git clone https://github.com/pnuskgh/service.git  
+git config --global push.default simple  
+
 source /service/bin/bash_profile.bash  
 
 ## CentOS 7 환경 설정
