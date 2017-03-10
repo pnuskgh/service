@@ -7,12 +7,12 @@
 ## 작업 환경 설정
 
 yum -y install epel-release  
-yum -y git  
+yum -y install git  
 
 cd /  
 git clone https://github.com/pnuskgh/service.git  
-git config --global user.name "Mountain Lover"
-git config --global user.email consult@jopenbusiness.com
+git config --global user.name "Mountain Lover"  
+git config --global user.email consult@jopenbusiness.com  
 git config --global push.default simple  
 
 source /service/bin/bash_profile.bash  
@@ -35,4 +35,8 @@ git commit -m '~'
 git push  
 
 git pull  
+
+## Bash 매뉴얼
+
+* https://github.com/denysdovhan/bash-handbook/blob/master/translations/ko-KR/README.md
 
