@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : config.bash, Version 0.00.001
-###     프로그램 설명   : Bash Script를 실행하기 위한 환경을 설정 한다.
+###     프로그램 명     : scp_image.bash, Version 0.00.001
+###     프로그램 설명   : Image 파일을 복사 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.04 ~ 2017.01.04
+###     작성일          : 2017.03.10 ~ 2017.03.10
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -13,11 +13,15 @@
 ###     All rights reserved.
 ### ================================================================================================
 
-BACKUP_DIR=${WORKING_DIR}/backup
-TEMPLATE_DIR=${WORKING_DIR}/template
-WORK_DIR=/work
-
 TIMESTAMP=`date +%Y%m%d_%H%M%S`
+
+TARGET_SERVER=$1
+TARGET_FOLDER=$2
+
+for FILE_NAME in `ls *.qcow2`; do
+    scp ${FILE_NAME} ${TARGET_SERVER}:${TARGET_FOLDER}
+    mv ${FILE_NAME} ${FILE_NAME}_${TIMESTAMP}
+done
 
 ### ================================================================================================
 

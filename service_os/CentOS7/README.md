@@ -34,5 +34,6 @@
 * create_image.bash  : 배포를 위한 이미지 생성
 
 * convert_image.bash : 이미지 포맷 변경
+* scp_image.bash      : 이미지 복사
 * register_image.bash : 이미지를 OpenStack에 등록
 

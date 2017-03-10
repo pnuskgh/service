@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : convert_image.bash, Version 0.00.001
-###     프로그램 설명   : VirtualBox의 vdi 이미지를 qcow2 이미지로 변환 한다.
+###     프로그램 명     : convert_image.bash, Version 0.00.002
+###     프로그램 설명   : 이미지를 qcow2 이미지로 변환 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.04 ~ 2017.01.04
+###     작성일          : 2017.01.04 ~ 2017.03.10
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -14,17 +14,48 @@
 ### ================================================================================================
 
 ### ------------------------------------------------------------------------------------------------
-###     VirtualBox의 vdi 이미지를 qcow2 이미지로 변환 한다.
-###         IDC_DOC_manage 장비에서 작업 한다.
+###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
-yum -y install libguestfs-tools
+source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
+source ${UTIL_DIR}/common.bash > /dev/null 2>&1
 
-mkdir -p /data/osimage/CentOS7/convert
+WORKING_DIR=`dirname $0`
+WORKING_DIR=${WORKING_DIR}/..
+source ${WORKING_DIR}/bin/config.bash
 
-#--- 사전에 /data/osimage/CentOS7/convert/ 폴더에 CentOS7_64.vdi 파일을 업로드 하여야 한다.
-cd /data/osimage/CentOS7/convert
-rm CentOS7_64.qcow2
-qemu-img convert -c -f vdi -O qcow2 CentOS7_64.vdi CentOS7_64.qcow2
+### ------------------------------------------------------------------------------------------------
+###     이미지 변환을 위한 프로그램을 설치 한다.
+### ------------------------------------------------------------------------------------------------
+ZZTEMP=`yum list installed | grep libguestfs-tools.noarch | wc -l`
+if [[ "${ZZTEMP}" = "0" ]]; then
+    yum -y install libguestfs-tools
+fi
+
+### ------------------------------------------------------------------------------------------------
+###     이미지를 변환 한다.
+###         https://en.wikibooks.org/wiki/QEMU/Images
+###         Convert-VHD -Path CentOS_7_64.vhdx -DestinationPath CentOS_7_64.vhd
+### ------------------------------------------------------------------------------------------------
+cd ${WORK_DIR}/images
+
+if [[ -f CentOS_7_64.qcow2 ]]; then
+    mv CentOS_7_64.qcow2 CentOS_7_64.qcow2_${TIMESTAMP}
+fi
+
+if [[ -f CentOS_7_64.vhd ]]; then
+    qemu-img convert -c -f vpc -O qcow2 CentOS_7_64.vhd CentOS_7_64.qcow2
+    mv CentOS_7_64.vhd CentOS_7_64.vhd_${TIMESTAMP}
+fi
+
+if [[ -f CentOS_7_64.vhdx ]]; then
+    qemu-img convert -c -f vhdx -O qcow2 CentOS_7_64.vhdx CentOS_7_64.qcow2
+    mv CentOS_7_64.vhdx CentOS_7_64.vhdx_${TIMESTAMP}
+fi
+
+if [[ -f CentOS_7_64.vdi ]]; then
+    qemu-img convert -c -f vdi -O qcow2 CentOS_7_64.vdi CentOS_7_64.qcow2
+    mv CentOS_7_64.vdi CentOS_7_64.vdi_${TIMESTAMP}
+fi
 
 ### ================================================================================================
 
