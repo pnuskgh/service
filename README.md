@@ -16,6 +16,7 @@ source /service/bin/bash_profile.bash
 
 ## Git
 
+cd /  
 git clone https://github.com/pnuskgh/service.git  
 
 git status  
