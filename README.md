@@ -8,12 +8,14 @@
 
 yum -y install epel-release  
 yum -y install git  
-
-cd /  
-git clone https://github.com/pnuskgh/service.git  
 git config --global user.name "Mountain Lover"  
 git config --global user.email consult@jopenbusiness.com  
 git config --global push.default simple  
+
+cd /  
+git clone https://github.com/pnuskgh/service.git  
+cd /service
+git checkout develop
 
 source /service/bin/bash_profile.bash  
 
