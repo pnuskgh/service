@@ -14,8 +14,8 @@ git config --global push.default simple
 
 cd /  
 git clone https://github.com/pnuskgh/service.git  
-cd /service
-git checkout develop
+cd /service  
+git checkout develop  
 
 source /service/bin/bash_profile.bash  
 
