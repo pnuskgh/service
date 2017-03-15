@@ -35,9 +35,12 @@ yum -y install crudini
 ###         cloud-utils-growpart : volume 사이즈 자동 조정
 ### ------------------------------------------------------------------------------------------------
 yum -y install acpid cloud-init cloud-utils cloud-utils-growpart dracut-kernel
+systemctl enable acpid
 
 backup /etc/cloud cloud.cfg
 # /usr/bin/cp -f ${TEMPLATE_DIR}/cloud.cfg /etc/cloud
+# sed -i 's/disable_root: 0/disable_root: 1/g' /etc/cloud/cloud.cfg
+# sed -i 's/ssh_pwauth: 1/ssh_pwauth: 0/g' /etc/cloud/cloud.cfg
 chmod 664 /etc/cloud/cloud.cfg
 
 ### ------------------------------------------------------------------------------------------------
@@ -80,7 +83,9 @@ chmod 644 /etc/sysconfig/network
 ###         console=tty0 console=ttyS0,115200n8 추가
 ### ------------------------------------------------------------------------------------------------
 backup /etc/default grub
-/usr/bin/cp -f ${TEMPLATE_DIR}/grub /etc/default/grub
+# /usr/bin/cp -f ${TEMPLATE_DIR}/grub /etc/default/grub
+sed -i 's/GRUB_CMDLINE_LINUX/#GRUB_CMDLINE_LINUX/g' /etc/default/grub
+echo 'GRUB_CMDLINE_LINUX="crashkernel=auto console=tty0 console=ttyS0,115200n8"' >> /etc/default/grub
 chmod 644 /etc/default/grub
 
 grub2-mkconfig -o /boot/grub2/grub.cfg

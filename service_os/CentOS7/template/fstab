@@ -6,5 +6,6 @@
 # Accessible filesystems, by reference, are maintained under '/dev/disk'
 # See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
 #
-/dev/vda1               /                       xfs     defaults        0 0
+# /dev/vda1               /                       xfs     defaults        0 0
+/dev/vda1               /                       ext4    defaults        0 0
 
