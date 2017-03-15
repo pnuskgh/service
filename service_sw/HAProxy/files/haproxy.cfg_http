@@ -1,0 +1,97 @@
+### ================================================================================================
+###     프로그램 명     : haproxy.cfg, Version 0.00.001
+###     프로그램 설명   : HAProxy 설정
+###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          : 2017.02.21 ~ 2017.02.21
+### ----[History 관리]------------------------------------------------------------------------------
+###     수정자         	:
+###     수정일         	:
+###     수정 내용      	:
+### --- [Copyright] --------------------------------------------------------------------------------
+###     Copyright (c) 1995~2017 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ================================================================================================
+#--- http://cbonte.github.io/haproxy-dconv/configuration-1.5.html
+
+### ------------------------------------------------------------------------------------------------
+### Global settings                    : 전체에 적용되는 설정
+###     log         127.0.0.1 local2
+###
+###     chroot      /var/lib/haproxy   : Current directory 지정
+###     pidfile     /var/run/haproxy.pid         : PID 파일 위치
+###     maxconn     4000               : 최대 connection 갯수
+###     user        haproxy            : HAProxy 사용자
+###     group       haproxy            : HAProxy 그룹
+###     daemon                         : Daemon으로 실행
+###
+###     stats socket /var/lib/haproxy/stats      : HAProxy용 socket
+### ------------------------------------------------------------------------------------------------
+global
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    stats socket /var/lib/haproxy/stats
+
+### ------------------------------------------------------------------------------------------------
+### Defaults settings                  : listen, frontend, backend에 적용되는 설정
+###     mode                    http   : http mode (http, https, tcp, udp)
+###     log                     global : 
+###     option                  httplog:
+###     option                  dontlognull      : 
+###     option http-server-close       :
+###     option forwardfor       except 127.0.0.0/8         : 
+###     option                  redispatch                 : 
+###     retries                 3      : 
+###     timeout http-request    10s    : 
+###     timeout queue           1m     : 
+###     timeout connect         10s    : 
+###     timeout client          1m     : 
+###     timeout server          1m     : 
+###     timeout http-keep-alive 10s    : 
+###     timeout check           10s    : 
+###     maxconn                 3000   : 최대 connection 갯수
+### ------------------------------------------------------------------------------------------------
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+### ------------------------------------------------------------------------------------------------
+### Frontend settings                  : Frontend 설정
+###     default_backend             http-servers
+### ------------------------------------------------------------------------------------------------
+frontend http-front *:80
+    default_backend             http-servers
+
+### ------------------------------------------------------------------------------------------------
+### HTTP backend settings              : HTTP Backend 설정
+###     balance     roundrobin
+###     server  web01 192.168.0.13:80 check
+###     server  web02 192.168.0.14:80 check
+### ------------------------------------------------------------------------------------------------
+backend http-servers
+    balance     roundrobin
+    server  web01 192.168.0.13:80 check
+    server  web02 192.168.0.14:80 check
+
+### ================================================================================================
+
