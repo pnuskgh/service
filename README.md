@@ -2,7 +2,7 @@
 
 ## History
 
-* 2017.03.10 ~ 2017.03.15, Version 0.00.008
+* 2017.03.10 ~ 2017.03.15, Version 0.00.016
 
 ## 작업 환경 설정
 
@@ -11,6 +11,8 @@ yum -y install git
 git config --global user.name "Mountain Lover"  
 git config --global user.email consult@jopenbusiness.com  
 git config --global push.default simple  
+git config --global --list  
+git config --list  
 
 cd /  
 git clone https://github.com/pnuskgh/service.git  
