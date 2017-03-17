@@ -36,7 +36,7 @@ if [[ $# = 3 ]]; then
     PROJECT_ID=$3
 elif [[ $# = 2 ]]; then
     YEAR_MONTH=$1
-    FLAG_PUBLIC=$1
+    FLAG_PUBLIC=$2
 elif [[ $# = 1 ]]; then
     YEAR_MONTH=$1
 else
