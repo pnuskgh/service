@@ -15,7 +15,6 @@
 
 BACKUP_DIR=${WORKING_DIR}/backup
 TEMPLATE_DIR=${WORKING_DIR}/template
-WORK_DIR=/work
 
 TIMESTAMP=`date +%Y%m%d_%H%M%S`
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : convert_image.bash, Version 0.00.002
+###     프로그램 명     : convert_image.bash, Version 0.00.003
 ###     프로그램 설명   : 이미지를 qcow2 이미지로 변환 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.04 ~ 2017.03.10
+###     작성일          : 2017.01.04 ~ 2017.03.17
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -14,14 +14,13 @@
 ### ================================================================================================
 
 ### ------------------------------------------------------------------------------------------------
-###     실행 환경을 설정 한다.
+###     Include
 ### ------------------------------------------------------------------------------------------------
-source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
-source ${UTIL_DIR}/common.bash > /dev/null 2>&1
+if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
+    export HOME_SERVICE="/service"
+fi
 
-WORKING_DIR=`dirname $0`
-WORKING_DIR=${WORKING_DIR}/..
-source ${WORKING_DIR}/bin/config.bash
+source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 
 ### ------------------------------------------------------------------------------------------------
 ###     이미지 변환을 위한 프로그램을 설치 한다.
@@ -32,30 +31,34 @@ if [[ "${ZZTEMP}" = "0" ]]; then
 fi
 
 ### ------------------------------------------------------------------------------------------------
+###     Convert Image Function
+### ------------------------------------------------------------------------------------------------
+convert_image() {
+    local FILE_EXT=$1
+    local TARGET=$2
+
+    for TMPFILE in `ls *.${FILE_EXT}`; do
+        FILE_NAME=`basename -s .${FILE_EXT} ${TMPFILE}`
+
+        if [[ -f ${FILE_NAME}.qcow2 ]]; then
+            mv ${FILE_NAME}.qcow2 ${FILE_NAME}.qcow2_${TIMESTAMP}
+        fi
+        qemu-img convert -c -f ${TARGET} -O qcow2 ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.qcow2
+        mv ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.${FILE_EXT}_${TIMESTAMP}
+    done
+    return 0
+}
+
+### ------------------------------------------------------------------------------------------------
 ###     이미지를 변환 한다.
 ###         https://en.wikibooks.org/wiki/QEMU/Images
 ###         Convert-VHD -Path CentOS_7_64.vhdx -DestinationPath CentOS_7_64.vhd
 ### ------------------------------------------------------------------------------------------------
-cd ${HOME_WORK}/images
 
-if [[ -f CentOS_7_64.qcow2 ]]; then
-    mv CentOS_7_64.qcow2 CentOS_7_64.qcow2_${TIMESTAMP}
-fi
+convert_image vdi  vdi
+convert_image vhd  vpc
+convert_image vhdx vhdx
 
-if [[ -f CentOS_7_64.vhd ]]; then
-    qemu-img convert -c -f vpc -O qcow2 CentOS_7_64.vhd CentOS_7_64.qcow2
-    mv CentOS_7_64.vhd CentOS_7_64.vhd_${TIMESTAMP}
-fi
-
-if [[ -f CentOS_7_64.vhdx ]]; then
-    qemu-img convert -c -f vhdx -O qcow2 CentOS_7_64.vhdx CentOS_7_64.qcow2
-    mv CentOS_7_64.vhdx CentOS_7_64.vhdx_${TIMESTAMP}
-fi
-
-if [[ -f CentOS_7_64.vdi ]]; then
-    qemu-img convert -c -f vdi -O qcow2 CentOS_7_64.vdi CentOS_7_64.qcow2
-    mv CentOS_7_64.vdi CentOS_7_64.vdi_${TIMESTAMP}
-fi
-
+exit 0
 ### ================================================================================================
 
