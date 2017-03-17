@@ -60,17 +60,19 @@
 
 CD에 cloudbase.iso 파일을 추가 한다.  
 CloudbaseInitSetup_0_9_9_x64.msi 파일을 실행 한다.  
-* Username : 자동으로 추가되는 사용자 아이디
+* Username : Admin (자동으로 추가되는 사용자 아이디)
 * Use metadata password : "--meta admin_pass=" 메타 데이터를 사용하여 비밀번호 초기 설정 허용
-* User's local groups (comma separated list) : 추가되는 사용자가 소속될 그룹
+* User's local groups (comma separated list) : Administrators (추가되는 사용자가 소속될 그룹)
 * Serial port for logging :
 
 설치가 마무리되는 시점에, 아래 체크 박스를 선택하고 'Finish' 버튼을 클릭합니다.  
 * Run Sysprep to create a generalized image. This is necessary if you plan to duplicate this instance, for example by creating a Glance image.
 
-C:/Program Files/Cloudbase Solutions/Cloudbase-Init/cloudbase-init.conf  
+C:/Program Files/Cloudbase Solutions/Cloudbase-Init/conf/cloudbase-init.conf  
 * logging_serial_port_settings=COM1,115200,N,8
 
-C:/Program Files/Cloudbase Solutions/Cloudbase-Init/cloudbase-init-unattend.conf  
+C:/Program Files/Cloudbase Solutions/Cloudbase-Init/conf/cloudbase-init-unattend.conf  
 * logging_serial_port_settings=COM1,115200,N,8
+
+Windows를 종료하고 디스크를 이미지로 변환하여 사용 한다.
 
