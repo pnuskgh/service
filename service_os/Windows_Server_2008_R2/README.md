@@ -83,3 +83,13 @@ C:/Program Files/Cloudbase Solutions/Cloudbase-Init/conf/cloudbase-init-unattend
 
 Windows를 종료하고 디스크를 이미지로 변환하여 사용 한다.
 
+## Windows Server로 이미지 생성 후 작업
+
+* 콘솔로 접속 한다.
+* Administrator를 선택 한다.
+* "로그인하기 전에 사용자 암호를 변경해야 합니다."라는 메시지가 표시되면 "확인" 버튼을 선택 한다.
+* "새 암호"와 "암호 확인"을 입력 한다.
+* Administrator로 로그인하여 사용하면 된다.
+  * 처음 로그인할 때 시간이 조금 오래 걸리므로 기다리세요.
+  * Admin으로 로그인 하려면 Admin의 비밀번호를 설정 하여야 합니다.
+
