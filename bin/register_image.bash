@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : register_image.bash, Version 0.00.004
+###     프로그램 명     : register_image.bash, Version 0.00.005
 ###     프로그램 설명   : Controller 장비에서 이미지를 등록 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.04 ~ 2017.03.20
+###     작성일          : 2017.01.04 ~ 2017.03.21
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -65,6 +65,8 @@ for IMAGE_FILE in `ls *.qcow2`; do
         openstack image create ${OPTIONS} --private --project ${PROJECT_ID} ${IMAGE_NAME}_${YEAR_MONTH}
     else
         openstack image create ${OPTIONS} --public ${IMAGE_NAME}_${YEAR_MONTH}
+        echo openstack image set --property product_os='{ "code": "WIN_SVR_STD_2012_R2", "name": "Windows Server Standard 2012 R2", "charge_type": "month" }'
+        echo openstack image set --property product_os='{ "code": "WIN_SVR_STD_2008_R2", 'name": "Windows Server Standard 2008 R2", "charge_type": "month" }'
     fi
 
     rm  ${IMAGE_FILE}
