@@ -4,6 +4,7 @@
 
 * Windows Server 2012 R2 이미지
 * Windows Server 2008 R2 이미지
+* Volume 용량 100 GB
 
 ## 설치 파일
 
