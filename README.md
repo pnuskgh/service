@@ -22,6 +22,9 @@ git checkout develop
 
 source /service/bin/bash_profile.bash  
 
+echo 'source /service/bin/bash_profile.bash' >> /root/.bash_profile
+mkdir /work
+
 ## CentOS 7 환경 설정
 
 * CentOS 7
