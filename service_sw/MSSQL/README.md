@@ -52,3 +52,7 @@ SQL Server Management Studio 프로그램을 실행 한다.
 
 "연결" 버튼을 선택 한다.
 
+## Cloudbase-Init 설치
+
+https://github.com/pnuskgh/service/tree/develop/service_os/Windows_Server_2012_R2 참조
+
