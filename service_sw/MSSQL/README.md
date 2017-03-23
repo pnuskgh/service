@@ -4,6 +4,8 @@
 
 * Windows Server 2012 R2 이미지
 * Windows Server 2008 R2 이미지
+
+* VirtualBox 이미지 이름 : MSSQL_for_Windows_Server_2012
 * Volume 용량 100 GB
 
 ## 설치 파일
