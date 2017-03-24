@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 001_install.bash, Version 0.00.002
-###     프로그램 설명   : Nginx를 설치 한다.
+###     프로그램 명     : 001_install_php.bash, Version 0.00.001
+###     프로그램 설명   : Nginx에 PHP 개발 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.23 ~ 2017.03.24
+###     작성일          : 2017.03.24 ~ 2017.03.24
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -19,20 +19,35 @@
 source ./config.bash > /dev/null 2>&1
 
 ### ------------------------------------------------------------------------------------------------
-###     Nginx 설치
+###     PHP 설치
 ### ------------------------------------------------------------------------------------------------
-yum -y install nginx nginx-*
+yum -y install php php-cli php-common php-mbstring php-gd php-xml
+yum -y install php-mysqlnd
 
-systemctl restart nginx.service
-systemctl enable nginx.service
+# yum -y install php-phpunit php-phpunit-* php-Smarty php-composer-* php-symfony php-symfony-*
+# yum -y install php-ZendFramework php-ZendFramework-*
+# yum -y install php-ZendFramework2 php-ZendFramework2-*
+# yum -y install php-pecl php-pecl-* php-pear php-pear-*
 
-# systemctl status firewalld.service
+yum -y install php-fpm
+systemctl restart php-fpm.service
+systemctl enable php-fpm.service
+
+### ------------------------------------------------------------------------------------------------
+###     PHP 환경 설정
+### ------------------------------------------------------------------------------------------------
+yum -y install crudini
+
+
+
 
 ### ------------------------------------------------------------------------------------------------
 ###     설치 정보 확인
-###         nginx/1.10.2
+###         PHP 5.4.16 
+###         Zend Engine v2.4.0
 ### ------------------------------------------------------------------------------------------------
-nginx -V
+php -v
+# php-fpm -v
 
 ### ================================================================================================
 

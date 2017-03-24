@@ -158,7 +158,8 @@ yum -y install ruby ruby-irb ruby-libs rubygems rubygem-json
 yum -y install php php-common
 
 # yum -y install php-fpm
-# service php-fpm restart
+# systemctl restart php-fpm
+# systemctl enable php-fpm
 
 ### ------------------------------------------------------------------------------------------------
 ###     Image 생성 전 CentOS를 최신 버전으로 update 한다.
