@@ -86,9 +86,9 @@ setup.exe 파일을 실행 한다.
 
 ## MSSQL(Microsoft SQL) Server 설치 확인 for Windows Server 2008
 
-Microsoft SQL Server Management Studio 프로그램을 실행 한다.
+SQL Server Management Studio 프로그램을 실행 한다.
 * 서버 유형 : 데이터베이스 엔진
-* 서버 이름 : 생략
+* 서버 이름 : (local)
 * 인증 : SQL Server 인증
   * 로그인 : sa
   * 암호 : 비밀1234!@#$
