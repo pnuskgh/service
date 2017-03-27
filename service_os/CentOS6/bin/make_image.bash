@@ -57,7 +57,8 @@ chkconfig acpid on
 ###        UUID 대신에 /dev/vda1 (ext4)을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
 backup /etc fstab
-/bin/cp -f ${TEMPLATE_DIR}/fstab /etc
+sed 's/UUID=[0-9a-z-]*/\/dev\/vda1  /g' /etc/fstab
+# /bin/cp -f ${TEMPLATE_DIR}/fstab /etc
 chmod 644 /etc/fstab
 
 ### ------------------------------------------------------------------------------------------------
@@ -78,7 +79,9 @@ rm -f /etc/udev/rules.d/70-persistent-net.rules
 #--- http://169.254.169.254/ 접속 허용
 #---     NOZEROCONF=yes 추가
 backup /etc/sysconfig network
-/bin/cp -f ${TEMPLATE_DIR}/network /etc/sysconfig/network
+sed -i '/NOZEROCONF/d' /etc/sysconfig/network
+echo "NOZEROCONF=yes" >> /etc/sysconfig/network
+# /bin/cp -f ${TEMPLATE_DIR}/network /etc/sysconfig/network
 chmod 644 /etc/sysconfig/network
 
 ### ------------------------------------------------------------------------------------------------
@@ -108,7 +111,8 @@ chmod 600 /etc/ssh/sshd_config
 #--- centos 사용자에게 sudo 권한을 부여 한다.
 #---     %centos   ALL=(ALL:ALL) NOPASSWD: ALL
 backup /etc sudoers
-/bin/cp -f ${TEMPLATE_DIR}/sudoers /etc/sudoers
+echo '%centos   ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
+# /bin/cp -f ${TEMPLATE_DIR}/sudoers /etc/sudoers
 chmod 440 /etc/sudoers
 
 ### ------------------------------------------------------------------------------------------------
