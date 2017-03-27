@@ -3,9 +3,9 @@
 ## 사전 준비 사항
 
 * Windows Server 2012 R2 이미지 (4 core / 4096 GB memory / 100 GB storage)
-  * 이미지 이름 : MSSQL_for_Windows_Server_2012 (SQL Server 2012 R2)
+  * 이미지 이름 : MSSQL_Server_2012_R2
 * Windows Server 2008 R2 이미지 (4 core / 6144 GB memory / 100 GB storage)
-  * 이미지 이름 : MSSQL_for_Windows_Server_2008 (SQL Server 2008 R2)
+  * 이미지 이름 : MSSQL_Server_2008_R2
   * Microsoft .NET Framework 설치
   * 업데이트된 Windows Installer를 설치
 
