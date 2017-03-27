@@ -56,6 +56,10 @@ for IMAGE_FILE in `ls *.qcow2`; do
         OPTIONS="--container-format bare --disk-format qcow2 --min-disk 8 --min-ram 512 --file ${IMAGE_FILE}"
     elif [[ "zz${IMAGE_NAME}zz" = "zzCentOS_6_64zz" ]]; then
         OPTIONS="--container-format bare --disk-format qcow2 --min-disk 8 --min-ram 512 --file ${IMAGE_FILE}"
+    elif [[ "zz${IMAGE_NAME}zz" = "zzMSSQL_Server_2012_R2zz" ]]; then
+        OPTIONS="--container-format bare --disk-format qcow2 --min-disk 64 --min-ram 1024 --file ${IMAGE_FILE}"
+    elif [[ "zz${IMAGE_NAME}zz" = "zzMSSQL_Server_2008_R2zz" ]]; then
+        OPTIONS="--container-format bare --disk-format qcow2 --min-disk 64 --min-ram 1024 --file ${IMAGE_FILE}"
     else
         OPTIONS="--container-format bare --disk-format qcow2 --min-disk 32 --min-ram 1024 --file ${IMAGE_FILE}"
     fi
@@ -67,6 +71,8 @@ for IMAGE_FILE in `ls *.qcow2`; do
         openstack image create ${OPTIONS} --public ${IMAGE_NAME}_${YEAR_MONTH}
         echo openstack image set --property product_os='{ "code": "WIN_SVR_STD_2012_R2", "name": "Windows Server Standard 2012 R2", "charge_type": "month" }'
         echo openstack image set --property product_os='{ "code": "WIN_SVR_STD_2008_R2", 'name": "Windows Server Standard 2008 R2", "charge_type": "month" }'
+        echo openstack image set --property product_dbms='{ "code": "MSSQL_SVR_2012", "name": "Microsoft SQL Server 2012 R2", "charge_type": "month" }'
+        echo openstack image set --property product_dbms='{ "code": "MSSQL_SVR_2008", "name": "Microsoft SQL Server 2008 R2", "charge_type": "month" }'
     fi
 
     rm  ${IMAGE_FILE}

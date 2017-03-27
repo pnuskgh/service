@@ -2,16 +2,20 @@
 
 ## History
 
-* 2017.03.10 ~ 2017.03.21, Version 0.00.030
+* 2017.03.10 ~ 2017.03.27, Version 0.00.046
 
 ## 작업 환경 설정
 
 yum -y install epel-release  
 yum -y install git  
-# apt-get install git-core
+* apt-get install git-core  
+
 git config --global user.name "Mountain Lover"  
 git config --global user.email consult@jopenbusiness.com  
 git config --global push.default simple  
+* Git 1.8.3에서만 사용
+* Git 1.7.1에서는 사용하지 말 것
+
 git config --global --list  
 git config --list  
 

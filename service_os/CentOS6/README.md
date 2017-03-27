@@ -36,9 +36,9 @@
 * make_image.bash     : 이미지 작성
 * create_image.bash   : 배포를 위한 이미지 생성
 
-* convert_image.bash  : 이미지 포맷 변경
-* scp_image.bash      : 이미지 복사
-* register_image.bash : 이미지를 OpenStack에 등록
+* /service/bin/convert_image.bash  : 이미지 포맷 변경
+* /service/bin/scp_image.bash      : 이미지 복사
+* /service/bin/register_image.bash : 이미지를 OpenStack에 등록
 
 # 참고 문헌
 * CentOS 6.0 Image : http://cloud.centos.org/centos/6/images/
