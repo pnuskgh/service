@@ -30,25 +30,25 @@ mkdir /work
 
 .ssh/id_rsa, id_rsa.pub 파일에 Git 접속을 위한 키를 저장 한다.  
 
-yum -y install epel-release
-yum -y install git
-* apt-get install git-core
+yum -y install epel-release  
+yum -y install git  
+* apt-get install git-core  
 
-git config --global user.name "Mountain Lover"
-git config --global user.email consult@jopenbusiness.com
+git config --global user.name "Mountain Lover"  
+git config --global user.email consult@jopenbusiness.com  
 
-git config --global --list
-git config --list
+git config --global --list  
+git config --list  
 
-cd /
-git clone git@github.com:pnuskgh/service.git  
-cd /service
-git checkout develop
+cd /  
+git clone git@github.com:pnuskgh/service.git    
+cd /service  
+git checkout develop  
 
-source /service/bin/bash_profile.bash
+source /service/bin/bash_profile.bash  
 
-echo 'source /service/bin/bash_profile.bash' >> /root/.bash_profile
-mkdir /work
+echo 'source /service/bin/bash_profile.bash' >> /root/.bash_profile  
+mkdir /work  
 
 ## CentOS 7 환경 설정
 
