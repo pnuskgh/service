@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 109_make_image_finish.bash, Version 0.00.001
+###     프로그램 명     : create_image.bash, Version 0.00.002
 ###     프로그램 설명   : 이미지를 최종 정리 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.06 ~ 2017.01.06
+###     작성일          : 2017.01.06 ~ 2017.03.27
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자         	:
 ###     수정일         	:
@@ -16,7 +16,12 @@
 ### ------------------------------------------------------------------------------------------------
 ###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
-. config.bash > /dev/null 2>&1
+source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
+source ${UTIL_DIR}/common.bash > /dev/null 2>&1
+
+WORKING_DIR=`dirname $0`
+WORKING_DIR=${WORKING_DIR}/..
+source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     이미지를 최종 정리 한다.
@@ -26,6 +31,7 @@ rm -rf /var/cache/yum/*
 history -c
 rm -f ~root/.bash_history
 rm -f ~root/.ssh/authorized_keys
+rm -f ~root/.gitconfig
 rm -f ~centos/.bash_history
 rm -f ~centos/.ssh/authorized_keys
     
@@ -35,7 +41,7 @@ rm -fr /var/lib/cloud/*
 passwd -d root
 passwd -d centos
 
-rm -rf /data
+rm -rf /service
 
 echo " "
 echo " "
