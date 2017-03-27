@@ -2,19 +2,16 @@
 
 ## History
 
-* 2017.03.10 ~ 2017.03.27, Version 0.00.046
+* 2017.03.10 ~ 2017.03.27, Version 0.00.047
 
-## 작업 환경 설정
+## 작업 환경 설정 for git 1.8.3 (CentOS 7)
 
 yum -y install epel-release  
 yum -y install git  
-* apt-get install git-core  
 
 git config --global user.name "Mountain Lover"  
 git config --global user.email consult@jopenbusiness.com  
 git config --global push.default simple  
-* Git 1.8.3에서만 사용
-* Git 1.7.1에서는 사용하지 말 것
 
 git config --global --list  
 git config --list  
@@ -27,6 +24,30 @@ git checkout develop
 source /service/bin/bash_profile.bash  
 
 echo 'source /service/bin/bash_profile.bash' >> /root/.bash_profile  
+mkdir /work
+
+## 작업 환경 설정 for git 1.7.1 (CentOS 6)
+
+.ssh/id_rsa, id_rsa.pub 파일에 Git 접속을 위한 키를 저장 한다.  
+
+yum -y install epel-release
+yum -y install git
+* apt-get install git-core
+
+git config --global user.name "Mountain Lover"
+git config --global user.email consult@jopenbusiness.com
+
+git config --global --list
+git config --list
+
+cd /
+git clone git@github.com:pnuskgh/service.git  
+cd /service
+git checkout develop
+
+source /service/bin/bash_profile.bash
+
+echo 'source /service/bin/bash_profile.bash' >> /root/.bash_profile
 mkdir /work
 
 ## CentOS 7 환경 설정
