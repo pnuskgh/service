@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : common.bash, Version 0.00.003
-###     프로그램 설명   : Bash 공통 라이브러리
+###     프로그램 명     : config.bash, Version 0.00.001
+###     프로그램 설명   : Bash Script를 실행하기 위한 환경을 설정 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2002.07.15 ~ 2017.03.10
+###     작성일          : 2017.03.28 ~ 2017.03.28
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -13,24 +13,11 @@
 ###     All rights reserved.
 ### ================================================================================================
 
-### ------------------------------------------------------------------------------------------------
-###     File backup
-### ------------------------------------------------------------------------------------------------
-backup() {
-    local SOURCE=$1
-    local FILENAME=$2
+WORKING_DIR=${HOME_SERVICE}/service_sw/Nginx
+BACKUP_DIR=${WORKING_DIR}/backup
+TEMPLATE_DIR=${WORKING_DIR}/template
 
-    if [[ "z${BACKUP_DIR}z" == "zz" ]]; then
-        return 1
-    fi
-
-    if [[ "z${TIMESTAMP}z" == "zz" ]]; then
-        /usr/bin/cp -f ${SOURCE}/${FILENAME} ${BACKUP_DIR}/${FILENAME}
-    else
-        /usr/bin/cp -f ${SOURCE}/${FILENAME} ${BACKUP_DIR}/${FILENAME}_${TIMESTAMP}
-    fi
-    return 0
-}
+TIMESTAMP=`date +%Y%m%d_%H%M%S`
 
 ### ================================================================================================
 

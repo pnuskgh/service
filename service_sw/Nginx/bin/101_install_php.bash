@@ -49,12 +49,16 @@ backup /etc php.ini
 crudini --set /etc/php.ini PHP date.timezone Asia/Seoul
 crudini --set /etc/php.ini PHP upload_max_filesize 20M
 crudini --set /etc/php.ini PHP post_max_size 30M
+# crudini --set /etc/php.ini PHP cgi.fix_pathinfo 0
 
 backup /etc/php-fpm.d www.conf
 crudini --set /etc/php-fpm.d/www.conf www user nginx
 crudini --set /etc/php-fpm.d/www.conf www group nginx
 crudini --set /etc/php-fpm.d/www.conf www security.limit_extensions .php
 crudini --set /etc/php-fpm.d/www.conf www listen /var/run/php-fpm/php-fpm.sock
+crudini --set /etc/php-fpm.d/www.conf www listen.owner nginx
+crudini --set /etc/php-fpm.d/www.conf www listen.group nginx
+crudini --set /etc/php-fpm.d/www.conf www listen.mode  0660
 
 # /etc/nginx/nginx.conf  파일에 아래 내용을 추가 한다.
 #        location ~ \.(php)$ {
