@@ -29,6 +29,7 @@ systemctl restart php-fpm.service
   * post_max_size = 30M
 * /etc/php.d/*.ini
 * /etc/php-fpm.conf
+* /etc/php-fpm.d/www.conf
   * user = nginx
   * group = nginx
   * security.limit_extensions = .php

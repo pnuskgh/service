@@ -16,7 +16,12 @@
 ### ------------------------------------------------------------------------------------------------
 ###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
-source ./config.bash > /dev/null 2>&1
+source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
+source ${UTIL_DIR}/common.bash > /dev/null 2>&1
+
+WORKING_DIR=`dirname $0`
+WORKING_DIR=${WORKING_DIR}/..
+source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     PHP 설치
@@ -30,16 +35,53 @@ yum -y install php-mysqlnd
 # yum -y install php-pecl php-pecl-* php-pear php-pear-*
 
 yum -y install php-fpm
-systemctl restart php-fpm.service
 systemctl enable php-fpm.service
+
+### ------------------------------------------------------------------------------------------------
+###     crudini를 설치 한다.
+### ------------------------------------------------------------------------------------------------
+yum -y install crudini
 
 ### ------------------------------------------------------------------------------------------------
 ###     PHP 환경 설정
 ### ------------------------------------------------------------------------------------------------
-yum -y install crudini
+backup /etc php.ini
+crudini --set /etc/php.ini PHP date.timezone Asia/Seoul
+crudini --set /etc/php.ini PHP upload_max_filesize 20M
+crudini --set /etc/php.ini PHP post_max_size 30M
 
+backup /etc/php-fpm.d www.conf
+crudini --set /etc/php-fpm.d/www.conf www user nginx
+crudini --set /etc/php-fpm.d/www.conf www group nginx
+crudini --set /etc/php-fpm.d/www.conf www security.limit_extensions .php
+crudini --set /etc/php-fpm.d/www.conf www listen /var/run/php-fpm/php-fpm.sock
 
+# /etc/nginx/nginx.conf  파일에 아래 내용을 추가 한다.
+#        location ~ \.(php)$ {
+#            root /usr/share/nginx/html;
+#            try_files $uri =404;
+#            fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+#            fastcgi_index index.php;
+#            fastcgi_read_timeout 10;
+#
+#            include fastcgi.conf;
+#        }
+backup /etc/nginx nginx.conf
+/usr/bin/cp -f ${TEMPLATE_DIR}/nginx.conf /etc/nginx
 
+#--- Nginx 설정 테스트
+nginx -t
+
+/usr/bin/cp -f ${TEMPLATE_DIR}/phpinfo.php /usr/share/nginx/html
+echo " "
+echo "http://공인IP/phpinfo.php 사이트로 접속하여 확인 하세요."
+echo " "
+
+### ------------------------------------------------------------------------------------------------
+###    php-fpm 실행
+### ------------------------------------------------------------------------------------------------
+systemctl restart php-fpm.service
+systemctl restart nginx.service
 
 ### ------------------------------------------------------------------------------------------------
 ###     설치 정보 확인
