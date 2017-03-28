@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : findContent.bash, Version 0.00.003
+###     프로그램 명     : findContent.bash, Version 0.00.004
 ###     프로그램 설명   : VirtualBox 가상 서버의 Network를 초기화 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2012.10.15 ~ 2013.02.18
+###     작성일          : 2012.10.15 ~ 2017.03.28
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -27,10 +27,11 @@ source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 ###         사용법 표시
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    /bin/echo "Using : findContent.bash [-d CONTENT_DIR] [-e EXT] [-l] CONTENT"
+    /bin/echo "Using : findContent.bash [-d CONTENT_DIR] [-e EXT] [-l] [-H] CONTENT"
     /bin/echo "        CONTENT_DIR    : 검색할 폴더"
     /bin/echo "        EXT            : 검색할 파일의 확장자"
     /bin/echo "        OPTION         : 검색 옵션 (-l)"
+    /bin/echo "        OPTION         : 검색 옵션 (-H)"
     /bin/echo "        CONTENT        : 검색할 문자열"
     /bin/echo " "
     exit 1
@@ -43,11 +44,12 @@ OPTION=""
 CONTENT=""
 
 ###---  Command Line에서 입력된 인수를 검사한다.
-while getopts "d:e:lh" flag; do
+while getopts "d:e:lHh" flag; do
     case $flag in
         d)  CONTENT_DIR=$OPTARG         ;;
         e)  EXT=$OPTARG                 ;;
         l)  OPTION="-l"                 ;;
+        H)  OPTION="-H"                 ;;
         h)  funcUsing                   ;;
         : | ? | *)  funcUsing           ;;
     esac
