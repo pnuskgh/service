@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 001_install.bash, Version 0.00.001
+###     프로그램 명     : 001_install.bash, Version 0.00.002
 ###     프로그램 설명   : MariaDB를 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
 ###     작성일          : 2017.01.19 ~ 2017.01.19
@@ -16,16 +16,21 @@
 ### ------------------------------------------------------------------------------------------------
 ###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
-source ./config.bash > /dev/null 2>&1
+source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
+source ${UTIL_DIR}/common.bash > /dev/null 2>&1
+
+WORKING_DIR=`dirname $0`
+WORKING_DIR=${WORKING_DIR}/..
+source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     MariaDB 설치
 ###         5.5.52-MariaDB MariaDB Server
 ### ------------------------------------------------------------------------------------------------
-yum -y install mariadb-server mariadb
+yum -y install mariadb mariadb-server
 
-systemctl restart mariadb.service
 systemctl enable mariadb.service
+systemctl restart mariadb.service
 
 # mysqladmin password
 mysql_secure_installation
@@ -39,16 +44,16 @@ mysql -V
 ### ------------------------------------------------------------------------------------------------
 ###     UTF-8 설정
 ### ------------------------------------------------------------------------------------------------
-cp /etc/my.cnf ${BASE_DIR}/backup/my.cnf_${TIMESTAMP}
-/usr/bin/cp -f ${BASE_DIR}/files/my.cnf /etc/my.cnf
+backup /etc my.cnf
+/usr/bin/cp -f ${TEMPLATE_DIR}/my.cnf /etc
 chmod 644 /etc/my.cnf
 
-cp /etc/my.cnf.d/client.cnf ${BASE_DIR}/backup/client.cnf_${TIMESTAMP}
-/usr/bin/cp -f ${BASE_DIR}/files/client.cnf /etc/my.cnf.d/client.cnf
+backup /etc/my.cnf.d client.cnf
+/usr/bin/cp -f ${TEMPLATE_DIR}/client.cnf /etc/my.cnf.d
 chmod 644 /etc/my.cnf.d/client.cnf
 
-cp /etc/my.cnf.d/mysql-clients.cnf ${BASE_DIR}/backup/mysql-clients.cnf_${TIMESTAMP}
-/usr/bin/cp -f ${BASE_DIR}/files/mysql-clients.cnf /etc/my.cnf.d/mysql-clients.cnf
+backup /etc/my.cnf.d mysql-clients.cnf
+/usr/bin/cp -f ${TEMPLATE_DIR}/mysql-clients.cnf /etc/my.cnf.d
 chmod 644 /etc/my.cnf.d/mysql-clients.cnf
 
 systemctl restart mariadb.service
