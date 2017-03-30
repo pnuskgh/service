@@ -104,7 +104,7 @@ chmod 440 /etc/sudoers
 ### ------------------------------------------------------------------------------------------------
 ###     불필요한 서비스를 제거 한다.
 ### ------------------------------------------------------------------------------------------------
-#--- D firewall daemon 제거
+#--- firewall daemon 제거
 systemctl stop firewalld.service
 systemctl disable firewalld.service
 
@@ -123,6 +123,7 @@ yum -y install java-1.7.0-openjdk
 
 ### ------------------------------------------------------------------------------------------------
 ###     Python을 설치 한다.
+###         https://hostpresto.com/community/tutorials/how-to-serve-python-apps-using-uwsgi-and-nginx-on-centos-7/
 ### ------------------------------------------------------------------------------------------------
 # yum -y install python python-*
 # yum -y install python2 python2-*
@@ -131,7 +132,19 @@ yum -y install java-1.7.0-openjdk
 
 yum -y install python python-IPy python-backports python-backports-ssl_match_hostname python-chardet python-cheetah python-configobj python-decorator python-firewall python-iniparse python-javapackages python-jsonpatch python-jsonpointer python-libs python-lxml python-markdown python-perf python-pillow python-prettytable python-progressbar python-pycurl python-pygments python-pyudev python-requestbuilder python-requests python-setuptools python-six python-slip python-slip-dbus python-urlgrabber python-urllib3
 
-yum -y install python-pip
+yum -y install python-pip python-devel gcc
+# pip install virtualenv 
+# virtualenv myprojectenv
+# myprojectenv/bin/activate
+# myprojectenv/bin/deactivate
+# pip install uwsgi
+# uwsgi --version
+# vi myproject/wsgi.py
+#     def application(environ, start_response):
+#         start_response('200 OK', [('Content-Type', 'text/html')])
+#         return ["<h1 style='color:blue'>Testing Success!</h1>"]
+# uwsgi --socket 0.0.0.0:8080 --protocol=http -w wsgi
+# http://공인IP:8080/
 
 ### ------------------------------------------------------------------------------------------------
 ###     Perl을 설치 한다.
