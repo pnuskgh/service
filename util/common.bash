@@ -24,6 +24,7 @@ backup() {
         return 1
     fi
 
+    mkdir -p ${BACKUP_DIR} > /dev/null 2>&1
     if [[ "z${TIMESTAMP}z" == "zz" ]]; then
         /usr/bin/cp -f ${SOURCE}/${FILENAME} ${BACKUP_DIR}/${FILENAME}
     else

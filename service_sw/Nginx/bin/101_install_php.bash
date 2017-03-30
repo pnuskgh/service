@@ -26,8 +26,9 @@ source ${WORKING_DIR}/bin/config.bash
 ### ------------------------------------------------------------------------------------------------
 ###     PHP 설치
 ### ------------------------------------------------------------------------------------------------
-yum -y install php php-cli php-common php-mbstring php-gd php-xml
-yum -y install php-mysqlnd
+yum -y install php php-cli php-common php-mbstring php-gd php-xml php-soap php-xmlrpc php-mcrypt
+yum -y remove php-mysqlnd
+yum -y install php-mysql
 
 # yum -y install php-phpunit php-phpunit-* php-Smarty php-composer-* php-symfony php-symfony-*
 # yum -y install php-ZendFramework php-ZendFramework-*

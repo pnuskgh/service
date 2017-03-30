@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 001_install.bash, Version 0.00.003
-###     프로그램 설명   : WordPress를 설치 한다.
+###     프로그램 명     : setup_db.bash, Version 0.00.001
+###     프로그램 설명   : WordPress용 Dabase 생성과 접속 권한 설정
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.28 ~ 2017.03.30
+###     작성일          : 2017.03.30 ~ 2017.03.30
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -25,46 +25,10 @@ source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     WordPress 설치
-###         WordPress 4.7.3
 ### ------------------------------------------------------------------------------------------------
-yum -y install wget unzip
+${HOME_SERVICE}/service_sw/MariaDB/bin/createDatabase.bash ${DB_NAME} ${DB_USER} ${DB_PASSWORD} ${PASSWD_ROOT}
 
-mkdir -p ${HOME_WORK}/zzinstall
-cd ${HOME_WORK}/zzinstall
-
-if [[ ! -f wordpress-4.7.3-ko_KR.zip ]]; then
-    # wget https://wordpress.org/latest.zip
-    wget https://ko.wordpress.org/wordpress-4.7.3-ko_KR.zip
-fi
-
-rm -rf wordpress > /dev/null 2>&1
-unzip wordpress-4.7.3-ko_KR.zip
-chown -R nginx:nginx ${HOME_WORK}/zzinstall/wordpress
-
-backup ${DOCUMENT_ROOT} 404.html
-backup ${DOCUMENT_ROOT} 50x.html
-backup ${DOCUMENT_ROOT} index.html
-backup ${DOCUMENT_ROOT} nginx-logo.png
-backup ${DOCUMENT_ROOT} poweredby.png
-
-/usr/bin/cp -rf ${HOME_WORK}/zzinstall/wordpress/* ${DOCUMENT_ROOT}
-
-cd ${HOME_WORK}
-rm -rf zzinstall
-
-systemctl restart nginx.service
-
-### ------------------------------------------------------------------------------------------------
-###     WordPress 환경 구성
-### ------------------------------------------------------------------------------------------------
-
-echo "MariaDB에서 WordPress DB와 사용자를 생성 한다"
-echo "    createDatabase.bash 사용"
-echo "MariaDB로의 접속 권한을 설정 한다."
-echo "    allowDBConnection.bash 사용"
-echo " "
-echo "http://공인IP/ 사이트로 접속하여 WordPress 설치를 완료 한다."
-echo " "
+${HOME_SERVICE}/service_sw/MariaDB/bin/allowDBConnection.bash ${DB_NAME} ${DB_USER} ${DB_PASSWORD} ${DB_HOST} ${PASSWD_ROOT}
 
 ### ================================================================================================
 
