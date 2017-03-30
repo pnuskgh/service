@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 001_install_php.bash, Version 0.00.001
+###     프로그램 명     : install_php.bash, Version 0.00.001
 ###     프로그램 설명   : Nginx에 PHP 개발 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
 ###     작성일          : 2017.03.24 ~ 2017.03.24
@@ -24,34 +24,8 @@ WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
-###     PHP 설치
+###     Nginx와 php-fpm 환경 설정
 ### ------------------------------------------------------------------------------------------------
-yum -y install php php-cli php-common php-mbstring php-gd php-xml php-soap php-xmlrpc php-mcrypt
-yum -y remove php-mysqlnd
-yum -y install php-mysql
-
-# yum -y install php-phpunit php-phpunit-* php-Smarty php-composer-* php-symfony php-symfony-*
-# yum -y install php-ZendFramework php-ZendFramework-*
-# yum -y install php-ZendFramework2 php-ZendFramework2-*
-# yum -y install php-pecl php-pecl-* php-pear php-pear-*
-
-yum -y install php-fpm
-systemctl enable php-fpm.service
-
-### ------------------------------------------------------------------------------------------------
-###     crudini를 설치 한다.
-### ------------------------------------------------------------------------------------------------
-yum -y install crudini
-
-### ------------------------------------------------------------------------------------------------
-###     PHP 환경 설정
-### ------------------------------------------------------------------------------------------------
-backup /etc php.ini
-crudini --set /etc/php.ini PHP date.timezone Asia/Seoul
-crudini --set /etc/php.ini PHP upload_max_filesize 20M
-crudini --set /etc/php.ini PHP post_max_size 30M
-# crudini --set /etc/php.ini PHP cgi.fix_pathinfo 0
-
 backup /etc/php-fpm.d www.conf
 crudini --set /etc/php-fpm.d/www.conf www user nginx
 crudini --set /etc/php-fpm.d/www.conf www group nginx
@@ -87,14 +61,6 @@ echo " "
 ### ------------------------------------------------------------------------------------------------
 systemctl restart php-fpm.service
 systemctl restart nginx.service
-
-### ------------------------------------------------------------------------------------------------
-###     설치 정보 확인
-###         PHP 5.4.16 
-###         Zend Engine v2.4.0
-### ------------------------------------------------------------------------------------------------
-php -v
-# php-fpm -v
 
 ### ================================================================================================
 
