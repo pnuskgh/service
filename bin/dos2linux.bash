@@ -1,53 +1,40 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : create_image.bash, Version 0.00.002
-###     프로그램 설명   : 이미지를 최종 정리 한다.
+###     프로그램 명     : dos2linux.bash, Version 0.00.002
+###     프로그램 설명   : Dos용 파일을 Linux 파일 형식으로 변환 합니다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.06 ~ 2017.03.27
+###     작성일          : 2013.04.03 ~ 2017.03.30
 ### ----[History 관리]------------------------------------------------------------------------------
-###     수정자         	:
-###     수정일         	:
-###     수정 내용      	:
+###     수정자          :
+###     수정일          :
+###     수정 내용       :
 ### --- [Copyright] --------------------------------------------------------------------------------
 ###     Copyright (c) 1995~2017 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
 
 ### ------------------------------------------------------------------------------------------------
-###     실행 환경을 설정 한다.
+###     Include
 ### ------------------------------------------------------------------------------------------------
+if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
+    export HOME_SERVICE="/service"
+fi
+
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
-source ${UTIL_DIR}/common.bash > /dev/null 2>&1
 
-RELATION_DIR="$(dirname $0)"
-WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
-source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
-###     이미지를 최종 정리 한다.
+###     Main Process
 ### ------------------------------------------------------------------------------------------------
-rm -rf /var/cache/yum/*
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
 
-history -c
-rm -f ~root/.bash_history
-rm -f ~root/.ssh/authorized_keys
-rm -f ~root/.gitconfig
-rm -f ~centos/.bash_history
-rm -f ~centos/.ssh/authorized_keys
-    
-rm -fr /var/lib/cloud/*
-
-#--- 사용자의 비밀번호를 제거 한다.
-passwd -d root
-passwd -d centos
-
-rm -rf /service
-
-echo " "
-echo " "
-echo "shutdown -h now 명령을 사용하여 종료 하세요."
-echo " "
-history -c
+###---  CentOS에서 설치 : yum install dos2unix
+for file in "$@"; do
+    if [ -f $file ]; then
+        /usr/bin/dos2unix $file
+    fi
+done
 
 ### ================================================================================================
 

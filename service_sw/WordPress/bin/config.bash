@@ -13,7 +13,6 @@
 ###     All rights reserved.
 ### ================================================================================================
 
-WORKING_DIR=${HOME_SERVICE}/service_sw/WordPress
 BACKUP_DIR=${WORKING_DIR}/backup
 TEMPLATE_DIR=${WORKING_DIR}/template
 

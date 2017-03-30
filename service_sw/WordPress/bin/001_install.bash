@@ -19,8 +19,8 @@
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 source ${UTIL_DIR}/common.bash > /dev/null 2>&1
 
-WORKING_DIR=`dirname $0`
-WORKING_DIR=${WORKING_DIR}/..
+RELATION_DIR="$(dirname $0)"
+WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
 DOCUMENT_ROOT=/usr/share/nginx/html
@@ -44,7 +44,7 @@ unzip wordpress-4.7.3-ko_KR.zip
 chown -R nginx:nginx ${HOME_WORK}/zzinstall/wordpress
 
 backup ${DOCUMENT_ROOT} 404.html
-backup ${DOCUMENT_ROOT}  50x.html
+backup ${DOCUMENT_ROOT} 50x.html
 backup ${DOCUMENT_ROOT} index.html
 backup ${DOCUMENT_ROOT} nginx-logo.png
 backup ${DOCUMENT_ROOT} poweredby.png

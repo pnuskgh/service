@@ -19,8 +19,8 @@
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 source ${UTIL_DIR}/common.bash > /dev/null 2>&1
 
-WORKING_DIR=`dirname $0`
-WORKING_DIR=${WORKING_DIR}/..
+RELATION_DIR="$(dirname $0)"
+WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
 
