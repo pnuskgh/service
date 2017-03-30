@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 001_install.bash, Version 0.00.002
+###     프로그램 명     : 001_install.bash, Version 0.00.003
 ###     프로그램 설명   : WordPress를 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.28 ~ 2017.03.28
+###     작성일          : 2017.03.28 ~ 2017.03.30
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -22,8 +22,6 @@ source ${UTIL_DIR}/common.bash > /dev/null 2>&1
 RELATION_DIR="$(dirname $0)"
 WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
-
-DOCUMENT_ROOT=/usr/share/nginx/html
 
 ### ------------------------------------------------------------------------------------------------
 ###     WordPress 설치
@@ -61,6 +59,10 @@ systemctl restart nginx.service
 ### ------------------------------------------------------------------------------------------------
 
 echo "MariaDB에서 WordPress DB와 사용자를 생성 한다"
+echo "    createDatabase.bash 사용"
+echo "MariaDB로의 접속 권한을 설정 한다."
+echo "    allowDBConnection.bash 사용"
+echo " "
 echo "http://공인IP/ 사이트로 접속하여 WordPress 설치를 완료 한다."
 echo " "
 

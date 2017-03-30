@@ -18,5 +18,7 @@ TEMPLATE_DIR=${WORKING_DIR}/template
 
 TIMESTAMP=`date +%Y%m%d_%H%M%S`
 
+DOCUMENT_ROOT=/usr/share/nginx/html
+
 ### ================================================================================================
 
