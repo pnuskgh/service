@@ -1,51 +1,55 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : findContent.bash, Version 0.00.003
-###     프로그램 설명   : 파일을 검색하여 결과를 조회 합니다.
-###     작성자          : 산사랑 (consult@jopenbusiness.com, www.jopenbusiness.com)
-###     작성일          : 2012.10.15 ~ 2013.02.18
+###     프로그램 명     : findContent.bash, Version 0.00.004
+###     프로그램 설명   : VirtualBox 가상 서버의 Network를 초기화 한다.
+###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          : 2012.10.15 ~ 2017.03.28
+### ----[History 관리]------------------------------------------------------------------------------
+###     수정자          :
+###     수정일          :
+###     수정 내용       :
 ### --- [Copyright] --------------------------------------------------------------------------------
-###     Copyright (c) 1995~2016 산사랑, All rights reserved.
+###     Copyright (c) 1995~2017 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
 ### ================================================================================================
 
-if [[ "${SERVER_FOLDER}" == "" ]]; then
-    echo "SERVER_FOLDER 환경 변수를 설정 하세요."
-    echo " "
-    exit 1
+### ------------------------------------------------------------------------------------------------
+###     Include
+### ------------------------------------------------------------------------------------------------
+if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
+    export HOME_SERVICE="/service"
 fi
 
-. ${SERVER_FOLDER}/bin/config.bash > /dev/null 2>&1
-. ${SERVER_FOLDER}/bin/utilCommon.bash > /dev/null 2>&1
+source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 
 ### ------------------------------------------------------------------------------------------------
-###     funcUsing, 2012.10.15 ~ 2013.02.18, Version 0.00.003
-###     사용법을 표시 합니다.
+###     funcUsing()
+###         사용법 표시
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    echo "Using : findContent [-d CONTENT_DIR] [-e EXT] [-l] CONTENT"
-    echo "        CONTENT_DIR    : 검색할 폴더"
-    echo "        EXT            : 검색할 파일의 확장자"
-    echo "        OPTION         : 검색 옵션 (-l)"
-    echo "        CONTENT        : 검색할 문자열"
-    echo " "
+    /bin/echo "Using : findContent.bash [-d CONTENT_DIR] [-e EXT] [-l] [-H] CONTENT"
+    /bin/echo "        CONTENT_DIR    : 검색할 폴더"
+    /bin/echo "        EXT            : 검색할 파일의 확장자"
+    /bin/echo "        OPTION         : 검색 옵션 (-l)"
+    /bin/echo "        OPTION         : 검색 옵션 (-H)"
+    /bin/echo "        CONTENT        : 검색할 문자열"
+    /bin/echo " "
     exit 1
 }
 
-### ------------------------------------------------------------------------------------------------
-###     Main
-### ------------------------------------------------------------------------------------------------
 ###---  Default 환경변수를 설정한다.
-CONTENT_DIR=`pwd`
+CONTENT_DIR=`/bin/pwd`
 EXT=""
 OPTION=""
 CONTENT=""
 
 ###---  Command Line에서 입력된 인수를 검사한다.
-while getopts "d:e:lh" flag; do
+while getopts "d:e:lHh" flag; do
     case $flag in
-        d)	CONTENT_DIR=$OPTARG         ;;
+        d)  CONTENT_DIR=$OPTARG         ;;
         e)  EXT=$OPTARG                 ;;
         l)  OPTION="-l"                 ;;
+        H)  OPTION="-H"                 ;;
         h)  funcUsing                   ;;
         : | ? | *)  funcUsing           ;;
     esac
@@ -57,15 +61,18 @@ if [[ 0 < $# ]]; then
 fi
 
 if [[ "$CONTENT" = "" ]]; then
-	funcUsing
+    funcUsing
 fi
 
+### ------------------------------------------------------------------------------------------------
+###     Main process
+### ------------------------------------------------------------------------------------------------
 if [[ "${EXT}" = "" ]]; then
-    find ${CONTENT_DIR} -name "*" -exec grep ${OPTION} "${CONTENT}" {} \; 2> /dev/null
+    /usr/bin/find ${CONTENT_DIR} -name "*" -exec /bin/grep ${OPTION} "${CONTENT}" {} \;
 else
-    find ${CONTENT_DIR} -name "*.${EXT}" -exec grep ${OPTION} "${CONTENT}" {} \; 2> /dev/null
+    /usr/bin/find ${CONTENT_DIR} -name "*.${EXT}" -exec /bin/grep ${OPTION} "${CONTENT}" {} \;
 fi
 exit 0
 
-### ============================================================================
+### ================================================================================================
 
