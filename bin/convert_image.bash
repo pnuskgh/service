@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : convert_image.bash, Version 0.00.003
-###     프로그램 설명   : 이미지를 qcow2 이미지로 변환 한다.
+###     프로그램 명     : convert_image.bash, Version 0.00.004
+###     프로그램 설명   : 이미지를 포맷을 변환 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.04 ~ 2017.03.17
+###     작성일          : 2017.01.04 ~ 2017.04.06
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -49,15 +49,31 @@ convert_image() {
     return 0
 }
 
+convert_raw_image() {
+    local FILE_EXT=$1
+    local TARGET=$2
+
+    for TMPFILE in `ls *.${FILE_EXT}`; do
+        FILE_NAME=`basename -s .${FILE_EXT} ${TMPFILE}`
+
+        if [[ -f ${FILE_NAME}.raw ]]; then
+            mv ${FILE_NAME}.raw ${FILE_NAME}.raw_${TIMESTAMP}
+        fi
+        qemu-img convert -c -f ${TARGET} -O raw ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.raw
+        mv ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.${FILE_EXT}_${TIMESTAMP}
+    done
+    return 0
+}
+
 ### ------------------------------------------------------------------------------------------------
 ###     이미지를 변환 한다.
 ###         https://en.wikibooks.org/wiki/QEMU/Images
 ###         Convert-VHD -Path CentOS_7_64.vhdx -DestinationPath CentOS_7_64.vhd
 ### ------------------------------------------------------------------------------------------------
 
-convert_image vdi  vdi
-convert_image vhd  vpc
-convert_image vhdx vhdx
+convert_raw_image vdi  vdi
+convert_raw_image vhd  vpc
+convert_raw_image vhdx vhdx
 
 exit 0
 ### ================================================================================================
