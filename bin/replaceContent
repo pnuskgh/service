@@ -1,0 +1,63 @@
+#!/bin/bash
+### ================================================================================================
+###     프로그램 명     		: replaceContent, Version 0.00.002
+###     프로그램 설명   		: 파일에서 문자열을 치환 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, 010-5034-3931)
+###     작성일          		: 2012.10.26 ~ 2013.05.12
+### ----[History 관리]------------------------------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ================================================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+
+### ----------------------------------------------------------------------------
+###     funcUsing()
+###			사용법 표시
+### ----------------------------------------------------------------------------
+funcUsing() {
+  	/bin/echo "Using : replaceContent [-d CONTENT_DIR] [-e EXT] STRBEFORE STRAFTER"
+    /bin/echo "        CONTENT_DIR    : 검색할 폴더"
+    /bin/echo "        EXT            : 변경할 파일의 확장자"
+    /bin/echo "        STRBEFORE      : 변경전 문자열"
+    /bin/echo "        STRAFTER       : 변경후 문자열"
+    /bin/echo " "
+  	exit 1
+}
+
+###---  Default 환경변수를 설정한다.
+CONTENT_DIR=`/bin/pwd`
+EXT=""
+STRBEFORE=""
+STRAFTER=""
+
+###---  Command Line에서 입력된 인수를 검사한다.
+while getopts "d:e:h" flag; do
+    case $flag in
+        d)	CONTENT_DIR=$OPTARG         ;;
+        e)  EXT=$OPTARG                 ;;
+        h)  funcUsing                   ;;
+        : | ? | *)  funcUsing           ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+if [[ $# = 2 ]]; then
+    STRBEFORE=$1
+    STRAFTER=$2
+else
+    funcUsing
+fi
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+/usr/bin/find ${CONTENT_DIR} -name "*${EXT}" -exec /usr/bin/perl -pi -e "s/${STRBEFORE}/${STRAFTER}/g" {} \;
+exit 0
+
+### ============================================================================

@@ -1,0 +1,74 @@
+#!/bin/bash
+### ================================================================================================
+###     프로그램 명     		: restoreSource, Version 0.00.001
+###     프로그램 설명   		: Instance의 Source를 복구 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          		: 2013.05.12 ~ 2013.05.12
+### ----[History 관리]------------------------------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ================================================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+. ${BIN_DIR}/utilCommon.bash
+
+### ----------------------------------------------------------------------------
+###     funcUsing()
+###			사용법 표시
+### ----------------------------------------------------------------------------
+funcUsing() {
+    /bin/echo "Using : removeSource INSTANCE FILETAR [NEWINSTANCE]"
+    /bin/echo "        INSTANCE       : Instance"
+    /bin/echo "        FILETAR        : File의 full path"
+    /bin/echo "        NEWINSTANCE    : 새로 복제할 Instance 이름"
+    /bin/echo " "
+  	exit 1
+}
+
+###---  올바른 서버에서 실행되고 있는지 확인한다.
+funcCheckServer $SERVER_WEB1 $SERVER_WEB2 $SERVER_WEB3 $SERVER_WEB4 $SERVER_WEB5
+if [[ "$?" -gt "0" ]]; then
+	exit $?
+fi
+
+###---  Command Line에서 입력된 인수를 검사한다.
+NEWINSTANCE=none
+if [[ $# = 1 ]]; then
+	INSTANCE=$1
+	/bin/echo "Backup folder : " ${BACKUP_DIR}/${INSTANCE}
+	/bin/ls -alF ${BACKUP_DIR}/${INSTANCE}/*.tar
+    exit 1
+elif [[ $# = 2 ]]; then
+	INSTANCE=$1
+	FILETAR=$2
+elif [[ $# = 3 ]]; then
+	INSTANCE=$1
+	FILETAR=$2
+	NEWINSTANCE=$3
+else
+	funcUsing
+fi
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+cd ${DOCUMENT_ROOT}
+if [[ ${NEWINSTANCE} = "none" ]]; then
+	/bin/echo "Restore Source : " ${INSTANCE}
+	/bin/tar xvf ${FILETAR} > /dev/null 2>&1
+else 
+	/bin/echo "Copy Source From " ${INSTANCE} " To " ${NEWINSTANCE}
+	/bin/mkdir zzdir
+	cd zzdir
+	/bin/tar xvf ${FILETAR} > /dev/null 2>&1
+	/bin/mv ${INSTANCE} ../${NEWINSTANCE}
+	cd ..
+	/bin/rmdir zzdir
+fi
+
+### ============================================================================

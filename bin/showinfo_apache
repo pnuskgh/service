@@ -1,0 +1,32 @@
+#!/bin/bash
+### ============================================================================
+###     프로그램 명  			: showinfo_apache, Version 0.00.004
+###     프로그램 설명   		: Apache HTTP Server 정보를 표시 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          		: 2002.07.15 ~ 2013.05.16
+### ----[History 관리]----------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ============================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+/bin/echo 'Apache 버전               :' `/usr/bin/yum list installed | /bin/awk '/^httpd\./{print $2}'`
+/bin/echo 'Apache 문자셋             :' `/bin/awk '/^AddDefaultCharset/{print $2}' /etc/httpd/conf/httpd.conf`
+/bin/echo '설치 폴더      		  : /etc/httpd/'
+/bin/echo '환경 파일      		  : vi /etc/httpd/conf/httpd.conf'
+/bin/echo '환경 파일/폴더            : /etc/sysconfig/httpd, /etc/httpd/conf.d/'
+/bin/echo 'DocumentRoot              :'  `/bin/awk '/^DocumentRoot/{gsub("\"", "", $2); print $2}' /etc/httpd/conf/httpd.conf`
+/bin/echo '기동 종료      		  : service httpd restart'
+/bin/echo '서비스 확인    		  : ps -ef | grep httpd | grep -v grep'
+/bin/echo '로그 폴더      		  : /etc/httpd/logs/'
+
+### ============================================================================

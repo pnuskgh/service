@@ -1,0 +1,100 @@
+#!/bin/bash
+### ============================================================================
+###     프로그램 명  			: showinfo_hadoop, Version 0.00.003
+###     프로그램 설명   		: Hadoop 정보를 표시 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          		: 2013.05.22 ~ 2013.05.26
+### ----[History 관리]----------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ============================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+TMP_HADOOP_HOME=`/usr/bin/which hadoop | /bin/awk '{sub("/bin/hadoop", "", $1); print $1}'`
+TMP_PIG_HOME=`/usr/bin/which pig | /bin/awk '{sub("/bin/pig", "", $1); print $1}'`
+TMP_HIVE_HOME=`/usr/bin/which hive | /bin/awk '{sub("/bin/hive", "", $1); print $1}'`
+TMP_OOZIE_HOME=`/usr/bin/which oozie | /bin/awk '{sub("/bin/oozie", "", $1); print $1}'`
+TMP_ZOOKEEPER_HOME=`/usr/bin/which zkServer.sh | /bin/awk '{sub("/bin/zkServer.sh", "", $1); print $1}'`
+TMP_HBASE_HOME=`/usr/bin/which hbase | /bin/awk '{sub("/bin/hbase", "", $1); print $1}'`
+TMP_FLUME_HOME=`/usr/bin/which flume-ng | /bin/awk '{sub("/bin/flume-ng", "", $1); print $1}'`
+TMP_SQOOP_HOME=`/usr/bin/which sqoop | /bin/awk '{sub("/bin/sqoop", "", $1); print $1}'`
+
+/bin/echo 'HADOOP_HOME               :' $TMP_HADOOP_HOME
+/bin/echo 'Hadoop 버전               :' `hadoop version | /bin/awk '{if (NR == 1) {print $2;}}'`
+/bin/echo 'Hadoop 환경 파일          :' $TMP_HADOOP_HOME/conf/
+/bin/echo 'Hadoop 기동 종료          : start-all.sh, start-dfs.sh start-mapred.sh'
+/bin/echo 'Hadoop 서비스 확인        : ps -ef | grep hadoop | grep -v grep | awk {print $8, $9}'
+/bin/echo 'Hadoop 로그 파일          :' $TMP_HADOOP_HOME/logs/
+/bin/echo 'Hadoop 서비스             : http://localhost:50070/, http://localhost:50030/'
+/bin/echo ' '
+
+/bin/echo 'PIG_HOME                  :' $TMP_PIG_HOME
+/bin/echo 'Pig 버전                  :' `/bin/ls $TMP_PIG_HOME/pig-* | /bin/grep -v without | /bin/awk '{sub(".jar", "", $1); sub("pig-", "", $1); split($1, data, "/"); print data[4]}'`
+/bin/echo ' '
+
+/bin/echo 'HIVE_HOME                 :' $TMP_HIVE_HOME
+/bin/echo 'Hive 버전                 :' `/bin/ls $TMP_HIVE_HOME/lib/hive-common-* | /bin/grep -v without | /bin/awk '{sub(".jar", "", $1); sub("hive-common-", "", $1); split($1, data, "/"); print data[5]}'`
+/bin/echo ' '
+
+/bin/echo 'OOZIE_HOME                :' $TMP_OOZIE_HOME
+/bin/echo 'Oozie 버전                :' `/bin/ls $TMP_OOZIE_HOME/oozie-core/oozie-core-* | /bin/grep -v tests.jar | /bin/awk '{sub(".jar", "", $1); sub("oozie-core-", "", $1); split($1, data, "/"); print data[5]}'`
+/bin/echo 'Ext-js 버전               : 2.2.1'
+/bin/echo 'Oozie 기동 종료           : oozied.sh start, oozied.sh stop'
+/bin/echo 'Oozie 서비스 확인         : pid =' `ps -ef | grep oozie | grep -v grep | awk '{print $2}'`
+/bin/echo 'Oozie 서비스              : http://localhost:11000/'
+/bin/echo ' '
+
+/bin/echo 'ZOOKEEPER_HOME            :' $TMP_ZOOKEEPER_HOME
+/bin/echo 'ZooKeeper 버전            :' `/bin/ls $TMP_ZOOKEEPER_HOME/zookeeper-*.jar | /bin/awk '{sub(".jar", "", $1); sub("zookeeper-", "", $1); split($1, data, "/"); print data[3]}'`
+/bin/echo 'ZooKeeper 기동 종료       : zkServer.sh start'
+/bin/echo ' '
+
+/bin/echo 'HBASE_HOME                :' $TMP_HBASE_HOME
+/bin/echo 'HBase 버전                :' `hbase version 2>&1 | /bin/awk '{if (NR == 1) {print $6;}}'`
+/bin/echo 'HBase 기동 종료           : start-hbase.sh'
+/bin/echo ' '
+
+/bin/echo 'ESPER_HOME                : /appl/esper'
+/bin/echo 'Esper 버전                :' `/bin/ls /appl/esper/esper-*.jar | /bin/awk '{sub(".jar", "", $1); sub("esper-", "", $1); split($1, data, "/"); print data[4]}'`
+/bin/echo ' '
+
+/bin/echo 'FLUME_HOME                :' $TMP_FLUME_HOME
+/bin/echo 'Flume 버전                :' `flume-ng version 2>&1 | /bin/awk '{if (NR == 1) {print $2;}}'`
+/bin/echo 'AVRO_HOME                 : /appl/avro'
+/bin/echo 'Avro 버전                 :' `java -jar /appl/avro/lib/avro-tools-1.7.4.jar 2>&1 | /bin/awk '{if (NR == 1) {print $2}}'`
+/bin/echo ' '
+
+/bin/echo 'SQOOP_HOME                :' $TMP_SQOOP_HOME
+/bin/echo 'Sqoop 버전                :' `sqoop version 2>&1 | /bin/awk '{if (NR == 1) {print $2}}'`
+/bin/echo ' '
+
+/bin/echo 'R_HOME                    : /usr/lib64/R'
+/bin/echo 'R 버전                    :' `R --version 2>&1 | /bin/awk '{if (NR == 1) {print $3}}'`
+/bin/echo 'RHive 버전                : 1.0-0.1'
+/bin/echo 'RSTUDIO_SERVER_HOME       : /usr/lib/rstudio-server'
+/bin/echo 'RStudio Server 실행       : service rstudio-server start'
+/bin/echo 'RStudio Server 서비스     : http://localhost:8787/'
+/bin/echo ' '
+
+/bin/echo 'MySQL 버전                :' `/usr/bin/mysql --version | /bin/awk '{gsub(",", "", $5); print $5}'`
+/bin/echo ' '
+
+/bin/echo 'Python 버전               :' `/usr/bin/python -V 2>&1 | /bin/awk '{print $2}'`
+/bin/echo 'Git 버전                  :' `/usr/bin/git version 2>&1 | /bin/awk '{print $3}'`
+/bin/echo 'Maven 버전                :' `/appl/maven/bin/mvn -version 2>&1 | /bin/awk '/Apache Maven/{print $3}'`
+/bin/echo 'Ant 버전                  :' `/usr/bin/ant -version 2>&1 | /bin/awk '{print $4}'`
+/bin/echo 'JAVA_HOME                 : /usr/lib/jvm/jre'
+/bin/echo 'Java 버전                 :' `/usr/bin/java -version 2>&1 | /bin/awk '/java version/{gsub("\"", "", $3); print $3}'`
+/bin/echo 'CentOS Ver.               :' `/usr/bin/lsb_release  -a | /bin/awk '/Description/{print $4}'`, `/bin/uname -p`
+/bin/echo ' '
+
+### ============================================================================

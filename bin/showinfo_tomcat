@@ -1,0 +1,35 @@
+#!/bin/bash
+### ============================================================================
+###     프로그램 명  			: showinfo_tomcat, Version 0.00.002
+###     프로그램 설명   		: Apache Tomcat 정보를 표시 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          		: 2002.05.16 ~ 2013.06.18
+### ----[History 관리]----------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ============================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+TOMCAT=`ls /etc/init.d/tomcat? | cut -d"/" -f4`
+
+###/bin/echo 'Tomcat 버전               :' `/sbin/service $TOMCAT version | /bin/awk '/Server number/ {print $3}'`
+/bin/echo 'Tomcat 버전               :' `/usr/bin/yum list installed | /bin/awk '/tomcat..no/ {print $2}'`
+/bin/echo '설치 폴더      		  : /etc/'$TOMCAT'/'
+/bin/echo '환경 파일      		  : vi /etc/'$TOMCAT'/'$TOMCAT'.conf'
+/bin/echo '환경 파일/폴더            : vi /etc/'$TOMCAT'/server.xml, /etc/'$TOMCAT'/'
+/bin/echo 'TomcatRoot                : /usr/share/'$TOMCAT'/'`/bin/awk '/appBase/{gsub("appBase=\"", "", $3); gsub("\"", "", $3); print $3}' /etc/$TOMCAT/server.xml`
+/bin/echo '기동 종료      		  : service '$TOMCAT' restart'
+/bin/echo '서비스 확인    		  : ps -ef | grep '$TOMCAT' | grep -v grep'
+/bin/echo '로그 폴더      		  : /usr/share/'$TOMCAT'/logs/'
+/bin/echo 'PID 파일      		  : /var/run/'$TOMCAT'.pid'
+
+### ============================================================================

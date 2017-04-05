@@ -1,0 +1,56 @@
+#!/bin/bash
+### ============================================================================
+###     프로그램 명  			: showinfo, Version 0.00.005
+###     프로그램 설명   		: Linux server의 정보를 표시 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          		: 2002.07.15 ~ 2013.05.26
+### ----[History 관리]----------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ============================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+
+### ----------------------------------------------------------------------------
+###     funcShowinfo()
+###			showinfo_* Script 실행
+### ----------------------------------------------------------------------------
+funcShowinfo() {
+    echo '------------------------------------------------------------'
+    ${BIN_DIR}/showinfo_$1 $2
+    echo ' '
+}
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+/usr/bin/clear
+case "$1" in
+  	"centos") 	funcShowinfo $1;;
+  	"mysql")  	funcShowinfo $1;;
+  	"apache") 	funcShowinfo $1;;
+  	"php") 		funcShowinfo $1;;
+  	"tomcat") 	funcShowinfo $1;;
+  	"java") 	funcShowinfo $1;;
+  	"name")   	funcShowinfo $1;;
+  	"vsftp")  	funcShowinfo $1;;
+  	"instance") funcShowinfo $1 $2;;
+  	"template") funcShowinfo $1;;
+  	"custom") 	funcShowinfo $1;;
+  	"hadoop") 	funcShowinfo $1;;
+  	*)
+    	funcShowinfo "centos"
+    	funcShowinfo "mysql"
+    	funcShowinfo "apache"
+    	funcShowinfo "php"
+    	funcShowinfo "tomcat"
+    	funcShowinfo "java"
+    	;;
+esac
+
+### ============================================================================

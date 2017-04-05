@@ -1,0 +1,30 @@
+#!/bin/bash
+### ============================================================================
+###     프로그램 명  			: showinfo_centos, Version 0.00.004
+###     프로그램 설명   		: Centos 정보를 표시 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          		: 2002.07.15 ~ 2013.05.16
+### ----[History 관리]----------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ============================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+### /bin/echo 'CentOS Ver.               :' `/bin/cat /etc/issue | /bin/grep CentOS`, `/bin/uname -p`
+/bin/echo 'CentOS Ver.               :' `/usr/bin/lsb_release  -a | /bin/awk '/Description/{print $4}'`, `/bin/uname -p`
+/bin/echo 'CPU 개수       	          :' `/bin/cat /proc/cpuinfo | /bin/grep processor | /usr/bin/wc -l` CPU
+/bin/echo 'Memory (MB)               :' `/usr/bin/free -m | /bin/awk '/Mem/{print $2}'` KB
+/bin/echo 'Restart 명령              : shutdown -r now'
+/bin/echo 'Shutdown 명령             : shutdown -h now'
+/bin/echo '방화벽 명령    		  : setup'
+
+### ============================================================================

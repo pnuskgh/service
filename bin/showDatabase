@@ -1,0 +1,101 @@
+#!/bin/bash
+### ============================================================================
+###     프로그램 명  			: showDatabase, Version 0.00.001
+###     프로그램 설명   		: Database 정보를 표시 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          		: 2013.05.12 ~ 2013.05.12
+### ----[History 관리]----------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ============================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+. ${BIN_DIR}/utilCommon.bash
+
+### ----------------------------------------------------------------------------
+###     funcUsing()
+###			사용법 표시
+### ----------------------------------------------------------------------------
+funcUsing() {
+  	/bin/echo "Using : showDatabase [DATABASE] [USER] ROOTPASSWORD"
+  	/bin/echo "        DATABASE       : Database"
+  	/bin/echo "        USER           : Database 사용자"
+  	/bin/echo "        ROOTPSSWORD    : Database root 사용자의 암호"
+  	/bin/echo " "
+  	exit 1
+}
+
+###---  올바른 서버에서 실행되고 있는지 확인한다.
+funcCheckServer ${SERVER_DATABASE1} ${SERVER_DATABASE2} ${SERVER_DATABASE3} ${SERVER_DATABASE4} ${SERVER_DATABASE5}
+if [[ "$?" -gt "0" ]]; then
+	exit $?
+fi
+
+###---  Command Line에서 입력된 인수를 검사한다.
+if [[ $# = 1 ]]; then
+    DATABASE=none
+    USER=none
+  	ROOTPASSWORD=$1
+elif [[ $# = 2 ]]; then
+    DATABASE=$1
+    USER=none
+  	ROOTPASSWORD=$2
+elif [[ $# = 3 ]]; then
+    DATABASE=$1
+    USER=$2
+  	ROOTPASSWORD=$3
+else
+	funcUsing
+fi
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+if [[ ${DATABASE} = "none" ]]; then 
+    /bin/echo "Databases list"
+    /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e 'show databases'
+
+    /bin/echo "."
+    /bin/echo "User list"
+    /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e 'select user, host from user order by user, host'
+
+    /bin/echo "."
+    /bin/echo "Connect information"
+    /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e 'select db, user, host from db order by db, user, host'
+else
+    if [[ ${USER} = "none" ]]; then 
+        /bin/echo "Databases list"
+        /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e "show databases like '${DATABASE}'"
+
+        /bin/echo "."
+        /bin/echo "User list"
+        /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e 'select user, host from user order by user, host'
+
+        /bin/echo "."
+        /bin/echo "Connect information"
+        /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e "select db, user, host from db where db = '${DATABASE}' order by db, user, host"        
+    else
+        /bin/echo "Databases list"
+        /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e "show databases like '${DATABASE}'"
+
+        /bin/echo "."
+        /bin/echo "User list"
+        /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e "select user, host from user where user = '${USER}' order by user, host"
+
+        /bin/echo "."
+        /bin/echo "Connect information"
+        /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e "select db, user, host from db where db = '${DATABASE}' and user = '${USER}' order by db, user, host"
+    fi
+    
+###    /bin/echo "."
+###    /bin/echo "Tables list"
+###    /usr/bin/mysql -uroot -p${ROOTPASSWORD} mysql -e "show tables from ${DATABASE}"
+fi
+exit 0
+
+### ============================================================================
