@@ -1,0 +1,169 @@
+#!/usr/bin/env bash
+### ================================================================================================
+###     프로그램 명     : servicectl.bash, Version 0.00.001
+###     프로그램 설명   : Service 관리
+###     작성자          : 산사랑 (consult@jopenbusiness.com, www.jopenbusiness.com)
+###     작성일          : 2016.2.3 ~ 2016.2.3
+### --- [Copyright] --------------------------------------------------------------------------------
+###     Copyright (c) 1995~2016 산사랑, All rights reserved.
+### ================================================================================================
+
+if [[ "${SERVER_FOLDER}" == "" ]]; then
+    echo "SERVER_FOLDER 환경 변수를 설정 하세요."
+    echo " "
+    exit 1
+fi
+
+. ${SERVER_FOLDER}/bin/config.bash > /dev/null 2>&1
+. ${SERVER_FOLDER}/bin/utilCommon.bash > /dev/null 2>&1
+
+flagDebug="False"
+
+### ------------------------------------------------------------------------------------------------
+###     funcUsing, 2016.2.3 ~ 2016.2.3, Version 0.00.001
+###     사용법을 표시 합니다.
+### ------------------------------------------------------------------------------------------------
+funcUsing() {
+    info "Using : servicectl.bash.bash NODES COMMAND [OPTIONS]"
+    info "        NODES                : 실행할 nodes"
+    info "        COMMAND              : 실행할 명령"
+    info "        OPTIONS              : 명령 옵션"
+
+    info "    COMMAND"
+    info "        restart SERVICE [PROCESS] : Service, Process 재시작"
+    info "            SERVICE          : all, ~"
+    info "            PROCESS          : all, service, pcs, ~"
+    info "        info [SERVICE]       : Service, Process 정보"
+
+    info " "
+    exit 2
+}
+
+### ------------------------------------------------------------------------------------------------
+###     funcInfo, 2016.2.3 ~ 2016.2.3, Version 0.00.001
+###     To-Do : node 이름과 일치하는 것만 표시할 것
+### ------------------------------------------------------------------------------------------------
+funcInfo() {
+    local SERVICE
+    local NODE
+    local TYPE
+    local PROCESS
+
+    if [[ $# == 0 ]]; then
+        info "------------------------------------------------------------"
+        info "--- Service list"
+        grep -v "#" ${SERVER_FOLDER}/conf/services | awk '{ if (0 < NF) printf("%-20s %s\n", $1, $2) }' | uniq
+    elif [[ $# == 1 ]]; then
+        info "------------------------------------------------------------"
+        info "--- Process list"
+        grep -v "#" ${SERVER_FOLDER}/conf/services | grep $1 | awk '{ 
+            if (0 < NF) {
+                for (i = 4;i <= NF;i++) { 
+                    printf("%-20s %-20s %-10s %s\n", $1, $2, $3, $(i))
+                }
+            }
+        }'
+    fi
+    info " "
+}
+
+### ------------------------------------------------------------------------------------------------
+###     funcRestart, 2016.2.3 ~ 2016.2.3, Version 0.00.001
+###     To-Do : 한번 ssh가 호출되면 bash가 종료됨
+### ------------------------------------------------------------------------------------------------
+funcRestart() {
+    local SERVICE
+    local NODE
+    local TYPE
+    local PROCESS
+
+    if [[ $# == 0 ]]; then
+        info "Please select service"
+        info " "
+        info "------------------------------------------------------------"
+        info "--- Service list"
+        grep -v "#" ${SERVER_FOLDER}/conf/services | awk '{ if (0 < NF) printf("%-20s %s\n", $1, $2) }' | uniq
+    elif [[ 0 < $# ]]; then
+        mkdir -p /root/zztemp
+        grep -v "#" ${SERVER_FOLDER}/conf/services | grep $1 | awk '{
+            if (0 < NF) {
+                for (i = 4;i <= NF;i++) {
+                    printf("%-20s %-20s %-10s %s\n", $1, $2, $3, $(i))
+                }
+            }
+        }' > /root/zztemp/zzservicectl.txt
+
+        date
+        for hostname in ${NODES}; do
+            info "------------------------------------------------------------"
+            info "--- ${hostname}"
+            while read row; do
+                SERVICE=`echo ${row} | awk '{ print $1 }'`
+                NODE=`echo ${row} | awk '{ print $2 }'`
+                TYPE=`echo ${row} | awk '{ print $3 }'`
+                PROCESS=`echo ${row} | awk '{ print $4 }'`
+                funcStartWith ${hostname} ${NODE}
+                if [[ "$?" == "1" ]]; then
+                    debug "Row : ${row}"
+                    debug "Service : ${SERVICE}"
+                    debug "Node : ${NODE}"
+                    debug "Type : ${TYPE}"
+                    debug "Process : ${PROCESS}"
+                    debug " "
+                   
+                    if [[ "${TYPE}" == "init.d" ]]; then
+                        info ssh ${hostname} "/etc/init.d/${PROCESS} restart"
+                        # bash -c "ssh ${hostname} /etc/init.d/${PROCESS} restart"
+                    elif [[ "${TYPE}" == "initctl" ]]; then
+                        info ssh ${hostname} "initctl restart ${PROCESS}"
+                        # bash -c "ssh ${hostname} initctl restart ${PROCESS}"
+                    elif [[ "${TYPE}" == "pcs" ]]; then
+                        info "Reserved : restart ${PROCESS}"
+                    else
+                        error "unknown - ${TYPE}"
+                    fi
+                fi
+            done < /root/zztemp/zzservicectl.txt
+            echo " "
+        done
+        info " "
+    else
+        funcUsing
+    fi
+    info " "
+}
+
+
+### ------------------------------------------------------------------------------------------------
+###     Main
+### ------------------------------------------------------------------------------------------------
+###---  Command Line에서 입력된 인수를 검사한다.
+if [[ 1 < $# ]]; then
+    ARGS=$1
+    shift
+    COMMAND=$1
+    shift
+    OPTIONS=$*
+else
+    funcUsing
+fi
+
+funcGetNodes ${ARGS}
+NODES=${RTSTR}
+debug "Nodes : ${NODES}"
+
+case ${COMMAND} in
+    info)
+        funcInfo ${OPTIONS}
+        ;;
+    restart)
+        funcRestart ${OPTIONS}
+        ;;
+    *)
+        funcUsing
+        ;;
+esac
+exit 0
+
+### ================================================================================================
+

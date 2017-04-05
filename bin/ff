@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+FILENAME=$1
+
+find . -name ${FILENAME}*
+

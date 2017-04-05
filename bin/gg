@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+CONTENT=$1
+
+grep -r ${CONTENT} *
+

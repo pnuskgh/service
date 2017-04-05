@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : dos2linux.bash, Version 0.00.002
-###     프로그램 설명   : Dos용 파일을 Linux 파일 형식으로 변환 합니다.
+###     프로그램 명     : vim.bash, Version 0.00.001
+###     프로그램 설명   : Remote로 접속하여 명령 실행
 ###     작성자          : 산사랑 (consult@jopenbusiness.com, www.jopenbusiness.com)
-###     작성일          : 2013.4.3 ~ 2016.1.29
+###     작성일          : 2016.2.3 ~ 2016.2.3
 ### --- [Copyright] --------------------------------------------------------------------------------
 ###     Copyright (c) 1995~2016 산사랑, All rights reserved.
 ### ================================================================================================
 
 if [[ "${SERVER_FOLDER}" == "" ]]; then
-    echo "SERVER_FOLDER 환경 변수를 설정 하세요."
-    echo " "
+    info "SERVER_FOLDER 환경 변수를 설정 하세요."
+    info " "
     exit 1
 fi
 
@@ -18,30 +18,45 @@ fi
 . ${SERVER_FOLDER}/bin/utilCommon.bash > /dev/null 2>&1
 
 ### ------------------------------------------------------------------------------------------------
-###     funcUsing, 2016.1.29 ~ 2016.1.29, Version 0.00.001
+###     funcUsing, 2016.2.3 ~ 2016.2.3, Version 0.00.001
 ###     사용법을 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    info "Using : dos2linux.bash FILES"
-    info "        FILES                : CRLF를 LF로 변경할 파일"
+    info "Using : vim.bash NODES FILES"
+    info "        NODES          : 실행할 nodes"
+    info "        FILES          : 수정할 파일"
     info " "
     exit 2
 }
 
 ### ------------------------------------------------------------------------------------------------
-###     Main, 2016.1.29 ~ 2016.1.29, Version 0.00.001
+###     Main
 ### ------------------------------------------------------------------------------------------------
 ###---  Command Line에서 입력된 인수를 검사한다.
-if [[ 0 == $# ]]; then
+if [[ 1 < $# ]]; then
+    ARGS=$1
+    shift
+    FILES=$*
+else
     funcUsing
 fi
 
-#--- yum install dos2unix
-for file in "$@"; do
-    if [ -f $file ]; then
-        dos2unix $file
-    fi
+funcGetNodes ${ARGS}
+NODES=${RTSTR}
+
+date
+for hostname in ${NODES}; do
+    info "------------------------------------------------------------"
+    info "--- ${hostname}"
+    TMPFILE=""
+    for file in ${FILES}; do
+        TMPFILE="${TMPFILE} scp://${hostname}/${file} "
+    done
+    echo vim ${TMPFILE}
+    vim ${TMPFILE}
+    info " "
 done
 
-### ================================================================================================
+exit 0
 
+### ============================================================================

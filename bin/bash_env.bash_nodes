@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+### ================================================================================================
+###     프로그램 명     : bash_env.bash_node, Version 0.00.008
+###     프로그램 설명   : Mirantis OpenStack용 Linux 환경 설정 정보
+###     작성자          : 산사랑 (consult@jopenbusiness.com, www.jopenbusiness.com)
+###     작성일          : 2013.5.12 ~ 2016.2.4
+### --- [Copyright] --------------------------------------------------------------------------------
+###     Copyright (c) 1995~2016 산사랑, All rights reserved.
+### ================================================================================================
+#--- 환경 설정 파일에 ". /data/bin/bash_env.bash"를 추가 하세요.
+
+export SERVER_FOLDER=/data
+
+alias dir='ls -alF'
+alias dird='ls -alF | grep /'
+alias vi=vim
+alias ff="find . -type f"
+
+# export LANG=ko_KR.utf8
+
+export CDPATH=.:${SERVER_FOLDER}:${SERVER_FOLDER}/custom:${SERVER_FOLDER}/link:/usr/lib/python2.7/dist-packages:/usr/share/openstack-dashboard
+export PATH=${PATH}:${SERVER_FOLDER}/bin
+
+# export PS1='[\u@ostf \W] '
+export PS1='[\u@\h \W] '
+export EDITOR=vim
+
+### ------------------------------------------------------------------------------------------------
+###     Fuel Master 설정
+### ------------------------------------------------------------------------------------------------
+DOCKER_DEVICE=/var/lib/docker/devicemapper/mnt
+export OSTF_ROOT=${DOCKER_DEVICE}/36ee72caa0c2a25cae37ac5879a3206b4126a481db18ed80767aa71039553de3/rootfs
+
+export RSYSLOG_ROOT=${DOCKER_DEVICE}/4d28def214a37fd94a967f5114b572b3807e956bc30123e1ab8447737aca3d59/rootfs
+export RABBITMQ_ROOT=${DOCKER_DEVICE}/99e6b78febc94f1786968740234f40e4d2e6eeafccb9213d4d6d74ee606d0443/rootfs
+export POSTGRES_ROOT=${DOCKER_DEVICE}/ca94dc951ae427d4bf49e8dea4f81217b698eb5dc9b74076f78823eddeba5d1f/rootfs
+export NAILGUN_ROOT=${DOCKER_DEVICE}/1baef127862c27c8ed29dcd08bdca8b1b5bc7e2d83ed481e791994e347104503/rootfs/root
+export MCOLLECTIVE_ROOT=${DOCKER_DEVICE}/mnt/b74d197eba8ad6761c2c09d94f252665fb071127e6ddd37e1d8694c3af7daf7b/rootfs/root
+export RSYNC_ROOT=${DOCKER_DEVICE}/9003102aa069bea98b8ee5b62c2c0faa49705a8c089dd9ffc730fb3e099c2b1a/rootfs
+export COBBLER_ROOT=${DOCKER_DEVICE}/88ced38adbec4c6bc678e81713b574bf97f16415b6af4798103e893066fb5fb2/rootfs
+export NGINX_ROOT=${DOCKER_DEVICE}/12228df32ea914831cdb53376eb9b8edad75259af0dcae79aac2328bf8703860/rootfs
+export ASTUTE_ROOT=${DOCKER_DEVICE}/b4afda9c2d5d4d834e7f28fd4cb95cb27ce763472518c77a895c55b3db22ca86/rootfs
+export KEYSTONE_ROOT=${DOCKER_DEVICE}/bf858b996c1c8f6d527f46d5a742c8ad7a51aaf13b1a6a2e4b2368a16ad8bcb2/rootfs/root
+
+
+alias gitpush='git push origin HEAD:refs/for/master'
+
+export FUELCLIENT_CUSTOM_SETTINGS=/etc/fuel/client/config.yaml
+
+### ================================================================================================

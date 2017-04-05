@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : dos2linux.bash, Version 0.00.002
-###     프로그램 설명   : Dos용 파일을 Linux 파일 형식으로 변환 합니다.
+###     프로그램 명     : repeat.bash, Version 0.00.004
+###     프로그램 설명   : 명령을 반복 실행
 ###     작성자          : 산사랑 (consult@jopenbusiness.com, www.jopenbusiness.com)
-###     작성일          : 2013.4.3 ~ 2016.1.29
+###     작성일          : 2015.12.31 ~ 2013.12.31
 ### --- [Copyright] --------------------------------------------------------------------------------
 ###     Copyright (c) 1995~2016 산사랑, All rights reserved.
 ### ================================================================================================
@@ -22,8 +22,9 @@ fi
 ###     사용법을 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    info "Using : dos2linux.bash FILES"
-    info "        FILES                : CRLF를 LF로 변경할 파일"
+    info "Using : repeat.bash DURATION COMMAND"
+    info "        DURATION             : 반복 실행 간격"
+    info "        COMMAND              : 반복 실행할 명령"
     info " "
     exit 2
 }
@@ -32,15 +33,21 @@ funcUsing() {
 ###     Main, 2016.1.29 ~ 2016.1.29, Version 0.00.001
 ### ------------------------------------------------------------------------------------------------
 ###---  Command Line에서 입력된 인수를 검사한다.
-if [[ 0 == $# ]]; then
+if [[ 1 < $# ]]; then
+    DURATION=$1
+    shift
+    COMMAND=$*
+else
     funcUsing
 fi
 
-#--- yum install dos2unix
-for file in "$@"; do
-    if [ -f $file ]; then
-        dos2unix $file
-    fi
+while true
+do
+    clear
+    date +%Y%m%d_%H%M%S
+    echo ${COMMAND}
+    ${COMMAND}
+    sleep ${DURATION}
 done
 
 ### ================================================================================================

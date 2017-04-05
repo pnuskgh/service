@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : dos2linux.bash, Version 0.00.002
-###     프로그램 설명   : Dos용 파일을 Linux 파일 형식으로 변환 합니다.
+###     프로그램 명     : dc_git_pull.bash, Version 0.00.001
+###     프로그램 설명   : Git 저장소를 최신으로 설정 한다.
 ###     작성자          : 산사랑 (consult@jopenbusiness.com, www.jopenbusiness.com)
-###     작성일          : 2013.4.3 ~ 2016.1.29
+###     작성일          : 2016.8.18 ~ 2016.8.18
 ### --- [Copyright] --------------------------------------------------------------------------------
 ###     Copyright (c) 1995~2016 산사랑, All rights reserved.
 ### ================================================================================================
@@ -18,30 +18,31 @@ fi
 . ${SERVER_FOLDER}/bin/utilCommon.bash > /dev/null 2>&1
 
 ### ------------------------------------------------------------------------------------------------
-###     funcUsing, 2016.1.29 ~ 2016.1.29, Version 0.00.001
+###     funcUsing, 2016.8.18 ~ 2016.8.18, Version 0.00.001
 ###     사용법을 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    info "Using : dos2linux.bash FILES"
-    info "        FILES                : CRLF를 LF로 변경할 파일"
+    info "Using : dc_git_pull.bash"
     info " "
     exit 2
 }
 
 ### ------------------------------------------------------------------------------------------------
-###     Main, 2016.1.29 ~ 2016.1.29, Version 0.00.001
+###     Main
 ### ------------------------------------------------------------------------------------------------
-###---  Command Line에서 입력된 인수를 검사한다.
-if [[ 0 == $# ]]; then
-    funcUsing
-fi
+cd ${SERVER_FOLDER}/custom
 
-#--- yum install dos2unix
-for file in "$@"; do
-    if [ -f $file ]; then
-        dos2unix $file
-    fi
+for foldername in bier ceilometer console-user daoucloud fuel-plugin-neutron-lbaas fuel-plugin-openldap homepage neutron ; do
+    echo "===================================="
+    echo ${foldername}
+    cd ${foldername}
+    git pull
+    cd ..
+    echo " "
+    echo " "
 done
+
+exit 0
 
 ### ================================================================================================
 

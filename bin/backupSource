@@ -1,44 +1,43 @@
 #!/bin/bash
 ### ================================================================================================
-###     프로그램 명     		: backupSource, Version 0.00.004
-###     프로그램 설명   		: Instance의 Source를 백업 합니다.
-###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          		: 2002.07.15 ~ 2013.05.16
+###     프로그램 명                     : backupSource, Version 0.00.004
+###     프로그램 설명                   : Instance의 Source를 백업 합니다.
+###     작성자                          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일                          : 2002.07.15 ~ 2013.05.16
 ### ----[History 관리]------------------------------------------------------------------------------
-###     수정자          		:
-###     수정일          		:
-###     수정 내용       		:
+###     수정자                          :
+###     수정일                          :
+###     수정 내용                       :
 ### --- [Copyright] ------------------------------------------------------------
 ###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
 
-###---  Script 환경 설정
-. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
-. ${BIN_DIR}/utilCommon.bash
+if [[ "${SERVER_FOLDER}" == "" ]]; then
+    echo "SERVER_FOLDER 환경 변수를 설정 하세요."
+    echo " "
+    exit 1
+fi
+
+. ${SERVER_FOLDER}/bin/config.bash > /dev/null 2>&1
+. ${SERVER_FOLDER}/bin/utilCommon.bash > /dev/null 2>&1
 
 ### ----------------------------------------------------------------------------
 ###     funcUsing()
-###			사용법 표시
+###                     사용법 표시
 ### ----------------------------------------------------------------------------
 funcUsing() {
     /bin/echo "Using : backupSource INSTANCE"
     /bin/echo "        INSTANCE       : Instance"
     /bin/echo " "
-  	exit 1
+        exit 1
 }
-
-###---  올바른 서버에서 실행되고 있는지 확인한다.
-funcCheckServer $SERVER_WEB1 $SERVER_WEB2 $SERVER_WEB3 $SERVER_WEB4 $SERVER_WEB5
-if [[ "$?" -gt "0" ]]; then
-	exit $?
-fi
 
 ###---  Command Line에서 입력된 인수를 검사한다.
 if [[ $# = 1 ]]; then
-	INSTANCE=$1
+        INSTANCE=$1
 else
-	funcUsing
+        funcUsing
 fi
 
 ### ----------------------------------------------------------------------------
@@ -47,11 +46,17 @@ fi
 /bin/echo "Backup Source : " ${INSTANCE}
 /bin/mkdir ${BACKUP_DIR} > /dev/null 2>&1
 /bin/mkdir ${BACKUP_DIR}/${INSTANCE} > /dev/null 2>&1
-cd ${DOCUMENT_ROOT}
-/bin/tar cvf ${BACKUP_DIR}/${INSTANCE}/${INSTANCE}_${TIMESTAMP}.tar ${INSTANCE} > /dev/null 2>&1
+
+if [[ ${INSTANCE} = "root" ]]; then
+  cd ${DOCUMENT_ROOT}/..
+  /bin/tar cvf ${BACKUP_DIR}/${INSTANCE}/${INSTANCE}_${TIMESTAMP}.tar html > /dev/null 2>&1
+else
+  cd ${DOCUMENT_ROOT}
+  /bin/tar cvf ${BACKUP_DIR}/${INSTANCE}/${INSTANCE}_${TIMESTAMP}.tar ${INSTANCE} > /dev/null 2>&1
+fi
 
 if [[ "$?" -gt "0" ]]; then
-	exit $?
+        exit $?
 fi
 
 ### /usr/bin/clear
@@ -64,3 +69,4 @@ fi
 exit 0
 
 ### ============================================================================
+

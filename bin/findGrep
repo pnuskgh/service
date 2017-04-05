@@ -1,0 +1,71 @@
+#!/bin/bash
+### ============================================================================
+###     프로그램 명                     : findGrep, Version 0.00.001
+###     프로그램 설명                   : 파일을 검색하여 결과를 조회 합니다.
+###     작성자                          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일                          : 2016.7.18 ~ 2016.7.18
+### ----[History 관리]----------------------------------------------------------
+###     수정자                          :
+###     수정일                          :
+###     수정 내용                       :
+### --- [Copyright] ------------------------------------------------------------
+###     Copyright (c) 1995~2013 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     All rights reserved.
+### ============================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+
+### ----------------------------------------------------------------------------
+###     funcUsing()
+###                     사용법 표시
+### ----------------------------------------------------------------------------
+funcUsing() {
+        /bin/echo "Using : findGrep [-d CONTENT_DIR] [-e EXT] [-l] CONTENT"
+        /bin/echo "        CONTENT_DIR    : 검색할 폴더"
+        /bin/echo "        EXT            : 검색할 파일의 확장자"
+        /bin/echo "        OPTION         : 검색 옵션 (-l)"
+        /bin/echo "        CONTENT        : 검색할 문자열"
+        /bin/echo " "
+        exit 1
+}
+
+###---  Default 환경변수를 설정한다.
+CONTENT_DIR=`/usr/bin/pwd`
+EXT=""
+OPTION=""
+CONTENT=""
+
+###---  Command Line에서 입력된 인수를 검사한다.
+while getopts "d:e:lh" flag; do
+    case $flag in
+        d)      CONTENT_DIR=$OPTARG         ;;
+        e)  EXT=$OPTARG                 ;;
+        l)  OPTION="-l"                 ;;
+        h)  funcUsing                   ;;
+        : | ? | *)  funcUsing           ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+if [[ 0 < $# ]]; then
+    CONTENT=$1
+fi
+
+if [[ "$CONTENT" = "" ]]; then
+        funcUsing
+fi
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+cd ${CONTENT_DIR}
+if [[ "${EXT}" = "" ]]; then
+        grep -r ${OPTION} "${CONTENT}" * 2> /dev/null
+else
+        grep ${OPTION} "${CONTENT}" *.${EXT} */*.${EXT} */*/*.${EXT} */*/*/*.${EXT} */*/*/*/*.${EXT} */*/*/*/*/*.${EXT} */*/*/*/*/*.${EXT} 2> /dev/null
+fi
+exit 0
+
+### ============================================================================
+
