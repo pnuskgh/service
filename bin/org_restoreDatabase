@@ -1,0 +1,68 @@
+#!/bin/bash
+### ================================================================================================
+###     프로그램 명     		: restoreDatabase, Version 0.00.002
+###     프로그램 설명   		: Database를 복구 합니다.
+###     작성자     			: 김계현 (pnuskgh@gmail.com, 010-5034-3931)
+###     작성일          		: 2002.07.15 ~ 2002.09.27
+### ----[History 관리]------------------------------------------------------------------------------
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
+### ================================================================================================
+
+###---  Script 환경 설정
+. ${CONFIG_DIR}/config.bash > /dev/null 2>&1
+. ${BIN_DIR}/utilCommon.bash
+
+### ----------------------------------------------------------------------------
+###     funcUsing()
+###			사용법 표시
+### ----------------------------------------------------------------------------
+funcUsing() {
+    /bin/echo "Using : restoreDatabase INSTANCE DATABASE USER PASSWORD FILESQL [ROOTPSSWORD]"
+    /bin/echo "        INSTANCE       : Instance"
+    /bin/echo "        DATABASE       : Database"
+    /bin/echo "        USER           : Database 사용자"
+    /bin/echo "        PASSWORD       : Database 사용자의 암호"
+    /bin/echo "        FILESQL        : File의 full path"
+    /bin/echo "        ROOTPSSWORD    : Database root 사용자의 암호"
+    /bin/echo " "
+  	exit 1
+}
+
+###---  올바른 서버에서 실행되고 있는지 확인한다.
+funcCheckServer ${SERVER_DATABASE1} ${SERVER_DATABASE2} ${SERVER_DATABASE3} ${SERVER_DATABASE4} ${SERVER_DATABASE5}
+if [[ "$?" -gt "0" ]]; then
+	exit $?
+fi
+
+###---  Command Line에서 입력된 인수를 검사한다.
+if [[ $# = 5 ]]; then
+  	/bin/echo -n "Database root 사용자의 암호를 입력 하세요 : "
+  	read ROOTPASSWORD
+elif [[ $# = 6 ]]; then
+  	ROOTPASSWORD=$6
+elif [[ $# = 1 ]]; then
+	INSTANCE=$1
+	/bin/echo "Backup folder : " ${BACKUP_DIR}/${INSTANCE}
+	/bin/ls -alF ${BACKUP_DIR}/${INSTANCE}/*.sql
+    exit 1
+else
+	funcUsing
+fi
+INSTANCE=$1
+DATABASE=$2
+USER=$3
+PASSWORD=$4
+FILESQL=$5
+
+### ----------------------------------------------------------------------------
+###     Main process
+### ----------------------------------------------------------------------------
+/bin/echo "Restore Database : " ${DATABASE}
+### /usr/bin/mysql -u${USER} -p${PASSWORD} -D ${DATABASE} < ${BACKUP_DIR}/${INSTANCE}/${INSTANCE}_${TIMESTAMP}.sql
+/usr/bin/mysql -u${USER} -p${PASSWORD} -D ${DATABASE} < ${FILESQL}
+exit 0
+
+### ============================================================================
+

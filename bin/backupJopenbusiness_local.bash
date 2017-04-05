@@ -45,7 +45,7 @@ backupSource blog
 backupDatabase dev crmdev crmdev opendata9
 backupSource dev
 
-backupDatabase demo crmdemo crmdemo opendata9
+backupDatabase demo crmdemo ccrmdemo opendata9
 backupSource demo
 
 ### ----------------------------------------------------------------------------
