@@ -59,7 +59,7 @@ convert_raw_image() {
         if [[ -f ${FILE_NAME}.raw ]]; then
             mv ${FILE_NAME}.raw ${FILE_NAME}.raw_${TIMESTAMP}
         fi
-        qemu-img convert -c -f ${TARGET} -O raw ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.raw
+        qemu-img convert -f ${TARGET} -O raw ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.raw
         mv ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.${FILE_EXT}_${TIMESTAMP}
     done
     return 0
