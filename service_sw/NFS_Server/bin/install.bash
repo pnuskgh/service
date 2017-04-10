@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install.bash, Version 0.00.001
+###     프로그램 명     : install.bash, Version 0.00.002
 ###     프로그램 설명   : NFS Server를 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.04.05 ~ 2017.04.05
+###     작성일          : 2017.04.05 ~ 2017.04.10
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -24,28 +24,49 @@ WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
+###     환경 설정을 한다.
+###     NFS_OPTIONS : [Path] [Client_IP](Options)
+###         ro (Default), rw, aync (Default), async
+###         root_squash    : Client의 root를 익명 사용자(nobody)로 매핑 (Default)
+###         no_root_squash : Client의 root를 서버의 root로 매핑
+###         all_squash     : 모든 사용자를 익명 사용자(nobody)로 매핑
+###         secure         : 마운트 요청시 1024 port 이하로 할당 허용 (Default)
+###         insecure       : 마운트 요청시 1024 port 이상도 할당 허용
+### ------------------------------------------------------------------------------------------------
+NFS_SERVER="192.168.0.121"
+VOLUME_NAME="/dev/vdd"
+VOLUME_FORMAT="xfs"
+MOUNT_SERVER="/data"
+NFS_OPTIONS="rw,no_root_squash"
+# NFS_OPTIONS="ro,all_squash"
+# NFS_OPTIONS="rw,async,no_subtree_check,no_root_squash"
+
+NFS_CLIENT="192.168.0.122"
+MOUNT_CLIENT="/data"
+
+### ------------------------------------------------------------------------------------------------
 ###     Volume Mount
 ###         Volume : /dev/vdd
 ###         Folder : /data
 ### ------------------------------------------------------------------------------------------------
 yum -y install xfsprogs
 
-df -h
-lsblk
+# df -h
+# lsblk
 
-mkfs.xfs  /dev/vdd
-# mkfs.ext4 /dev/vdd
-
-mkdir -p /data
-mount -t xfs /dev/vdd /data
-# mount -t ext4 /dev/vdd /data
-echo "/dev/vdd /data xfs  defaults 0 0" >> /etc/fstab
-# echo "/dev/vdd /data ext4  defaults 1 2" >> /etc/fstab
+mkdir -p ${MOUNT_SERVER}
+if [[ "${VOLUME_FORMAT}" == "xfs" ]]; then
+    mkfs.xfs ${VOLUME_NAME}
+    mount -t xfs ${VOLUME_NAME} ${MOUNT_SERVER}
+    echo "${VOLUME_NAME} ${MOUNT_SERVER} xfs  defaults 0 0" >> /etc/fstab
+else
+    mkfs.ext4 ${MOUNT_SERVER}
+    mount -t ext4 ${VOLUME_NAME} ${MOUNT_SERVER}
+    echo "${VOLUME_NAME} ${MOUNT_SERVER} ext4  defaults 1 2" >> /etc/fstab
+fi
 
 ### ------------------------------------------------------------------------------------------------
 ###     NFS Server 설치
-###        NFS Server : 192.168.0.121
-###        NFS Client : 192.168.0.122
 ### ------------------------------------------------------------------------------------------------
 yum -y install nfs-utils
 
@@ -60,15 +81,7 @@ systemctl enable  nfs-server.service
 # vi /etc/idmapd.conf
 #     Domain=~
 
-#--- [Path] [Client_IP](Options)
-#--- Options
-#---     ro (Default), rw, aync (Default), async
-#---     root_squash : Client의 root를 익명 사용자(nobody)로 매핑 (Default)
-#---     all_squash  : 모든 사용자를 익명 사용자(nobody)로 매핑
-#---     secure      : 마운트 요청시 1024 port 이하로 할당 허용 (Default)
-#---     insecure    : 마운트 요청시 1024 port 이상도 할당 허용
-#---     anonuid=<uid>, anongid=<gid>
-echo "/data 192.168.0.122(rw,async,no_subtree_check,no_root_squash)" > /etc/exports
+echo "${MOUNT_SERVER} ${NFS_CLIENT}(${NFS_OPTIONS})" > /etc/exports
 chmod 644 /etc/exports
 
 systemctl restart nfs-server.service
