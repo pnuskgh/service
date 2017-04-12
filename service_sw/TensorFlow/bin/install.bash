@@ -24,6 +24,12 @@ WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
+###     TensorFlow 설정
+### ------------------------------------------------------------------------------------------------
+GPU_SUPPORT="False"
+STORAGE_URL="https://storage.googleapis.com/tensorflow/linux"
+
+### ------------------------------------------------------------------------------------------------
 ###     TensorFlow 설치
 ###     https://www.tensorflow.org/
 ###     https://www.tensorflow.org/install/install_linux
