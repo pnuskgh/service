@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 ### ================================================================================================
-###     프로그램 명     : expert_mnist.py, Version 0.00.001
+###     프로그램 명     : expert_mnist.py, Version 0.00.002
 ###     프로그램 설명   : MNIST 고급
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.04.13 ~ 2017.04.13
+###     작성일          : 2017.04.13 ~ 2017.04.19
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -15,7 +15,7 @@
 ### ================================================================================================
 #--- !/usr/bin/python2.7
 #--- https://tensorflowkorea.gitbooks.io/tensorflow-kr/g3doc/tutorials/mnist/pros/
-import os
+import sys, os
 import inspect
 import tensorflow as tf
 import numpy as np

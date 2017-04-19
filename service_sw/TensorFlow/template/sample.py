@@ -19,6 +19,7 @@ import os
 import inspect
 import tensorflow as tf
 import numpy as np
+import matplotlib.pyplot as plt
 
 ### -----------------------------------------------------------------------------------------------
 ###     데이터 준비

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install.bash, Version 0.00.001
+###     프로그램 명     : install.bash, Version 0.00.002
 ###     프로그램 설명   : TensorFlow를 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.04.12 ~ 2017.04.12
+###     작성일          : 2017.04.12 ~ 2017.04.19
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -44,7 +44,7 @@ virtualenv --system-site-packages ~/venvs/tensorflow
 
 source ~/venvs/tensorflow/bin/activate
 echo "source ~/venvs/tensorflow/bin/activate" >> ~/.bash_profile
-pip install --upgrade numpy scipy wheel cryptography
+pip install --upgrade numpy scipy wheel cryptography matplotlib
 
 # python -V
 # Python 2.7.5
