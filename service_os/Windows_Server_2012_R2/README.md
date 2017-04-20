@@ -86,3 +86,20 @@ Windows를 종료하고 디스크를 이미지로 변환하여 사용 한다.
   * 처음 로그인할 때 시간이 조금 오래 걸리므로 기다리세요.
   * Admin으로 로그인 하려면 Admin의 비밀번호를 설정 하여야 합니다.
 
+# Volume 사이즈 조정
+
+* Size 증가
+  * VBoxManage 명령어의 modifyhd를 사용하여 disk 크기를 증가 한다.
+  * Windows의 디스크 관리 화면에서 드라이브의 볼륨을 증가 한다.
+cd L:\work\repo_VirtualBox\OpenStack_Images\Windows_Server_2012_R2  
+"C:/Program Files/Oracle/VirtualBox/VBoxManage" modifyhd Windows_Server_2012_R2.vdi --resize 102400  
+
+* Size 감소
+  * Windows의 디스크 관리 화면에서 드라이브의 볼륨을 감소 한다.
+  * VirtualBox에서 새로운 볼륨을 생성 한다.
+  * VBoxManage 명령어의 clonehd를 사용하여 디스크를 복제 한다.
+  * 복제한 디스크로 기존 디스크를 교체 한다.
+  * Windows의 디스크 관리 화면에서 드라이브의 볼륨을 증가 한다.
+cd L:\work\repo_VirtualBox\OpenStack_Images\Windows_Server_2012_R2
+"C:/Program Files/Oracle/VirtualBox/VBoxManage" clonehd Windows_Server_2012_R2.vdi Windows_Server_2012_R2_1.vdi --existing
+
