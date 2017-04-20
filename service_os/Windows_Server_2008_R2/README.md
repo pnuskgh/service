@@ -80,6 +80,15 @@ C:/Program Files/Cloudbase Solutions/Cloudbase-Init/conf/cloudbase-init.conf
 C:/Program Files/Cloudbase Solutions/Cloudbase-Init/conf/cloudbase-init-unattend.conf  
 * logging_serial_port_settings=COM1,115200,N,8
 
+* Windows Server의 정품 인증을 한다.
+#--- 제품키 설치/제거
+slmgr /ipk 제품키
+slmgr /spky                 #--- 레지스트리에서 제품키 삭제  
+slmgr /upk  
+  
+#--- 정품 인증  
+slmgr /ato  
+
 Windows를 종료하고 디스크를 이미지로 변환하여 사용 한다.
 
 ## Windows Server로 이미지 생성 후 작업
