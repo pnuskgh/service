@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : convert_image.bash, Version 0.00.004
+###     프로그램 명     : convert_image.bash, Version 0.00.005
 ###     프로그램 설명   : 이미지를 포맷을 변환 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.04 ~ 2017.04.06
+###     작성일          : 2017.01.04 ~ 2017.04.21
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -23,6 +23,24 @@ fi
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 
 ### ------------------------------------------------------------------------------------------------
+###     funcUsing()
+###         사용법 표시
+### ------------------------------------------------------------------------------------------------
+funcUsing() {
+    /bin/echo "Using : convert_image.bash [TYPE]"
+    /bin/echo "        TYPE           : 이미지 타입 (raw. default, qcow2)"
+    /bin/echo " "
+    exit 1
+}
+
+###---  Command Line에서 입력된 인수를 검사한다.
+if [[ $# = 1 ]]; then
+    TYPE=qcow2
+else
+    TYPE=raw
+fi
+
+### ------------------------------------------------------------------------------------------------
 ###     이미지 변환을 위한 프로그램을 설치 한다.
 ### ------------------------------------------------------------------------------------------------
 ZZTEMP=`yum list installed | grep libguestfs-tools.noarch | wc -l`
@@ -34,46 +52,31 @@ fi
 ###     Convert Image Function
 ### ------------------------------------------------------------------------------------------------
 convert_image() {
-    local FILE_EXT=$1
-    local TARGET=$2
+    local SOURCE_FILE_EXT=$1
+    local SOURCE_FILE_TYPE=$2
+    local TARGET_FILE_EXT=$3
+    local TARGET_FILE_TYPE=$4
 
-    for TMPFILE in `ls *.${FILE_EXT}`; do
-        FILE_NAME=`basename -s .${FILE_EXT} ${TMPFILE}`
+    for TMPFILE in `ls *.${SOURCE_FILE_EXT}`; do
+        FILE_NAME=`basename -s .${SOURCE_FILE_EXT} ${TMPFILE}`
 
-        if [[ -f ${FILE_NAME}.qcow2 ]]; then
-            mv ${FILE_NAME}.qcow2 ${FILE_NAME}.qcow2_${TIMESTAMP}
+        if [[ -f ${FILE_NAME}.${TARGET_FILE_EXT} ]]; then
+            mv ${FILE_NAME}.${TARGET_FILE_EXT} ${FILE_NAME}.${TARGET_FILE_EXT}_${TIMESTAMP}
         fi
-        qemu-img convert -c -f ${TARGET} -O qcow2 ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.qcow2
-        mv ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.${FILE_EXT}_${TIMESTAMP}
-    done
-    return 0
-}
-
-convert_raw_image() {
-    local FILE_EXT=$1
-    local TARGET=$2
-
-    for TMPFILE in `ls *.${FILE_EXT}`; do
-        FILE_NAME=`basename -s .${FILE_EXT} ${TMPFILE}`
-
-        if [[ -f ${FILE_NAME}.raw ]]; then
-            mv ${FILE_NAME}.raw ${FILE_NAME}.raw_${TIMESTAMP}
-        fi
-        qemu-img convert -f ${TARGET} -O raw ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.raw
-        mv ${FILE_NAME}.${FILE_EXT} ${FILE_NAME}.${FILE_EXT}_${TIMESTAMP}
+        qemu-img convert -c -f ${SOURCE_FILE_TYPE} -O ${TARGET_FILE_TYPE} ${FILE_NAME}.${SOURCE_FILE_EXT} ${FILE_NAME}.${TARGET_FILE_EXT}
+        mv ${FILE_NAME}.${SOURCE_FILE_EXT} ${FILE_NAME}.${SOURCE_FILE_EXT}_${TIMESTAMP}
     done
     return 0
 }
 
 ### ------------------------------------------------------------------------------------------------
-###     이미지를 변환 한다.
+###     Main process
 ###         https://en.wikibooks.org/wiki/QEMU/Images
 ###         Convert-VHD -Path CentOS_7_64.vhdx -DestinationPath CentOS_7_64.vhd
 ### ------------------------------------------------------------------------------------------------
-
-convert_raw_image vdi  vdi
-convert_raw_image vhd  vpc
-convert_raw_image vhdx vhdx
+convert_image vdi  vdi   ${TYPE} ${TYPE}
+convert_image vhd  vpc   ${TYPE} ${TYPE}
+convert_image vhdx vhdx  ${TYPE} ${TYPE}
 
 exit 0
 ### ================================================================================================
