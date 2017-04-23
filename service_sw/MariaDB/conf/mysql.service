@@ -1,0 +1,18 @@
+[Unit]
+Description=MySQL service
+After=syslog.target
+After=network.target
+
+[Service]
+Type=forking
+User=mysql
+Group=mysql
+ExecStart=/usr/local/mysql/support-files/mysql.server start
+ExecStop=/usr/local/mysql/support-files/mysql.server stop
+StandardOutput=syslog
+StandardError=syslog
+syslogIdentifier=mysql
+
+[Install]
+WantedBy=multi-user.target
+

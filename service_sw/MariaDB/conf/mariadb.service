@@ -1,0 +1,18 @@
+[Unit]
+Description=MariaDB service
+After=syslog.target
+After=network.target
+
+[Service]
+Type=forking
+User=mariadb
+Group=mariadb
+ExecStart=/usr/local/maria/support-files/mariadb.server start
+ExecStop=/usr/local/maria/support-files/mariadb.server stop
+StandardOutput=syslog
+StandardError=syslog
+syslogIdentifier=mariadb
+
+[Install]
+WantedBy=multi-user.target
+
