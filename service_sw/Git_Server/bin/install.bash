@@ -1,20 +1,27 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명              : install_git.bash, Version 0.00.007
-###     프로그램 설명         	: Git 설치 Script
-###     작성자                     : 산사랑 (consult@jopenbusiness.com, www.jopenbusiness.com)
-###     작성일                     : 2015.7.21 ~ 2015.8.3
-### --- [History 관리] -------------------------------------------------------------------------------
-###     2015.07.21, 산사랑 : 초안 작성
-###     2015.07.30, 산사랑 : install_git.bash로 파일 분리
+###     프로그램 명     : install.bash, Version 0.00.001
+###     프로그램 설명   : Git Server 환경을 구성 한다.
+###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          : 2017.01.19 ~ 2017.01.19
+### ----[History 관리]------------------------------------------------------------------------------
+###     수정자          :
+###     수정일          :
+###     수정 내용       :
 ### --- [Copyright] --------------------------------------------------------------------------------
-###     Copyright (c) 1995~2015 산사랑, 오픈소스 비즈니스 컨설팅
+###     Copyright (c) 1995~2017 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
 
 ### ------------------------------------------------------------------------------------------------
-###             Main process
+###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
+source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
+source ${UTIL_DIR}/common.bash > /dev/null 2>&1
+
+RELATION_DIR="$(dirname $0)"
+WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
+source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     root 사용자로 작업을 하고 있는지 확인 합니다.
@@ -31,10 +38,16 @@ fi
 ###     Git 설치
 ### ------------------------------------------------------------------------------------------------
 TMPSTR=`git --version | grep "git version" | wc -l`
-if [ "${TMPSTR}" = "0" ]; then 
+if [ "${TMPSTR}" = "0" ]; then
     yum -y install git
     git --version
 fi
+
+
+
+
+exit 0
+
 
 ### ------------------------------------------------------------------------------------------------
 ###     Git 설치 및 환경 설정 (원격 저장소 생성)
@@ -75,7 +88,7 @@ chown git:git /cloudnas/repo_git_master
 ###     su - git -c 'cd /cloudnas/repo_git_master; git init --bare jopenbusiness.git'
 ###     su - git -c 'cd /cloudnas/repo_git_master; git init --bare localization.git'
 
-### Tip : repository 생성 
+### Tip : repository 생성
 ###     git clone ssh://git@osscloud.biz:/cloudnas/repo_git_master/jopenbusiness.git jopenbusiness
 ###     git clone ssh://git@osscloud.biz:/cloudnas/repo_git_master/localization.git localization
 
