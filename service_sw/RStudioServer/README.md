@@ -9,8 +9,11 @@
   * License : https://www.rstudio.com/products/rstudio/download2/
   * Download : https://www.rstudio.com/products/rstudio/download-server/
   * 홈 디렉토리 : /usr/lib/rstudio-server
+  * 설정 파일 : /etc/rstudio/rserver.conf, /etc/rstudio/rsession.conf
 
 * R Studio Server 설치  
 wget https://download2.rstudio.org/rstudio-server-rhel-1.0.143-x86_64.rpm  
 yum install --nogpgcheck rstudio-server-rhel-1.0.143-x86_64.rpm  
 
+* R Studio Server 설정
+  * 한글 설정 : "Tools > Global Options... > Code > Saving > Default text encoding"을 "UTF-8"로 설정 한다.
