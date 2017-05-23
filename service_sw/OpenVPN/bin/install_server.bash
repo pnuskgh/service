@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_server.bash, Version 0.00.001
+###     프로그램 명     : install_server.bash, Version 0.00.002
 ###     프로그램 설명   : OpenVPN을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.05.18 ~ 2017.05.18
+###     작성일          : 2017.05.18 ~ 2017.05.23
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -23,8 +23,11 @@ RELATION_DIR="$(dirname $0)"
 WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
+OPENVPN_DIR="/etc/openvpn"
+EASY_RSA_DIR="${OPENVPN_DIR}/easy-rsa"
+
 OPENVPN_SERVER_IP="203.217.211.48"
-OPENVPN_SERVER_PORT="443"
+OPENVPN_SERVER_PORT="1194"
 
 ### ------------------------------------------------------------------------------------------------
 ###     OpenVPN 설치
@@ -37,12 +40,17 @@ yum -y install openvpn easy-rsa
 ###         OpenVPN Server : server.crt, server.key
 ###         OpenVPN Client : john.crt, john.key
 ### ------------------------------------------------------------------------------------------------
-# rm -rf /etc/openvpn/easy-rsa/keys/*
-mkdir -p /etc/openvpn/easy-rsa/keys
-cp -rf /usr/share/easy-rsa/2.0/* /etc/openvpn/easy-rsa
-cp -f /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
+mkdir -p ${EASY_RSA_DIR}
+cp -rf /usr/share/easy-rsa/2.0/* ${EASY_RSA_DIR}
 
-cd /etc/openvpn/easy-rsa
+cd ${EASY_RSA_DIR}
+rm -rf keys
+mkdir -p keys
+cp -f openssl-1.0.0.cnf openssl.cnf
+
+cp vars ${BACKUP_DIR}/vars_${TIMESTAMP}
+/bin/cp -f ${TEMPLATE_DIR}/vars ${EASY_RSA_DIR}
+
 #--- KEY_~ 환경변수만 수정
 source ./vars
 ./clean-all
@@ -61,12 +69,21 @@ source ./vars
 
 ### ------------------------------------------------------------------------------------------------
 ###     OpenVPN 설정
+###        1194/tcp, 1194/udp
 ### ------------------------------------------------------------------------------------------------
-/bin/cp -f ${WORKING_DIR}/template/server.conf /etc/openvpn/server.conf
+mkdir -p ${OPENVPN_DIR}/logs
 
-systemctl start openvpn@server.service
+# /bin/cp -f /usr/share/doc/openvpn-2.4.2/sample/sample-config-files/server.conf ${OPENVPN_DIR}/server.conf
+cp ${OPENVPN_DIR}/server.conf ${BACKUP_DIR}/server_${TIMESTAMP}.conf
+/bin/cp -f ${TEMPLATE_DIR}/server.conf ${OPENVPN_DIR}/server.conf
+
+systemctl restart openvpn@server.service
 systemctl -f enable openvpn@server.service
-netstat -ant | grep 443
+
+netstat -ant | grep 1194
+ip addr list
+
+exit 0
 
 ### ------------------------------------------------------------------------------------------------
 ###     Routing & Forwarding Rules

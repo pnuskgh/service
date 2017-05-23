@@ -24,7 +24,7 @@ WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
 OPENVPN_SERVER_IP="203.217.211.48"
-OPENVPN_SERVER_PORT="443"
+OPENVPN_SERVER_PORT="1194"
 
 ### ------------------------------------------------------------------------------------------------
 ###     OpenVPN 설치
@@ -42,6 +42,8 @@ echo "OpenVPN Server로부터 key 파일을 복사 한다."
 ### ------------------------------------------------------------------------------------------------
 cd /etc/openvpn/easy-rsa/keys
 openvpn --config ${WORKING_DIR}/template/client.ovpn
+
+ip addr list
 
 ### ================================================================================================
 
