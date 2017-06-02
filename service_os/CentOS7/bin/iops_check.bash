@@ -23,6 +23,7 @@ WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
 DATA_VOLUME="/data"
+FIO_OPTIONS="--directory=${DATA_VOLUME} --name fio_test_file --direct=1 --numjobs=16 --time_based --runtime=60 --group_reporting --norandommap"
 
 ### ------------------------------------------------------------------------------------------------
 ###     funcUsing, 2016.6.1 ~ 2016.6.1, Version 0.00.001
@@ -82,9 +83,11 @@ create_volume() {
 check_volume() {
     local OPTIONS=$*
 
-    yum -y install fio
+    dd if=/dev/zero of=/dev/vdd bs=16M
+    dd if=/dev/zero of=/dev/vg_data/lv_data bs=16M
+    # dd if=/dev/urandom of=/dev/sda bs=16M
 
-    FIO_OPTIONS="--directory=${DATA_VOLUME} --name fio_test_file --direct=1 --numjobs=16 --time_based --runtime=60 --group_reporting --norandommap"
+    yum -y install fio
 
     cd /work
     fio --rw=randwrite --bs=4k --size=1G ${FIO_OPTIONS}
