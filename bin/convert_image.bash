@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : convert_image.bash, Version 0.00.005
+###     프로그램 명     : convert_image.bash, Version 0.00.006
 ###     프로그램 설명   : 이미지를 포맷을 변환 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.04 ~ 2017.04.21
+###     작성일          : 2017.01.04 ~ 2017.06.08
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -77,6 +77,8 @@ convert_image() {
 convert_image vdi  vdi   ${TYPE} ${TYPE}
 convert_image vhd  vpc   ${TYPE} ${TYPE}
 convert_image vhdx vhdx  ${TYPE} ${TYPE}
+
+# qemu-img convert -f qcow2 -O raw AIWAF_VE_v4.0.2.qcow2 AIWAF_VE_v4.0.2.raw
 
 exit 0
 ### ================================================================================================
