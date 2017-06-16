@@ -1,9 +1,5 @@
 # CentOS 환경에서 service 관리
 
-## History
-
-* 2017.03.10 ~ 2017.04.07, Version 0.00.074
-
 ## 작업 환경 설정 for git 1.8.3 (CentOS 7)
 
 yum -y install epel-release  
@@ -55,6 +51,12 @@ mkdir /work
 * CentOS 7
 * Python 2.7.5
 * Git 1.8.3.1
+
+## Git 접속 방법 변경
+vi /service/.git/config  
+    [remote "origin"]  
+        url = https://github.com/pnuskgh/service.git  
+        url = git@github.com:pnuskgh/service.git  
 
 ## Git 주요 명령어
 

@@ -29,7 +29,7 @@ source ${WORKING_DIR}/bin/config.bash
 ### ----------------------------------------------------------------------------
 funcUsing() {
     echo "Using : createRepository.bash REPOSITORY"
-    echo "        REPOSITORY     : Git 저장소 이름 (jopenbusiness.git)"
+    echo "        REPOSITORY     : Git 저장소 이름 (jopenbusiness)"
     echo " "
     exit 1
 }
@@ -45,7 +45,11 @@ fi
 ###     Main process
 ### ------------------------------------------------------------------------------------------------
 chsh -s /bin/bash git
-su - git -c "cd /work/repository/git; git init --bare ${REPOSITORY}"
+
+su - git -c "cd /work/repository/git; git init --bare ${REPOSITORY}.git"
+# /work/jopenbusiness/authorized_keys 파일에 public key를 등록해 두면 비밀번호 없이 접속 가능
+# git clone ssh://git@192.168.0.160/work/repository/git/${REPOSITORY}.git jopenbusiness
+
 chsh -s /usr/bin/git-shell git
 
 exit 0
