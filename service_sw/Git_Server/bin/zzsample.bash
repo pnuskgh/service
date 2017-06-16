@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install.bash, Version 0.00.002
-###     프로그램 설명   : Git을 설치하고 구성 한다.
+###     프로그램 명     : createRepository.bash, Version 0.00.002
+###     프로그램 설명   : Git Server용 repository를 생성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
 ###     작성일          : 2017.01.19 ~ 2017.06.16
 ### ----[History 관리]------------------------------------------------------------------------------
@@ -23,61 +23,78 @@ RELATION_DIR="$(dirname $0)"
 WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
-### ------------------------------------------------------------------------------------------------
-###     root 사용자로 작업을 하고 있는지 확인 합니다.
-### ------------------------------------------------------------------------------------------------
-TMPSTR=`env | grep USER`
-if [ "${TMPSTR}" = "USER=root" ]; then
-    echo ""
-else
-    echo "root 사용자로 작업 하세요."
+### ----------------------------------------------------------------------------
+###     funcUsing()
+###                     사용법 표시
+### ----------------------------------------------------------------------------
+funcUsing() {
+    echo "Using : createRepository.bash REPOSITORY"
+    echo "        REPOSITORY     : Git 저장소 이름 (jopenbusiness.git)"
+    echo " "
     exit 1
+}
+
+#---  Command Line에서 입력된 인수를 검사한다.
+if [[ $# = 1 ]]; then
+    REPOSITORY=$1
+else
+    funcUsing
 fi
+echo ${REPOSITORY}
+exit 0
+
+
 
 ### ------------------------------------------------------------------------------------------------
-###     Git 설치
-###         git version 1.8.3.1
+###     Nginx를 설치 한다.
 ### ------------------------------------------------------------------------------------------------
-TMPSTR=`git --version | grep "git version" | wc -l`
-if [ "${TMPSTR}" = "0" ]; then
-    yum -y install git
-fi
-
-git --version
 
 ### ------------------------------------------------------------------------------------------------
-###     Git 환경 설정 (원격 저장소 생성)
+###     Git 설치 및 환경 설정 (원격 저장소 생성)
 ###         git:git 사용자 생성
 ###         git protocol은 4418 port 사용
 ### ------------------------------------------------------------------------------------------------
-#--- git 사용자 생성
+mkdir -p /work/repository/git
+exit 0
+
+
+### git 사용자 생성
 groupadd git >& /etc/null
-useradd  -d /home/git -m -g git git >& /etc/null
+useradd  -d /cloudnas/home/git -m -g git git >& /etc/null
 
-# /bin/echo -n "git 사용자의 암호를 입력 하세요 : "
-passwd git
+### To-Do : 사용자 입력을 받는 것이 아니라 script에서 설정한 값을 사용하도록 수정할 것
+# passwd git
 
-#--- git 사용자로 로그인하지 못하도록 설정
+su - git -c '/cloudnas/bin/init_user.bash' >& /etc/null
+
+### git 사용자로 로그인하지 못하도록 설정
 TMPSTR=`grep git-shell /etc/shells | wc -l`
 if [ "${TMPSTR}" = "0" ]; then
     cat >> /etc/shells <<+
 /usr/bin/git-shell
 +
 fi
-chsh -s /usr/bin/git-shell git
+# chsh -s /usr/bin/git-shell git
 # chsh -s /bin/bash git
 
-#--- git 원격 접속 오류 방지
+### git 원격 접속 오류 방지
 TMPSTR=`grep "PasswordAuthentication no" /etc/ssh/sshd_config | wc -l`
 if [ "${TMPSTR}" = "1" ]; then
     sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
     service sshd restart
 fi
 
-#--- git repository 생성
-mkdir -p /work/repository/git > /dev/null 2>&1
-chown git:git /work/repository/git
+### remote repository 생성
+mkdir /cloudnas/repo_git_master >& /etc/null
+chown git:git /cloudnas/repo_git_master
 
-exit 0
+### Tip : Remote Git Repository 생성
+###     su - git -c 'cd /cloudnas/repo_git_master; git init --bare jopenbusiness.git'
+###     su - git -c 'cd /cloudnas/repo_git_master; git init --bare localization.git'
+
+### Tip : repository 생성
+###     git clone ssh://git@osscloud.biz:/cloudnas/repo_git_master/jopenbusiness.git jopenbusiness
+###     git clone ssh://git@osscloud.biz:/cloudnas/repo_git_master/localization.git localization
+
 ### ================================================================================================
 
