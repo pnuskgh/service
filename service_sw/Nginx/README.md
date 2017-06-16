@@ -1,3 +1,15 @@
+# Nginx 설치후 설정
+  
+cd /etc/nginx  
+mkdir sites-enabled  
+mkdir sites-available  
+  
+vi /etc/nginx/nginx.conf  
+    http {  
+        charset UTF-8;  
+  
+    include /etc/nginx/sites-enabled/*.conf;
+
 # Nginx 환경 구성
 
 Nginx version : nginx/1.10.2
