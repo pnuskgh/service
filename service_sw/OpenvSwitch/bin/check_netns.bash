@@ -52,6 +52,15 @@ ip netns exec ${NAMESPACE_NAME} ip link set veth_guest up
 ip addr list
 ip netns exec ${NAMESPACE_NAME} ip addr list
  
+#--- IP 할당
+ip addr add 10.0.128.101/24 dev veth_host
+ip netns exec ${NAMESPACE_NAME} ip addr add 10.0.128.102/24 dev veth_guest
+ip addr list
+ip netns exec ${NAMESPACE_NAME} ip addr list
+
+ping -c 3 10.0.128.101
+ping -c 3 10.0.128.102
+
 ### ------------------------------------------------------------------------------------------------
 ###     Linux Network Namespace clear
 ### ------------------------------------------------------------------------------------------------

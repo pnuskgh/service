@@ -26,22 +26,36 @@ vi  /etc/sysctl.conf
 ### ------------------------------------------------------------------------------------------------
 BRIDGE_NAME="br0"
 
-ip addr list
 brctl show
+ip addr list
  
 #--- Linux Bridge 추가
 brctl addbr ${BRIDGE_NAME}
 brctl show
+ip addr list
   
-brctl addif br0 eth0                  #--- br0 Bridge에 eth0 NIC 연결 
-# brctl delbr br0
-# brctl delif br0 eth0
-# brctl stp br0 off         #--- br0 Bridge에서 stp off (off : default) 
- 
+#--- Linux Bridge를 NIC와 연결
+brctl addif ${BRIDGE_NAME} veth_host
+brctl show
+ip addr list
+
+# brctl stp ${BRIDGE_NAME} off         #--- br0 Bridge에서 stp off (off : default) 
+
+#--- IP 할당
+ip addr add 10.0.128.103 dev ${BRIDGE_NAME}
+ip addr list
+
+ping -c 3 10.0.128.103
+ip netns exec ${NAMESPACE_NAME} ping -c 3 10.0.128.103
+
+# ip addr del 10.0.128.101/24 dev veth_host
+# ip netns exec ${NAMESPACE_NAME} ping -c 3 10.0.128.103
  
 ### ------------------------------------------------------------------------------------------------
 ###     Linux Bridge clear
 ### ------------------------------------------------------------------------------------------------
+brctl delif ${BRIDGE_NAME} veth_host
+brctl delbr ${BRIDGE_NAME}
 
 ### ================================================================================================
 
