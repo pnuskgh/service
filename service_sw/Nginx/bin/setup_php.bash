@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_php.bash, Version 0.00.001
+###     프로그램 명     : install_php.bash, Version 0.00.002
 ###     프로그램 설명   : Nginx에 PHP 개발 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.24 ~ 2017.03.24
+###     작성일          : 2017.03.24 ~ 2017.10.07
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -21,6 +21,7 @@ source ${UTIL_DIR}/common.bash > /dev/null 2>&1
 
 RELATION_DIR="$(dirname $0)"
 WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
+# WORKING_DIR="/service/service_sw/Nginx"
 source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
@@ -35,7 +36,7 @@ crudini --set /etc/php-fpm.d/www.conf www listen.owner nginx
 crudini --set /etc/php-fpm.d/www.conf www listen.group nginx
 crudini --set /etc/php-fpm.d/www.conf www listen.mode  0660
 
-# /etc/nginx/nginx.conf  파일에 아래 내용을 추가 한다.
+# vi /etc/nginx/nginx.conf  파일에 아래 내용을 추가 한다.
 #        location ~ \.(php)$ {
 #            root /usr/share/nginx/html;
 #            try_files $uri =404;

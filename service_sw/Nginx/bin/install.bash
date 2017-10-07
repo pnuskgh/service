@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 001_install.bash, Version 0.00.002
+###     프로그램 명     : 001_install.bash, Version 0.00.003
 ###     프로그램 설명   : Nginx를 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.23 ~ 2017.03.24
+###     작성일          : 2017.03.23 ~ 2017.10.07
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -33,13 +33,15 @@ systemctl enable nginx.service
 
 ### ------------------------------------------------------------------------------------------------
 ###     방화벽 설정
+###     https://www.lesstif.com/pages/viewpage.action?pageId=22053128
+###     Conf : /usr/lib/firewalld/ 
 ### ------------------------------------------------------------------------------------------------
-# systemctl stop firewalld.service
-# systemctl disable firewalld.service
+systemctl start firewalld.service
+systemctl enable firewalld.service
 
-# firewall-cmd --permanent --zone=public --add-port=80/tcp
-# firewall-cmd --reload
-# firewall-cmd --list-all
+firewall-cmd --permanent --zone=public --add-port=80/tcp
+firewall-cmd --reload
+firewall-cmd --list-all
 
 ### ------------------------------------------------------------------------------------------------
 ###     설치 정보 확인

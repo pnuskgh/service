@@ -1,3 +1,8 @@
+# CentOS 7
+
+## CentOS 7 초기 설정2dd
+init_centos.bash
+
 # CentOS 7 Image
 
 ## Hyper-V에서 CentOS 7 이미지 생성

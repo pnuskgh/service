@@ -3,7 +3,7 @@
 ###     프로그램 명     : createDatabase.bash, Version 0.00.004
 ###     프로그램 설명   : Database 사용자를 생성 합니다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.19 ~ 2017.03.30
+###     작성일          : 2002.07.15 ~ 2017.03.30
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -57,13 +57,21 @@ PASSWORD=$3
 /bin/echo "Create Database : " ${DATABASE}
 mysql -uroot -p${ROOTPASSWORD} mysql <<+
 create database ${DATABASE};
-insert into user (Host, User, Password)
-       values ('localhost', '${USER}', password('${PASSWORD}'));
-commit;
+show databases;
+
+grant all privileges on ${DATABASE}.* to ${USER}@localhost identified by '${PASSWORD}';
+grant all privileges on ${DATABASE}.* to ${USER}@'%' identified by '${PASSWORD}';
 flush privileges;
+
+select Host, User, Password from user;
+select Host, Db, User from db;
 exit
 
 +
+
+# insert into user (Host, User, Password)
+#        values ('localhost', '${USER}', password('${PASSWORD}'));
+# commit;
 
 exit 0
 

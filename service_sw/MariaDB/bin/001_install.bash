@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 001_install.bash, Version 0.00.002
+###     프로그램 명     : 001_install.bash, Version 0.00.003
 ###     프로그램 설명   : MariaDB를 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.19 ~ 2017.01.19
+###     작성일          : 2017.01.19 ~ 2017.10.07
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -59,6 +59,16 @@ chmod 644 /etc/my.cnf.d/mysql-clients.cnf
 systemctl restart mariadb.service
 
 mysql -uroot -pdemo1234 mysql -e "show variables like 'c%'"
+
+### ------------------------------------------------------------------------------------------------
+###     방화벽 설정
+### ------------------------------------------------------------------------------------------------
+systemctl start firewalld.service
+systemctl enable firewalld.service
+
+firewall-cmd --permanent --add-service=mysql
+firewall-cmd --reload
+firewall-cmd --list-all
 
 ### ------------------------------------------------------------------------------------------------
 ###     PhpMyAdmin
