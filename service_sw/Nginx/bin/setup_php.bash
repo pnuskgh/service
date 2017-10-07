@@ -37,6 +37,10 @@ crudini --set /etc/php-fpm.d/www.conf www listen.group nginx
 crudini --set /etc/php-fpm.d/www.conf www listen.mode  0660
 
 # vi /etc/nginx/nginx.conf  파일에 아래 내용을 추가 한다.
+#        location / {
+#            index index.php index.html;
+#        }
+#
 #        location ~ \.(php)$ {
 #            root /usr/share/nginx/html;
 #            try_files $uri =404;
