@@ -13,7 +13,8 @@
 ###     All rights reserved.
 ### ================================================================================================
 
-BACKUP_DIR=${WORKING_DIR}/backup
+# BACKUP_DIR=${WORKING_DIR}/backup
+BACKUP_DIR=/work/backup
 TEMPLATE_DIR=${WORKING_DIR}/template
 
 TIMESTAMP=`date +%Y%m%d_%H%M%S`
