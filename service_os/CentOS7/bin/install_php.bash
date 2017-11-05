@@ -37,6 +37,9 @@ yum -y install php-mysql
 yum -y install php-fpm
 systemctl enable php-fpm.service
 
+# service php-fpm start
+# chkconfig php-fpm on
+
 ### ------------------------------------------------------------------------------------------------
 ###     PHP 환경 설정
 ### ------------------------------------------------------------------------------------------------

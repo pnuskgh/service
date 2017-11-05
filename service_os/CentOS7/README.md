@@ -1,6 +1,6 @@
 # CentOS 7
 
-## CentOS 7 초기 설정2dd
+## CentOS 7 초기 설정
 init_centos.bash
 
 # CentOS 7 Image
