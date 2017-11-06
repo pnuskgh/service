@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : bash_profile.bash, Version 0.00.006
+###     프로그램 명     : bash_profile.bash, Version 0.00.007
 ###     프로그램 설명   : Bash Shell 기본 환경을 설정 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.18 ~ 2017.03.28
+###     작성일          : 2017.01.18 ~ 2017.11.6
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -36,7 +36,7 @@ alias dird='ls -alF | grep /'
 export LANG=ko_KR.utf8
 
 CDPATH=.:${HOME_SERVICE}:${HOME_SERVICE}/service_os:${HOME_SERVICE}/service_sw
-PATH=${PATH}:${HOME_SERVICE}/bin
+PATH=${PATH}:${HOME_SERVICE}/bin:/work/bin
 
 TIMESTAMP=`date +%Y%m%d_%H%M%S`
 

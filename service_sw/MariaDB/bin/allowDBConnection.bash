@@ -29,7 +29,7 @@ source ${WORKING_DIR}/bin/util.bash
 ###         사용법 표시
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    /bin/echo "Using : createDatabase.bash DATABASE USER PASSWORD HOST [ROOTPASSWORD]"
+    /bin/echo "Using : allowDBConnection.bash DATABASE USER PASSWORD HOST [ROOTPASSWORD]"
     /bin/echo "        DATABASE       : Database"
     /bin/echo "        USER           : Database 사용자"
     /bin/echo "        PASSWORD       : Database 사용자의 암호"
