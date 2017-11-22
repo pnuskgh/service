@@ -75,3 +75,22 @@ git pull
 
 * https://github.com/denysdovhan/bash-handbook/blob/master/translations/ko-KR/README.md
 
+# Linux 폴더 구조
+
+## /service/
+
+* bin/ : 공통으로 사용하는 실행 파일
+* conf/ : 공통으로 사용하는 설정 파일
+* service_os/ : OS S/W
+* service_sw/ : Software
+* util/ : 공통으로 사용하는 유틸리티
+
+## /work/
+
+* backup/ : Backup/Restore
+* bin/ : Linux별로 사용하는 실행 파일
+* conf/ : Linux별로 사용하는 설정 파일
+* custom/ : 커스터마이징된 소스 저장
+* install/ : 설치 프로그램
+* template/ : 템플릿
+
