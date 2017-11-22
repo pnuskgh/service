@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : bash_env.bash, Version 0.00.007
+###     프로그램 명     : bash_env.bash, Version 0.00.008
 ###     프로그램 설명   : Linux 환경 설정 정보
 ###     작성자          : 산사랑 (consult@jopenbusiness.com, www.jopenbusiness.com)
-###     작성일          : 2013.5.12 ~ 2016.2.1
+###     작성일          : 2013.5.12 ~ 2017.11.23
 ### --- [Copyright] --------------------------------------------------------------------------------
 ###     Copyright (c) 1995~2016 산사랑, All rights reserved.
 ### ================================================================================================
@@ -15,6 +15,7 @@ alias dir='ls -alF'
 alias dird='ls -alF | grep /'
 # alias vi=vim
 alias ff="find . -type f"
+alias show='clear; cat ~/README.md'
 
 # export LANG=ko_KR.utf8
 
