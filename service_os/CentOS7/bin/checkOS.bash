@@ -35,9 +35,18 @@ if [[ -f /etc/os-release ]]; then
         OS_NAME="centos"
         OS_VERSION=${VERSION_ID}
     fi
+
     if [[ "${DISTRIB_ID}" == "Ubuntu" ]]; then
         OS_NAME="ubuntu"
         OS_VERSION=${DISTRIB_RELEASE}
+    fi
+
+    #--- Amazon Linux AMI 2017.09 이미지는 CentOS 6.8을 기반으로 만들어진 OS 입니다.
+    if [[ "${NAME}" == "Amazon Linux AMI" ]]; then
+        OS_NAME="centos"
+        if [[ "${VERSION}" == "2017.09" ]]; then
+            OS_VERSION=6
+        fi
     fi
     funcExit
 fi
@@ -48,6 +57,7 @@ if [[ -f /etc/centos-release ]]; then
     if [[ "${TMPSTR}" == "1" ]]; then
         OS_VERSION="7"
     fi
+
     TMPSTR=`cat /etc/centos-release | grep 'release 6.5' | wc -l`
     if [[ "${TMPSTR}" == "1" ]]; then
         OS_VERSION="6.5"
