@@ -38,23 +38,25 @@ chown nginx:nginx doc_liferay//index.html
 ### ------------------------------------------------------------------------------------------------
 ###     Liferay Portal 7.0.4 GA5 with Apache Tomcat 설치
 ### ------------------------------------------------------------------------------------------------
+yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-*
+
 cd ${DOCUMENT_ROOT}
 unzip ${HOME_WORK}/install/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip
 mv liferay-ce-portal-7.0-ga5 liferay
 
+# systemctl restart firewalld.service
+firewall-cmd --permanent --zone=public --add-port=8080/tcp
+firewall-cmd --reload
+firewall-cmd --list-all
 
+cd liferay/tomcat-8.0.32/bin
+./startup.sh
 
+# tail -f ${DOCUMENT_ROOT}/liferay/tomcat-8.0.32/logs/catalina.out
+# tail -f /usr/share/nginx/html/liferay/tomcat-8.0.32/logs/catalina.out
+# http://demo.obcon.co.kr:8080/
 
-
-
-
-
-
-
-
-
-
-
+# ./shutdown.sh
 
 ### ================================================================================================
 
