@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install.bash, Version 0.00.002
-###     프로그램 설명   : Liferay Portal을 설치 한다.
+###     프로그램 명     : install620.bash, Version 0.00.003
+###     프로그램 설명   : Liferay Portal 6.2.0을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.12.04 ~ 2017.12.05
+###     작성일          : 2017.12.04 ~ 2017.12.15
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -29,7 +29,7 @@ source ${WORKING_DIR}/bin/config.bash
 ###         사용법 표시
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    /bin/echo "Using : install.bash DATABASE USER PASSWORD [ROOTPASSWORD]"
+    /bin/echo "Using : install523.bash DATABASE USER PASSWORD [ROOTPASSWORD]"
     /bin/echo "        DATABASE       : Database"
     /bin/echo "        USER           : Database 사용자"
     /bin/echo "        PASSWORD       : Database 사용자의 암호"
@@ -52,13 +52,11 @@ USER=$2
 PASSWORD=$3
 
 ### ------------------------------------------------------------------------------------------------
-###     Liferay Portal 7.0.4 GA5 with Apache Tomcat 설치
+###     Liferay Portal 6.2.0 with Apache Tomcat 설치
 ### ------------------------------------------------------------------------------------------------
-yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-*
-
 cd ${DOCUMENT_ROOT}
-unzip ${HOME_WORK}/install/liferay_700/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip
-mv liferay-ce-portal-7.0-ga5 liferay
+unzip ${HOME_WORK}/install/liferay_620/liferay-portal-tomcat-6.2-ce-ga6-20160112152609836.zip
+mv liferay-portal-6.2-ce-ga6 liferay620
 
 # systemctl restart firewalld.service
 firewall-cmd --permanent --zone=public --add-port=8080/tcp
@@ -70,7 +68,7 @@ firewall-cmd --list-all
 ### ------------------------------------------------------------------------------------------------
 ${HOME_SERVICE}/service_sw/MariaDB/bin/createDatabase.bash ${DATABASE} ${USER} ${PASSWORD} ${ROOTPASSWORD}
 
-TMPFILE=${DOCUMENT_ROOT}/liferay/portal-ext.properties
+TMPFILE=${DOCUMENT_ROOT}/liferay620/portal-ext.properties
 echo "jdbc.default.driverClassName=org.mariadb.jdbc.Driver" >> ${TMPFILE}
 echo "jdbc.default.url=jdbc:mariadb://localhost/${DATABASE}?useUnicode=true&characterEncoding=UTF-8&useFastDateParsing=false" >> ${TMPFILE}
 echo "jdbc.default.username=${USER}" >> ${TMPFILE}
@@ -79,18 +77,12 @@ echo "jdbc.default.password=${PASSWORD}" >> ${TMPFILE}
 cat ${TMPFILE}
 echo " "
 
-### ------------------------------------------------------------------------------------------------
-###     Liferay Portal 기동/종료
-### ------------------------------------------------------------------------------------------------
-cd ${DOCUMENT_ROOT}
-cd liferay/tomcat-8.0.32/bin
-./startup.sh
+cp /work/install/mariadb.jar /usr/share/nginx/html/liferay620/tomcat-7.0.62/lib/ext
 
-# tail -f ${DOCUMENT_ROOT}/liferay/tomcat-8.0.32/logs/catalina.out
-# tail -f /usr/share/nginx/html/liferay/tomcat-8.0.32/logs/catalina.out
-# http://demo.obcon.co.kr:8080/
-
-# ./shutdown.sh
+### ------------------------------------------------------------------------------------------------
+###     Liferay Portal 구성
+### ------------------------------------------------------------------------------------------------
+echo "Apache Tomcat를 기동한 후 http://demo.obcon.co.kr:8080/ 사이트로 접속하여 초기 설정을 합니다"
 
 ### ================================================================================================
 

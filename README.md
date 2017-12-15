@@ -80,6 +80,9 @@ git pull
 ## /service/
 
 * bin/ : 공통으로 사용하는 실행 파일
+** install.bash, uninstall.bash
+** service.bash start|restart|stop|status|info
+** backup.bash, restore.bash
 * conf/ : 공통으로 사용하는 설정 파일
 * service_os/ : OS S/W
 * service_sw/ : Software

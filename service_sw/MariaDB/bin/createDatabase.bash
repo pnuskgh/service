@@ -63,8 +63,8 @@ grant all privileges on ${DATABASE}.* to ${USER}@localhost identified by '${PASS
 grant all privileges on ${DATABASE}.* to ${USER}@'%' identified by '${PASSWORD}';
 flush privileges;
 
-select Host, User, Password from user;
-select Host, Db, User from db;
+select Host, User, Password from user order by User, Host;
+select Host, Db, User from db order by User, Db, Host;
 exit
 
 +
