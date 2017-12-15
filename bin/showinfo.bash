@@ -1,22 +1,17 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : bash_profile.bash, Version 0.00.009
-###     프로그램 설명   : Bash Shell 기본 환경을 설정 한다.
-###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.01.18 ~ 2017.12.15
+###     프로그램 명  			: showinfo.bash, Version 0.00.006
+###     프로그램 설명   		: Linux server의 정보를 표시 합니다.
+###     작성자          		: 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
+###     작성일          		: 2002.07.15 ~ 2017.12.15
 ### ----[History 관리]------------------------------------------------------------------------------
-###     수정자          :
-###     수정일          :
-###     수정 내용       :
+###     수정자          		:
+###     수정일          		:
+###     수정 내용       		:
 ### --- [Copyright] --------------------------------------------------------------------------------
-###     Copyright (c) 1995~2017 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     Copyright (c) 1995~2018 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
-
-### ------------------------------------------------------------------------------------------------
-###     ~/.bash_profile 기본 설정
-###         source ${HOME_SERVICE}/bin/bash_profile.bash
-### ------------------------------------------------------------------------------------------------
 
 ### ------------------------------------------------------------------------------------------------
 ###     Include
@@ -26,30 +21,49 @@ if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
 fi
 
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
-#--- HOME_SERVICE=/service
-#--- HOME_WORK=/work
 
 ### ------------------------------------------------------------------------------------------------
-###     Linux 기본 설정을 한다.
+###     funcRunCmd($0), 2017.12.15 ~ 2017.12.15, Version 0.00.001
+###     명령어 실행
 ### ------------------------------------------------------------------------------------------------
-export LANG=ko_KR.utf8
-export TZ='Asia/Seoul'
+funcRunCmd() {
+    local COMMAND
 
-PATH=${PATH}:${HOME_WORK}/bin:${HOME_SERVICE}/bin
-CDPATH=.:${HOME_SERVICE}:${HOME_SERVICE}/service_os:${HOME_SERVICE}/service_sw
-
-TIMESTAMP=`date +%Y%m%d_%H%M%S`
-
-alias dir='ls -alF'
-alias dird='ls -alF | grep /'
-alias show=${HOME_SERVICE}/bin/showinfo.bash
+    COMMAND=$1
+    CMD_FILE=${HOME_WORK}/bin/showinfo_${COMMAND}.bash
+    if [[ -f ${CMD_FILE} ]]; then
+        exec bash ${CMD_FILE}
+    else
+        CMD_FILE=${HOME_SERVICE}/bin/showinfo_${COMMAND}.bash
+        if [[ -f ${CMD_FILE} ]]; then
+            source ${CMD_FILE}
+        fi
+    fi
+}
 
 ### ------------------------------------------------------------------------------------------------
-###     Local 설정을 한다.
+###     Main process
 ### ------------------------------------------------------------------------------------------------
-if [[ -f ~/.bash_local ]]; then
-    source ${HOME_SERVICE}/bin/bash_profile_local.bash
+clear
+
+if [[ 0 = $# ]]; then
+    cat ~/README.md
+    exit 0
 fi
+COMMAND=$1
 
+for COMMAND in $*; do
+    case "${COMMAND}" in
+        "info")
+            ls -alF ${HOME_WORK}/bin/showinfo_*.bash ${HOME_SERVICE}/bin/showinfo_*.bash 2> /dev/null
+            ;;
+        *)
+            funcRunCmd ${COMMAND}
+            ;;
+    esac
+    echo " "
+    echo " "
+done
+exit 0
 ### ================================================================================================
 

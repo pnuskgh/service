@@ -21,6 +21,8 @@ OS_VERSION="unknown"
 ###     사용법을 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
 funcExit() {
+    export OS_NAME
+    export OS_VERSION
     echo ${OS_NAME} ${OS_VERSION}
     echo " "
     exit 0
@@ -75,6 +77,8 @@ if [[ -f /etc/issue ]]; then
     funcExit
 fi
 
+export OS_NAME
+export OS_VERSION
 exit 1
 ### ================================================================================================
 
