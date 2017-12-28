@@ -79,6 +79,11 @@ if [[ -f /etc/centos-release ]]; then
     if [[ "${TMPSTR}" == "1" ]]; then
         OS_VERSION="6.5"
     fi
+
+    TMPSTR=`cat /etc/centos-release | grep 'release 6.9' | wc -l`
+    if [[ "${TMPSTR}" == "1" ]]; then
+        OS_VERSION="6.9"
+    fi
 fi
 
 if [[ -f /etc/issue ]]; then
