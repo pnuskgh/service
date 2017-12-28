@@ -54,7 +54,7 @@ COMMAND=$1
 
 for COMMAND in $*; do
     case "${COMMAND}" in
-        "info")
+        help)
             ls -alF ${HOME_WORK}/bin/showinfo_*.bash ${HOME_SERVICE}/bin/showinfo_*.bash 2> /dev/null
             ;;
         *)
