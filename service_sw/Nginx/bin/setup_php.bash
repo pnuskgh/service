@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_php.bash, Version 0.00.003
+###     프로그램 명     : install_php.bash, Version 0.00.004
 ###     프로그램 설명   : Nginx에 PHP 개발 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.24 ~ 2017.11.21
+###     작성일          : 2017.03.24 ~ 2018.01.09
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
 ###     수정 내용       :
 ### --- [Copyright] --------------------------------------------------------------------------------
-###     Copyright (c) 1995~2017 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     Copyright (c) 1995~2018 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
 
@@ -25,17 +25,8 @@ WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
 source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
-###     Nginx와 php-fpm 환경 설정
+###     Nginx 환경 설정
 ### ------------------------------------------------------------------------------------------------
-backup /etc/php-fpm.d www.conf
-crudini --set /etc/php-fpm.d/www.conf www user nginx
-crudini --set /etc/php-fpm.d/www.conf www group nginx
-crudini --set /etc/php-fpm.d/www.conf www security.limit_extensions .php
-crudini --set /etc/php-fpm.d/www.conf www listen /var/run/php-fpm/php-fpm.sock
-crudini --set /etc/php-fpm.d/www.conf www listen.owner nginx
-crudini --set /etc/php-fpm.d/www.conf www listen.group nginx
-crudini --set /etc/php-fpm.d/www.conf www listen.mode  0660
-
 # vi /etc/nginx/nginx.conf  파일에 아래 내용을 추가 한다.
 #        location / {
 #            index index.php index.html;
@@ -44,7 +35,7 @@ crudini --set /etc/php-fpm.d/www.conf www listen.mode  0660
 #        location ~ \.(php)$ {
 #            root /usr/share/nginx/html;
 #            try_files $uri =404;
-#            fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+#            fastcgi_pass unix:/var/run/php-fpm/www.sock;
 #            fastcgi_index index.php;
 #            fastcgi_read_timeout 10;
 #

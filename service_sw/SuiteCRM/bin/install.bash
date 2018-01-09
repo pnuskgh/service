@@ -33,6 +33,7 @@ vi /etc/php.ini
 #    session.save_path = "/var/lib/php/session"
 #    memory_limit = 128M
 #    upload_max_filesize = 20M
+#    post_max_size = 20M
 
 mkdir -p /var/lib/php/session
 chown nginx:nginx /var/lib/php/session
