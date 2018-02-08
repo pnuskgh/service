@@ -1,5 +1,17 @@
 ---
 # tasks file for centos
-- name: Set Timezone
+#--- http://docs.ansible.com/ansible/latest/file_module.html
+- name: Set timezone
   file: src=/usr/share/zoneinfo/Asia/Seoul dest=/etc/localtime state=link force=yes
+
+#--- http://docs.ansible.com/ansible/latest/yum_module.html
+- name: Install packages
+  yum: name={{ item }} state=present
+  with_items:
+    - epel-release
+
+- name: Upgrade all packages
+  yum: 
+    name: '*'
+    state: latest
 
