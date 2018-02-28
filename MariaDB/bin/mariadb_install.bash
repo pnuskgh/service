@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : 001_install.bash, Version 0.00.003
+###     프로그램 명     : mariadb_install.bash, Version 0.00.003
 ###     프로그램 설명   : MariaDB를 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
 ###     작성일          : 2017.01.19 ~ 2017.10.07

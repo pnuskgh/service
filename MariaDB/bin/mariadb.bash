@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : git.bash, Version 0.00.001
-###     프로그램 설명   : Git을 관리 합니다.
+###     프로그램 명     : mariadb.bash, Version 0.00.001
+###     프로그램 설명   : MariaDB를 관리 합니다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
 ###     작성일          : 1995.02.20 ~ 2018.02.28
 ### ----[History 관리]------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ fi
 
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 
-SOFTWARE="Git"
+SOFTWARE="MariaDB"
 if [[ -f ${HOME_SERVICE}/${SOFTWARE}/bin/config.php ]]; then
     source ${HOME_SERVICE}/${SOFTWARE}/bin/config.php
 fi
@@ -31,30 +31,27 @@ fi
 ###     사용법을 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    echo "Using : git.bash COMMAND [OPTIONS]"
-    echo "        COMMAND              : help, install, checkoutService, status"
+    echo "Using : mariadb.bash COMMAND [OPTIONS]"
+    echo "        COMMAND              : help, install, status, ps, start, restart, stop"
     echo "        OPTIONS              : ..."
     echo " "
     exit 2
 }
 
 ### ------------------------------------------------------------------------------------------------
-###     Git을 설치 합니다.
+###     Status를 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
-funcInstall() {
-    yum -y install git
-
-    git config --global user.name "Mountain Lover"
-    git config --global user.email consult@jopenbusiness.com
-    git config --global push.default simple
-
-    git config --global --list
-    git config --list
-
-    # cd /
-    # git clone https://github.com/pnuskgh/service.git
-    # cd /service
-    # git checkout develop
+funcStatus() {
+    mysql -V
+    echo " "
+    echo "Config"
+    echo "    vi /etc/my.cnf"
+    echo "    /etc/my.cnf.d/"
+    echo "Data                : /var/lib/mysql/"
+    echo "Socket              : /var/lib/mysql/mysql.sock"
+    echo " "
+    echo "tail -f /var/log/mariadb/mariadb.log"
+    echo "mysql -uroot -p mysql -e \"show variables like 'c%'\""
 }
 
 ### ------------------------------------------------------------------------------------------------
@@ -78,20 +75,22 @@ case ${COMMAND} in
         funcUsing
         ;;
     install)
-        funcInstall
-        ;;
-    checkoutService)
-        cd /
-        git clone git@github.com:pnuskgh/service.git
-        cd /service
-        git checkout develop
+        /bin/bash ${HOME_SERVICE}/${SOFTWARE}/bin/mariadb_install.bash
         ;;
     status)
-        git --version
-        echo " "
-
-        git config --global --list
-        # git config --list
+        funcStatus
+        ;;
+    start)
+        systemctl start mariadb.service
+        ;;
+    restart)
+        systemctl restart mariadb.service
+        ;;
+    stop)
+        systemctl stop mariadb.service
+        ;;
+    ps)
+        ps -ef | grep -v grep | grep mysql
         ;;
     *)
         funcUsing
