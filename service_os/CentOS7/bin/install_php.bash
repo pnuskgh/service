@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_php.bash, Version 0.00.002
+###     프로그램 명     : install_php.bash, Version 0.00.003
 ###     프로그램 설명   : PHP를 설치하고 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.24 ~ 2018.01.09
+###     작성일          : 2017.03.24 ~ 2018.03.03
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -29,7 +29,7 @@ source ${WORKING_DIR}/bin/config.bash
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
     /bin/echo "Using : install_php.bash [VERSION]"
-    /bin/echo "        VERSION        : 5, 7"
+    /bin/echo "        VERSION        : 5, 72"
     /bin/echo " "
     exit 1
 }
@@ -48,6 +48,15 @@ fi
 ### ------------------------------------------------------------------------------------------------
 ###     PHP 설치
 ### ------------------------------------------------------------------------------------------------
+if [[ "${VERSION}" == "72" ]]; then
+    echo "wget -q http://rpms.remirepo.net/enterprise/remi-release-7.rpm"
+    echo "rpm -Uvh remi-release-7.rpm"
+    # yum -y install yum-utils
+    # yum --enablerepo=remi update remi-release
+    # yum-config-manager --enable remi-php72
+    echo " "
+fi
+
 case ${VERSION} in
     default)
         echo "--- Install PHP"
@@ -64,22 +73,32 @@ case ${VERSION} in
     7)
         echo "--- Install PHP 7.1"
         # yum remove httpd httpd-*
-        yum -y install httpd24 httpd24-*
+        # yum -y install httpd24 httpd24-*
+
         yum -y install php71 php71-cli php71-common php71-mbstring php71-gd php71-xml php71-soap php71-xmlrpc php71-mcrypt php71-imap
         yum -y install php71-mysqlnd
 
         yum -y install php71-fpm
+        ;;
+    72)
+        echo "--- Install PHP 7.2"
+        yum -y install php72 php72-php php72-php-cli php72-php-common php72-php-mbstring php72-php-gd php72-php-xml php72-php-soap php72-php-xmlrpc php72-php-mcrypt php72-php-imap
+        yum -y install php72-php-mysqlnd
+
+        yum -y install php72-php-fpm
         ;;
     *)
         funcUsing
         ;;
 esac
 
-# service php-fpm start
-# chkconfig php-fpm on
+# service php72-php-fpm start
+# chkconfig php72-php-fpm on
 
 ### ------------------------------------------------------------------------------------------------
 ###     PHP 환경 설정
+###     /etc/php.ini
+###     /etc/opt/remi/php72/php.ini
 ### ------------------------------------------------------------------------------------------------
 backup /etc php.ini
 crudini --set /etc/php.ini PHP date.timezone Asia/Seoul
@@ -99,6 +118,7 @@ crudini --set /etc/php-fpm.d/www.conf www user nginx
 crudini --set /etc/php-fpm.d/www.conf www group nginx
 crudini --set /etc/php-fpm.d/www.conf www security.limit_extensions .php
 # crudini --set /etc/php-fpm.d/www.conf www listen /var/run/php-fpm/php-fpm.sock
+# crudini --set /etc/php-fpm.d/www.conf www listen /var/opt/remi/php72/run/php-fpm/www.sock
 crudini --set /etc/php-fpm.d/www.conf www listen /var/run/php-fpm/www.sock
 crudini --set /etc/php-fpm.d/www.conf www listen.owner nginx
 crudini --set /etc/php-fpm.d/www.conf www listen.group nginx
@@ -123,6 +143,7 @@ yum -y install php71-pecl-apcu php71-pecl-apcu-devel
 ###    php-fpm 실행
 ### ------------------------------------------------------------------------------------------------
 systemctl restart php-fpm.service
+# systemctl restart php72-php-fpm.service
 
 ### ------------------------------------------------------------------------------------------------
 ###     설치 정보 확인
@@ -131,6 +152,9 @@ systemctl restart php-fpm.service
 ### ------------------------------------------------------------------------------------------------
 php -v
 # php-fpm -v
+
+# php72 -v
+# php72-php-fpm -v
 
 ### ================================================================================================
 
