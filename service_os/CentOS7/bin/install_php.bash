@@ -40,7 +40,7 @@ funcUsing() {
 if [[ $# = 1 ]]; then
     VERSION=$1
 elif [[ $# = 0 ]]; then
-    INSTANCE="default"
+    VERSION="default"
 else
     funcUsing
 fi
@@ -48,7 +48,7 @@ fi
 ### ------------------------------------------------------------------------------------------------
 ###     PHP 설치
 ### ------------------------------------------------------------------------------------------------
-case ${INSTANCE} in
+case ${VERSION} in
     default)
         echo "--- Install PHP"
         yum -y install php php-cli php-common php-mbstring php-gd php-xml php-soap php-xmlrpc php-mcrypt php-imap
