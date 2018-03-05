@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : nginx.bash, Version 0.00.001
-###     프로그램 설명   : Nginx를 관리 합니다.
+###     프로그램 명     : mediawiki.bash, Version 0.00.001
+###     프로그램 설명   : MediaWiki를 관리 합니다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 1995.02.20 ~ 2018.03.01
+###     작성일          : 1995.02.20 ~ 2018.03.05
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -22,7 +22,7 @@ fi
 
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 
-SOFTWARE="Nginx"
+SOFTWARE="MediaWiki"
 if [[ -f ${HOME_SERVICE}/${SOFTWARE}/bin/config.php ]]; then
     source ${HOME_SERVICE}/${SOFTWARE}/bin/config.php
 fi
@@ -31,8 +31,8 @@ fi
 ###     사용법을 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
-    echo "Using : nginx.bash COMMAND [OPTIONS]"
-    echo "        COMMAND              : help, install, status, ps, start, restart, stop"
+    echo "Using : mediawiki.bash COMMAND [OPTIONS]"
+    echo "        COMMAND              : help, install, status"
     echo "        OPTIONS              : ..."
     echo " "
     exit 2
@@ -42,13 +42,7 @@ funcUsing() {
 ###     Status를 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
 funcStatus() {
-    nginx -V
     echo " "
-    echo "Config"
-    echo "    /etc/nginx/"
-    echo "    vi /etc/nginx/nginx.conf"
-    echo " "
-    echo "tail -f /var/log/nginx/error.log"
 }
 
 ### ------------------------------------------------------------------------------------------------
@@ -72,21 +66,49 @@ case ${COMMAND} in
         funcUsing
         ;;
     install)
+        echo "MariaDB를 설치 하세요"
+        echo "Nginx를 설치 하세요"
+        echo "PHP와 PHP-FPM을 설치 하세요"
+        echo "    PHP에 설치된 모듈 목록 보기"
+        php72 -m
+        echo -n "잠시 멈춤 ..."
+        read ZZTEMP
+
+        yum -y install ImageMagick 
+        ls -alF /usr/bin/convert
+        cd /usr/share/nginx/html/mediawiki
+        ce images
+        mkdir archive
+        mkdir thumb
+        mkdir temp
+        mkdir deleted
+
+        echo "브라우저로 접속하여 MediaWiki를 설치 합니다."
+        echo -n "잠시 멈춤 ..."
+        read ZZTEMP
+
+        # cd /usr/share/nginx/html/mediawiki
+        # vi LocalSettings.php
+        #     $wgShellLocale = "ko_KR.utf8";
+        #     $wgLanguageCode = "ko";
+        #     $wgLocaltimezone="Asia/Seoul";
+        #     $wgLocalTZoffset=+540;
+        #
+        #     $wgEmergencyContact = "pnuskgh@gmail.com";
+        #     $wgPasswordSender = "pnuskgh@gmail.com";
+        #     $wgEmailAuthentication = true;
+        #     
+        #     $wgEnableUploads = true;
+        #     $wgUseImageResize = true;
+        #     $wgUseImageMagick = true;
+        #     $wgImageMagickConvertCommand = "/usr/bin/convert";
+        #     $wgHashedUploadDirectory = true;
+
+        echo "WYSIWYG-CKeditor 설치"
+
         ;;
     status)
         funcStatus
-        ;;
-    start)
-        systemctl start nginx.service
-        ;;
-    restart)
-        systemctl restart nginx.service
-        ;;
-    stop)
-        systemctl stop nginx.service
-        ;;
-    ps)
-        ps -ef | grep -v grep | grep nginx
         ;;
     *)
         funcUsing

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_php.bash, Version 0.00.003
+###     프로그램 명     : install_php.bash, Version 0.00.004
 ###     프로그램 설명   : PHP를 설치하고 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.24 ~ 2018.03.03
+###     작성일          : 2017.03.24 ~ 2018.03.05
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -82,7 +82,7 @@ case ${VERSION} in
         ;;
     72)
         echo "--- Install PHP 7.2"
-        yum -y install php72 php72-php php72-php-cli php72-php-common php72-php-mbstring php72-php-gd php72-php-xml php72-php-soap php72-php-xmlrpc php72-php-mcrypt php72-php-imap
+        yum -y install php72 php72-php php72-php-cli php72-php-common php72-php-mbstring php72-php-gd php72-php-xml php72-php-soap php72-php-xmlrpc php72-php-mcrypt php72-php-imap php72-php-pecl-zip
         yum -y install php72-php-mysqlnd
 
         yum -y install php72-php-fpm
@@ -105,6 +105,16 @@ crudini --set /etc/php.ini PHP date.timezone Asia/Seoul
 crudini --set /etc/php.ini PHP upload_max_filesize 10M
 crudini --set /etc/php.ini PHP post_max_size 10M
 # crudini --set /etc/php.ini PHP cgi.fix_pathinfo 0
+
+mkdir -p /var/lib/php/session
+mkdir -p /var/lib/php/upload
+cd /var/lib
+chown -R nginx:nginx *
+
+# session.save_path = "/var/lib/php/session"
+# upload_tmp_dir    = "/var/lib/php/upload"
+crudini --set /etc/php.ini Session session.save_path /var/lib/php/session
+crudini --set /etc/php.ini PHP upload_tmp_dir /var/lib/php/upload
 
 ### ------------------------------------------------------------------------------------------------
 ###     PHP - MBString 설정
