@@ -75,7 +75,7 @@ case ${VERSION} in
         # yum remove httpd httpd-*
         # yum -y install httpd24 httpd24-*
 
-        yum -y install php71 php71-cli php71-common php71-mbstring php71-gd php71-xml php71-soap php71-xmlrpc php71-mcrypt php71-imap
+        yum -y install php71 php71-cli php71-common php71-mbstring php71-gd php71-xml php71-soap php71-xmlrpc php71-mcrypt php71-imap php72-php-opcache
         yum -y install php71-mysqlnd
 
         yum -y install php71-fpm

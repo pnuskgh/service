@@ -33,7 +33,7 @@ fi
 ###     Linux 기본 설정을 한다.
 ### ------------------------------------------------------------------------------------------------
 export LANG=ko_KR.utf8
-export TZ='Asia/Seoul'
+# export TZ='Asia/Seoul'
 
 PATH=${PATH}:${HOME_WORK}/bin:${HOME_SERVICE}/bin
 CDPATH=.:${HOME_SERVICE}:${HOME_WORK}
