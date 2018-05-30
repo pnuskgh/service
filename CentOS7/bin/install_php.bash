@@ -85,7 +85,10 @@ case ${VERSION} in
     72)
         echo "--- Install PHP 7.2"
         yum -y install php72 php72-php php72-php-cli php72-php-common php72-php-mbstring php72-php-gd php72-php-xml php72-php-soap php72-php-xmlrpc php72-php-mcrypt php72-php-imap php72-php-pecl-zip
-        # yum -y install php72-php-posix
+
+        #--- https://webtatic.com/packages/php72/
+        #---     php72-php-process가 php-posix, php-sysvmsg, php-sysvsem, php-sysvshm을 포함
+        # yum -y install php72-php-process
         yum -y install php72-php-mysqlnd
 
         yum -y install php72-php-fpm
