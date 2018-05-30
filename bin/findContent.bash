@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : findContent.bash, Version 0.00.004
+###     프로그램 명     : findContent.bash, Version 0.00.005
 ###     프로그램 설명   : VirtualBox 가상 서버의 Network를 초기화 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2012.10.15 ~ 2017.03.28
+###     작성일          : 2012.10.15 ~ 2018.04.12
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
 ###     수정 내용       :
 ### --- [Copyright] --------------------------------------------------------------------------------
-###     Copyright (c) 1995~2017 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     Copyright (c) 1995~2018 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
 
@@ -68,9 +68,9 @@ fi
 ###     Main process
 ### ------------------------------------------------------------------------------------------------
 if [[ "${EXT}" = "" ]]; then
-    /usr/bin/find ${CONTENT_DIR} -name "*" -exec /bin/grep ${OPTION} "${CONTENT}" {} \;
+    /usr/bin/find ${CONTENT_DIR} -name "*" -exec /bin/grep ${OPTION} "${CONTENT}" {} \; 2> /devnull
 else
-    /usr/bin/find ${CONTENT_DIR} -name "*.${EXT}" -exec /bin/grep ${OPTION} "${CONTENT}" {} \;
+    /usr/bin/find ${CONTENT_DIR} -name "*.${EXT}" -exec /bin/grep ${OPTION} "${CONTENT}" {} \; 2> /devnull
 fi
 exit 0
 
