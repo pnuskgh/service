@@ -61,6 +61,7 @@ case ${VERSION} in
     default)
         echo "--- Install PHP"
         yum -y install php php-cli php-common php-mbstring php-gd php-xml php-soap php-xmlrpc php-mcrypt php-imap
+        # yum -y install php-posix
         yum -y install php-mysql
 
         yum -y install php-fpm
@@ -76,6 +77,7 @@ case ${VERSION} in
         # yum -y install httpd24 httpd24-*
 
         yum -y install php71 php71-cli php71-common php71-mbstring php71-gd php71-xml php71-soap php71-xmlrpc php71-mcrypt php71-imap php72-php-opcache
+        # yum -y install php71-posix
         yum -y install php71-mysqlnd
 
         yum -y install php71-fpm
@@ -83,6 +85,7 @@ case ${VERSION} in
     72)
         echo "--- Install PHP 7.2"
         yum -y install php72 php72-php php72-php-cli php72-php-common php72-php-mbstring php72-php-gd php72-php-xml php72-php-soap php72-php-xmlrpc php72-php-mcrypt php72-php-imap php72-php-pecl-zip
+        # yum -y install php72-php-posix
         yum -y install php72-php-mysqlnd
 
         yum -y install php72-php-fpm
