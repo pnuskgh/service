@@ -65,10 +65,6 @@ vi  /etc/opt/remi/php71/php.d/20-mbstring.ini
 #   
 #   mbstring.script_encoding = UTF-8
 
-vi  /etc/opt/remi/php71/php.d/20-mcrypt.ini
-#   ; Enable mcrypt extension module
-#   extension=mcrypt
-
 vi  /etc/opt/remi/php71/php.d/30-mcrypt.ini
 #   ; Enable mcrypt extension module
 #   extension=mcrypt
