@@ -17,16 +17,17 @@
 ###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
-source ${UTIL_DIR}/common.bash > /dev/null 2>&1
 
-RELATION_DIR="$(dirname $0)"
-WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
+BASE_NAME="Nginx"
+WORKING_DIR="${HOME_SERVICE}/${BASE_NAME}"
 source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     Nginx 설치
 ### ------------------------------------------------------------------------------------------------
 yum -y install nginx nginx-*
+
+/usr/bin/cp ${TEMPLATE_DIR}/nginx.conf    /etc/nginx
 
 systemctl restart nginx.service
 systemctl enable nginx.service

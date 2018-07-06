@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : mariadb_install.bash, Version 0.00.003
+###     프로그램 명     : install.bash, Version 0.00.003
 ###     프로그램 설명   : MariaDB를 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
 ###     작성일          : 2017.01.19 ~ 2017.10.07
@@ -44,17 +44,10 @@ mysql -V
 ### ------------------------------------------------------------------------------------------------
 ###     UTF-8 설정
 ### ------------------------------------------------------------------------------------------------
-backup /etc my.cnf
-/usr/bin/cp -f ${TEMPLATE_DIR}/my.cnf /etc
-chmod 644 /etc/my.cnf
-
-backup /etc/my.cnf.d client.cnf
-/usr/bin/cp -f ${TEMPLATE_DIR}/client.cnf /etc/my.cnf.d
-chmod 644 /etc/my.cnf.d/client.cnf
-
-backup /etc/my.cnf.d mysql-clients.cnf
-/usr/bin/cp -f ${TEMPLATE_DIR}/mysql-clients.cnf /etc/my.cnf.d
-chmod 644 /etc/my.cnf.d/mysql-clients.cnf
+/usr/bin/cp ${TEMPLATE_DIR}/my.cnf               /etc
+/usr/bin/cp ${TEMPLATE_DIR}/client.cnf           /etc/my.cnf.d
+/usr/bin/cp ${TEMPLATE_DIR}/server.cnf           /etc/my.cnf.d
+/usr/bin/cp ${TEMPLATE_DIR}/mysql-clients.cnf    /etc/my.cnf.d
 
 systemctl restart mariadb.service
 
