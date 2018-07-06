@@ -47,7 +47,8 @@ yum -y install php71-php-pecl-apcu php71-php-pecl-apcu-devel
 yum -y install nginx nginx-*
 mkdir -p /var/lib/php/session
 mkdir -p /var/lib/php/upload
-chown -R nginx:nginx /var/lib/php/session /var/lib/php/upload 
+chown -R nginx:nginx /var/lib/php
+chown -R nginx:nginx /var/opt/remi/php71/lib/php
 
 BASE_PHP71="/etc/opt/remi/php71"
 /usr/bin/cp ${TEMPLATE_DIR}/php.ini ${BASE_PHP71}
