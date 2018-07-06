@@ -64,6 +64,15 @@ firewall-cmd --reload
 firewall-cmd --list-all
 
 ### ------------------------------------------------------------------------------------------------
+###     Network로 Database 접속 허용
+### ------------------------------------------------------------------------------------------------
+# chcon -R -t httpd_sys_content_rw_t /var/www/html
+setsebool httpd_can_network_connect_db=on
+setsebool httpd_can_network_connect=on
+setsebool httpd_can_sendmail=on
+setsebool httpd_unified=on
+
+### ------------------------------------------------------------------------------------------------
 ###     PhpMyAdmin
 ###     HeidiSQL
 ### ------------------------------------------------------------------------------------------------
