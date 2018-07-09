@@ -16,13 +16,21 @@
 ### ------------------------------------------------------------------------------------------------
 ###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
+SOFTWARE="CentOS7"
+
+if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
+    export HOME_SERVICE="/service"
+fi
+WORKING_DIR="${HOME_SERVICE}/${SOFTWARE}"
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 
-# RELATION_DIR="$(dirname $0)"
-# WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
-BASE_NAME="CentOS7"
-WORKING_DIR="${HOME_SERVICE}/${BASE_NAME}"
-source ${WORKING_DIR}/bin/config.bash
+if [[ -f ${WORKING_DIR}/bin/config.php ]]; then
+    source ${WORKING_DIR}/bin/config.php
+else
+    TIMESTAMP=`date +%Y%m%d_%H%M%S`
+    BACKUP_DIR=${WORKING_DIR}/backup
+    TEMPLATE_DIR=${WORKING_DIR}/template
+fi
 
 ### ------------------------------------------------------------------------------------------------
 ###     PHP 설치
@@ -30,10 +38,10 @@ source ${WORKING_DIR}/bin/config.bash
 yum -y install wget
 
 #--- Remi repository 설치
-mkdir -p /work/install
 cd /work/install
 wget -q http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 rpm -Uvh remi-release-7.rpm
+yum repolist
 
 #--- PHP 7.1 설치
 yum -y install php71 php71-php php71-php-cli php71-php-common php71-php-fpm php71-php-gd php71-php-imap php71-php-json php71-php-mbstring php71-php-mysqlnd php71-php-opcache php71-php-pdo php71-php-pecl-crypto php71-php-mcrypt php71-php-pecl-zip php71-php-process php71-php-soap php71-php-xml php71-php-xmlrpc php71-runtime

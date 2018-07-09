@@ -16,11 +16,21 @@
 ### ------------------------------------------------------------------------------------------------
 ###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
+SOFTWARE="Nginx"
+
+if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
+    export HOME_SERVICE="/service"
+fi
+WORKING_DIR="${HOME_SERVICE}/${SOFTWARE}"
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 
-BASE_NAME="Nginx"
-WORKING_DIR="${HOME_SERVICE}/${BASE_NAME}"
-source ${WORKING_DIR}/bin/config.bash
+if [[ -f ${WORKING_DIR}/bin/config.php ]]; then
+    source ${WORKING_DIR}/bin/config.php
+else
+    TIMESTAMP=`date +%Y%m%d_%H%M%S`
+    BACKUP_DIR=${WORKING_DIR}/backup
+    TEMPLATE_DIR=${WORKING_DIR}/template
+fi
 
 ### ------------------------------------------------------------------------------------------------
 ###     Nginx 설치

@@ -16,12 +16,22 @@
 ### ------------------------------------------------------------------------------------------------
 ###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
+SOFTWARE="MariaDB"
+
+if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
+    export HOME_SERVICE="/service"
+fi
+WORKING_DIR="${HOME_SERVICE}/${SOFTWARE}"
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 source ${UTIL_DIR}/common.bash > /dev/null 2>&1
 
-RELATION_DIR="$(dirname $0)"
-WORKING_DIR="$(cd -P ${RELATION_DIR}/.. && pwd)"
-source ${WORKING_DIR}/bin/config.bash
+if [[ -f ${WORKING_DIR}/bin/config.php ]]; then
+    source ${WORKING_DIR}/bin/config.php
+else
+    TIMESTAMP=`date +%Y%m%d_%H%M%S`
+    BACKUP_DIR=${WORKING_DIR}/backup
+    TEMPLATE_DIR=${WORKING_DIR}/template
+fi
 
 ### ------------------------------------------------------------------------------------------------
 ###     MariaDB 설치
@@ -37,7 +47,7 @@ mysql_secure_installation
 
 ### ------------------------------------------------------------------------------------------------
 ###     설치 정보 확인
-###         5.5.52-MariaDB
+###         mysql  Ver 15.1 Distrib 5.5.56-MariaDB
 ### ------------------------------------------------------------------------------------------------
 mysql -V
 

@@ -34,6 +34,23 @@ source ${WORKING_DIR}/bin/config.bash
 /service/Nginx/bin/install.bash
 /service/MariaDB/bin/install.bash
 
+# /service/MariaDB/bin/createDatabase.bash suitecrm78  suite78  demo1234 demo1234
+# /service/MariaDB/bin/createDatabase.bash suitecrm79  suite79  demo1234 demo1234
+# /service/MariaDB/bin/createDatabase.bash suitecrm710 suite710 demo1234 demo1234
+
+### ------------------------------------------------------------------------------------------------
+### 
+### ------------------------------------------------------------------------------------------------
+suitecrm_ready() {
+    local FILENAME=$1
+    local TARGET=$2
+
+    cd /usr/share/nginx/html
+    unzip /work/install/${FILENAME}.zip > /dev/null 2>&1
+    mv ${FILENAME} ${TARGET}
+    chown -R nginx:nginx ${TARGET}
+}
+
 ### ------------------------------------------------------------------------------------------------
 ###     SuiteCRM 설치
 ###     https://suitecrm.com/download
@@ -42,10 +59,12 @@ yum -y install unzip
 
 #--- 설치할 SuiteCRM 소스를 아래 폴더에 위치 한다.
 #---     SuiteCRM-7.8.6.zip 파일을 notebook에서 업로드 한다.
+suitecrm_ready("SuiteCRM-7.8.20", "suitecrm78")
+suitecrm_ready("SuiteCRM-7.9.6",  "suitecrm79")
+suitecrm_ready("SuiteCRM-7.10.6", "suitecrm710")
+
 cd /usr/share/nginx/html
-unzip /work/install/SuiteCRM-7.10.6.zip
-mv SuiteCRM-7.10.6 suitecrm
-chown -R nginx:nginx suitecrm
+ls -alF
 
 # crontab -e -u nginx
 #     * * * * * cd /usr/share/nginx/html/suitecrm; php -f cron.php > /dev/null 2>&1 
