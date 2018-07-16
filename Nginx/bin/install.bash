@@ -68,8 +68,13 @@ if [[ "${SELINUX_TYPE}" = "Enforcing" ]]; then
     cd ${DOCUMENT_ROOT}
     # ps -efZ | grep nginx
     # ls -alZ *
-    chcon -R -t httpd_sys_rw_content_t *
+    # chcon -R -t httpd_sys_rw_content_t *
+    chcon -Rt httpd_sys_content_t
 fi 
+
+# setenforce 0
+# vi  /etc/selinux/config
+#     SELINUX=disabled
 
 ### ================================================================================================
 
