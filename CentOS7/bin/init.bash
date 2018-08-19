@@ -53,6 +53,8 @@ yum -y remove NetworkManager
 # groupadd centos
 # useradd -d /home/centos -s /usr/bin/bash -m -g centos centos
 
+# echo "centos        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
+
 ### ------------------------------------------------------------------------------------------------
 ###     Hostname을 설정 합니다.
 ### ------------------------------------------------------------------------------------------------
