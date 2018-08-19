@@ -40,6 +40,7 @@ git checkout stable/queens
 cp samples/local.conf local.conf
 vi local.conf
     HOST_IP=192.168.56.151
+./stack.sh
 
 http://192.168.56.151/horizon
 # This is your host IP address: 192.168.56.151
@@ -49,5 +50,6 @@ http://192.168.56.151/horizon
 # The default users are: admin and demo
 # The password: nomoresecret
 
+./unstack.sh
 ### ================================================================================================
 
