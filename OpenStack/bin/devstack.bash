@@ -42,6 +42,12 @@ vi local.conf
     HOST_IP=192.168.56.151
 
 http://192.168.56.151/horizon
+# This is your host IP address: 192.168.56.151
+# This is your host IPv6 address: ::1
+# Horizon is now available at http://192.168.56.151/dashboard
+# Keystone is serving at http://192.168.56.151/identity/
+# The default users are: admin and demo
+# The password: nomoresecret
 
 ### ================================================================================================
 
