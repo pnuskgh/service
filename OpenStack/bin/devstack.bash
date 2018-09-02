@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : devstack.bash, Version 0.00.001
+###     프로그램 명     : devstack.bash, Version 0.00.002
 ###     프로그램 설명   : DevStack을 사용하여 OpenStack을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.08.19 ~ 2018.08.19
+###     작성일          : 2018.08.19 ~ 2018.09.01
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -16,8 +16,10 @@
 ### ------------------------------------------------------------------------------------------------
 ###     stack 사용자를 추가 한다.
 ### ------------------------------------------------------------------------------------------------
+groupadd centos
 useradd -d /home/stack -s /usr/bin/bash -m -g centos stack
 echo "stack        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
+# echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
 
 passwd stack
 
@@ -26,8 +28,8 @@ passwd stack
 ### ------------------------------------------------------------------------------------------------
 su - stack
 # git clone https://git.openstack.org/cgit/openstack-dev/devstack
-git clone https://git.openstack.org/cgit/openstack-dev/sandbox
-# git clone https://git.openstack.org/openstack-dev/devstack
+# git clone https://git.openstack.org/cgit/openstack-dev/sandbox
+git clone https://git.openstack.org/openstack-dev/devstack
 cd devstack
 git checkout stable/queens
 # git checkout stable/pike
@@ -52,4 +54,3 @@ http://192.168.56.151/horizon
 
 ./unstack.sh
 ### ================================================================================================
-
