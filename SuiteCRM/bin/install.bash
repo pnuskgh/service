@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install.bash, Version 0.00.003
+###     프로그램 명     : install.bash, Version 0.00.004
 ###     프로그램 설명   : SuiteCRM을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.09.14 ~ 2018.06.12
+###     작성일          : 2017.09.14 ~ 2018.09.10
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -37,6 +37,10 @@ source ${WORKING_DIR}/bin/config.bash
 # /service/MariaDB/bin/createDatabase.bash suitecrm78  suite78  demo1234 demo1234
 # /service/MariaDB/bin/createDatabase.bash suitecrm79  suite79  demo1234 demo1234
 # /service/MariaDB/bin/createDatabase.bash suitecrm710 suite710 demo1234 demo1234
+
+#--- SuiteCRM에는 Cache가 적용되지 않도록 한다.
+vi  /etc/opt/remi/php71/php.d/opcache-default.blacklist
+    /usr/share/nginx/html/suitecrm
 
 ### ------------------------------------------------------------------------------------------------
 ### 
