@@ -106,6 +106,8 @@ vi  ~/README.md
     iwlist wlan0 scan
     wpa_cli -i wlan0 reconfigure
 
+    pinout
+
     cd /work/appl/OBCon_RaspberryPi
 
 apt  update
@@ -200,14 +202,14 @@ pip3 install numpy
 pip3 install pandas
 
 #--- GPIO 개발 환경 구성
-apt  install  python3-gpiozero
-apt  install  python3-rpi.gpio
-apt  install  python3-pigpio
-pip  install  spidev
+apt  install  python3-gpiozero python3-rpi.gpio python3-pigpio
+pip3 install  spidev
 #--- "시작 > 기본 설정 > Raspberry Pi Configuration > Interfacesa > SPI"를 "Enable"로 설정 한다.
 reboot
 ls -alF /dev/spidev0.0 /dev/spidev0.1
 
+crontab -e
+    * * * * * /work/appl/OBCon_RaspberryPi/OBCon_SCADA_Daemon.bash  watchdog
 
 
 # apt  list  --installed
