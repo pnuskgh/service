@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_raspbian.bash, Version 0.00.001
+###     프로그램 명     : install_raspbian.bash, Version 0.00.002
 ###     프로그램 설명   : Raspbian을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.11.01 ~ 2018.11.17
+###     작성일          : 2018.11.01 ~ 2018.11.19
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -59,6 +59,38 @@ systemctl  start   vncserver-x11-serviced.service
 systemctl  enable  vncserver-x11-serviced.service
 
 passwd                                  #--- pi/raspberry 사용자의 비밀번호를 변경 한다. 
+
+### ------------------------------------------------------------------------------------------------
+###     Serial (UART)를 설정 한다.
+### ------------------------------------------------------------------------------------------------
+#--- USB to RS232 TTL 시리얼 변환 케이블 연결
+#---     VCC	: 5V (적색)			: 라즈베리파이 앞줄 2번째
+#---     GND	: 검정색			: 라즈베리파이 앞줄 3번째
+#---     RXD	: 수신 (흰색)			: 라즈베리파이 앞줄 4번째 <-> TXD 연동
+#---     TXD	: 전송 (녹색)		:	: 라즈베리파이 앞줄 5번째 <-> RXD 연동
+
+#--- Raspberry Pi에서 Serial 통신 설정
+#---     "시작 > 기본 설정 > Raspberry Pi Configuration > Interfaces" 메뉴 선택
+#---         Serial Port		: Enable
+#---         Serial Console		: Enable (Putty로 접속시 설정), Disable (시리얼 통신시 설정)
+
+vi  /boot/config.txt
+    enable_uart=1
+    # disable bluetooth
+    dtoverlay=pi3-disable-bt
+systemctl  disable  hciuart
+reboot
+
+# stty  -F  /dev/ttyAMA0  115200
+
+#--- Windows 10에서 장치 드라이브 설치
+#---     PL2303_64bit_Installer.exe 프로그램을 설치
+#---     "장치 관리자 > 포트(COM & LPT) > Prolific USB-to-Serial Comm Port(COM5)" 메뉴에서 확인
+
+#--- Putty를 사용하여 접속
+#---     Serial line : COM5
+#---     Speed       : 115200
+#---     접속 형식   : 시리얼
 
 ### ------------------------------------------------------------------------------------------------
 ###     기본적인 환경을 설정 한다.
@@ -208,13 +240,39 @@ pip3 install  spidev
 reboot
 ls -alF /dev/spidev0.0 /dev/spidev0.1
 
+#--- Serial (UART) 개발 환경 구성
+apt  install  python3-serial
+# pip3  install  pyserial
+
+### ------------------------------------------------------------------------------------------------
+###     OBCon_RaspberryPi 프로그램 로딩 후 설정
+### ------------------------------------------------------------------------------------------------
+mkdir  -p  /work/appl/OBCon_RaspberryPi
+cd  /work/appl/OBCon_RaspberryPi
+chmod  755 *.bash
+
 crontab -e
     * * * * * /work/appl/OBCon_RaspberryPi/OBCon_SCADA_Daemon.bash  watchdog
 
+#--- Python을 서비스로 등록
+# vi /etc/systemd/system/obcon_daemon.service
+#     [Unit]
+#     After=multi-user.target
+#     
+#     [Service]
+#     ExecStart=/usr/bin/python3 /work/appl/OBCon_RaspberryPi/OBCon_SCADA_Daemon.py
+#     
+#     [Install]
+#     WantedBy=default.target
+# systemctl daemon-reload
+# 
+# systemctl  enable  obcon_daemon
+# systemctl  start   obcon_daemon
+# systemctl  status  obcon_daemon
 
 # apt  list  --installed
-# pip  list
-# pip  freeze
+# pip3  list
+# pip3  freeze
 
 ### ================================================================================================
 
