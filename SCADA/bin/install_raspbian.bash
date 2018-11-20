@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_raspbian.bash, Version 0.00.002
+###     프로그램 명     : install_raspbian.bash, Version 0.00.003
 ###     프로그램 설명   : Raspbian을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.11.01 ~ 2018.11.19
+###     작성일          : 2018.11.01 ~ 2018.11.21
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -241,8 +241,8 @@ reboot
 ls -alF /dev/spidev0.0 /dev/spidev0.1
 
 #--- Serial (UART) 개발 환경 구성
-apt  install  python3-serial
-# pip3  install  pyserial
+# apt  install  python3-serial
+pip3  install  pyserial
 
 ### ------------------------------------------------------------------------------------------------
 ###     OBCon_RaspberryPi 프로그램 로딩 후 설정
@@ -273,6 +273,18 @@ crontab -e
 # apt  list  --installed
 # pip3  list
 # pip3  freeze
+
+### ------------------------------------------------------------------------------------------------
+###     pigpio를 설정 한다.
+### ------------------------------------------------------------------------------------------------
+#--- "시작 > 기본 설정 > Raspberry Pi Configuration > Interfaces" 메뉴를 선택 한다.
+#--- "Remote GPIO"를 "Enable"로 설정 한다.
+systemctl  enable  pigpiod.service
+systemctl  start   pigpiod.service	
+
+#--- Windows에서 pigpio를 설치 한다.
+#--- export PIGPIO_ADDR=soft, export PIGPIO_PORT=8888
+#--- pigpio.pi('hostname', 8888)
 
 ### ================================================================================================
 
