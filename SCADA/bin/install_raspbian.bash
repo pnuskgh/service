@@ -229,9 +229,11 @@ mkdir -p /work/appl/OBCon_RaspberryPi
 cd /work/appl/OBCon_RaspberryPi
 
 pip3 install configparser
-pip3 install matplotlib
-pip3 install numpy
-pip3 install pandas
+
+apt  install  libatlas3-base
+pip3 install  numpy
+pip3 install  pandas
+pip3 install  matplotlib
 
 #--- GPIO 개발 환경 구성
 apt  install  python3-gpiozero python3-rpi.gpio python3-pigpio
