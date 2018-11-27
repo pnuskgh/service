@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_raspbian.bash, Version 0.00.003
+###     프로그램 명     : install_raspbian.bash, Version 0.00.007
 ###     프로그램 설명   : Raspbian을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.11.01 ~ 2018.11.21
+###     작성일          : 2018.11.01 ~ 2018.11.27
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -139,6 +139,7 @@ vi  ~/README.md
     wpa_cli -i wlan0 reconfigure
 
     pinout
+    gpio readall
 
     cd /work/appl/OBCon_RaspberryPi
 
@@ -246,6 +247,11 @@ ls -alF /dev/spidev0.0 /dev/spidev0.1
 # apt  install  python3-serial
 pip3  install  pyserial
 
+#--- Arduino 통합 개발 환경 설치
+#--- http://thrillfighter.tistory.com/583
+#---     https://www.arduino.cc/en/Main/Software : arduino-1.8.7-windows.exe
+# apt install arduino
+
 ### ------------------------------------------------------------------------------------------------
 ###     OBCon_RaspberryPi 프로그램 로딩 후 설정
 ### ------------------------------------------------------------------------------------------------
@@ -287,6 +293,110 @@ systemctl  start   pigpiod.service
 #--- Windows에서 pigpio를 설치 한다.
 #--- export PIGPIO_ADDR=soft, export PIGPIO_PORT=8888
 #--- pigpio.pi('hostname', 8888)
+
+### ------------------------------------------------------------------------------------------------
+###     Raspberry Pi에 CPP 개발 환경 구성
+### ------------------------------------------------------------------------------------------------
+#--- Raspberry에서 c++ 개발 환경 설정
+apt install openssh-server g++ gdb gdbserver
+
+#--- WiringPi 2.46 설치
+apt install wiringpi
+gpio -v
+gpio readall
+
+# gcc -o hello hello.c
+# ./hello
+
+### ------------------------------------------------------------------------------------------------
+###     ADS1256 설정
+### ------------------------------------------------------------------------------------------------
+#--- BCM2835 설치
+# vi  /boot/config.txt
+#     dtparam=spi=on
+# 
+# lsmod | egrep '2835|spi'
+#     spidev                 16384  0
+#     snd_bcm2835            32768  1
+#     snd_pcm                98304  1 snd_bcm2835
+#     snd                    69632  5 snd_timer,snd_bcm2835,snd_pcm
+#     i2c_bcm2835            16384  0
+#     spi_bcm2835            16384  0
+
+mkdir -p /work/download
+cd /work/download
+
+#--- http://www.airspayce.com/mikem/bcm2835/
+#---     http://www.airspayce.com/mikem/bcm2835/bcm2835-1.57.tar.gz
+#---     https://www.waveshare.com/wiki/File:Bcm2835-1.45.tar.gz
+#---     https://www.waveshare.com/wiki/File:Bcm2835-1.39.tar.gz
+wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.57.tar.gz
+gzip -d bcm2835-1.57.tar.gz
+tar xvf bcm2835-1.57.tar
+# tar zxvf bcm2835-1.57.tar
+
+cd bcm2835-1.57
+./configure
+make
+make check
+make install
+
+dir /proc/device-tree/soc/ranges
+
+#--- High-Precision-AD-DA-Board-Code 설치
+#---     https://www.waveshare.com/wiki/File:High-Precision-AD-DA-Board-Code.7z
+#---     interfaces/ADS1256/ 폴더에 업로드
+cd /work/appl/OBCon_RaspberryPi/interfaces/ADS1256/ADS1256
+make
+# gcc ads1256_test.c -o ads1256_test -lbcm2835
+./ads1256_test
+
+#--- SPI Python 모듈 제작
+#---     https://github.com/fabiovix/py-ads1256
+#---     https://github.com/kizniche/pyadda
+cd /work/download
+
+wget https://codeload.github.com/jaxbulsara/pyadda/zip/master -O pyadda-master.zip
+unzip pyadda-master.zip
+
+cd pyadda-master
+python3 setup.py install
+python3 channel_read_example.py
+
+
+
+
+
+
+#--- 부팅시 자동 실행
+#---     /etc/rc.local 파일에 실행 명령어 추가
+
+### ------------------------------------------------------------------------------------------------
+###     Windows에 CPP 개발 환경 구성
+###         https://makersweb.net/qt/6258
+### ------------------------------------------------------------------------------------------------
+#--- Visual Studio Community 2017 설정
+#---     "C++을 사용한 Linux 개발" 설치
+
+#--- EClipse cpp 설치
+#---     https://www.eclipse.org/ide/
+
+#--- Raspberry Pi Toolchain 설치
+#---     http://gnutoolchains.com/raspberry/
+#---         raspberry-gcc6.3.0-r3.exe
+#--- raspberry-gcc6.3.0-r3.exe 설치
+#---
+#--- sysroot 동기화
+#---    반드시 최초 1회 실행
+#---    반드시 Raspberry Pi에 새로운 라이브러리를 설치한 경우 실행
+#--- TOOLS/UpdateSysroot.bat
+
+#--- EClipse 환경 설정
+#---     "Help > Install New Software > --All Available Sites--" 메뉴를 선택 한다.
+#---         XXX "Mobile and Device Development" 설치
+#---         C/C++ GCC Cross Compiler Support
+#---         C/C++ Remote Launch
+#---         Remote System Explorer User Actions
 
 ### ================================================================================================
 
