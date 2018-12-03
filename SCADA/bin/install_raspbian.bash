@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_raspbian.bash, Version 0.00.007
+###     프로그램 명     : install_raspbian.bash, Version 0.00.008
 ###     프로그램 설명   : Raspbian을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.11.01 ~ 2018.11.27
+###     작성일          : 2018.11.01 ~ 2018.12.03
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -326,50 +326,88 @@ gpio readall
 mkdir -p /work/download
 cd /work/download
 
-#--- http://www.airspayce.com/mikem/bcm2835/
-#---     http://www.airspayce.com/mikem/bcm2835/bcm2835-1.57.tar.gz
-#---     https://www.waveshare.com/wiki/File:Bcm2835-1.45.tar.gz
-#---     https://www.waveshare.com/wiki/File:Bcm2835-1.39.tar.gz
-wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.57.tar.gz
-gzip -d bcm2835-1.57.tar.gz
-tar xvf bcm2835-1.57.tar
-# tar zxvf bcm2835-1.57.tar
-
-cd bcm2835-1.57
-./configure
-make
-make check
-make install
-
-dir /proc/device-tree/soc/ranges
+# #--- http://www.airspayce.com/mikem/bcm2835/
+# #---     http://www.airspayce.com/mikem/bcm2835/bcm2835-1.57.tar.gz
+# #---     https://www.waveshare.com/wiki/File:Bcm2835-1.45.tar.gz
+# #---     https://www.waveshare.com/wiki/File:Bcm2835-1.39.tar.gz
+# wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.57.tar.gz
+# gzip -d bcm2835-1.57.tar.gz
+# tar xvf bcm2835-1.57.tar
+# # tar zxvf bcm2835-1.57.tar
+# 
+# cd bcm2835-1.57
+# ./configure
+# make
+# make check
+# make install
+# 
+# dir /proc/device-tree/soc/ranges
 
 #--- High-Precision-AD-DA-Board-Code 설치
 #---     https://www.waveshare.com/wiki/File:High-Precision-AD-DA-Board-Code.7z
 #---     interfaces/ADS1256/ 폴더에 업로드
+cd /work/download
+wget  https://www.waveshare.com/w/upload/5/5e/High-Precision-AD-DA-Board-Code.7z
+#--- 압축을 풀어 interfaces/ADS1256/ 폴더에 AD-DA/, ADS1256/, DAC8532/ 폴더를 생성 한다.
+
+#--- SPI Python 모듈 제작 준비
+#---     https://github.com/fabiovix/py-ads1256
+#---     https://github.com/kizniche/pyadda
+cd /work/download
+wget  https://codeload.github.com/jaxbulsara/pyadda/zip/master -O pyadda-master.zip
+unzip pyadda-master.zip
+#--- setup.py, wrapper.h, wrapper.c 파일을 interfaces/ADS1256/ADS1256/ 폴더로 복사 한다.
+
+#--- 테스트 및 모듈 제작
 cd /work/appl/OBCon_RaspberryPi/interfaces/ADS1256/ADS1256
 make
 # gcc ads1256_test.c -o ads1256_test -lbcm2835
 ./ads1256_test
 
-#--- SPI Python 모듈 제작
-#---     https://github.com/fabiovix/py-ads1256
-#---     https://github.com/kizniche/pyadda
-cd /work/download
-
-wget https://codeload.github.com/jaxbulsara/pyadda/zip/master -O pyadda-master.zip
-unzip pyadda-master.zip
-
-cd pyadda-master
+#--- setup.py, wrapper.h, wrapper.c 파일 작성 한다.
 python3 setup.py install
-python3 channel_read_example.py
-
-
-
-
-
+# python3 channel_read_example.py
+python3 ads1256_test.py
 
 #--- 부팅시 자동 실행
 #---     /etc/rc.local 파일에 실행 명령어 추가
+
+### ------------------------------------------------------------------------------------------------
+###     MQTT (Message Queuing Telemetry Transport) 환경 구성
+###     http://mosquitto.org/
+### ------------------------------------------------------------------------------------------------
+apt  install  mosquitto
+
+systemctl  restart  mosquitto.service
+systemctl  enable   mosquitto.service
+
+netstat -tln | grep 1883
+
+
+apt  install  paho-mqtt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### ------------------------------------------------------------------------------------------------
 ###     Windows에 CPP 개발 환경 구성
