@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_raspbian.bash, Version 0.00.008
+###     프로그램 명     : install_iot.bash, Version 0.00.010
 ###     프로그램 설명   : Raspbian을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.11.01 ~ 2018.12.03
+###     작성일          : 2018.11.01 ~ 2018.12.11
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -16,7 +16,7 @@
 ### ------------------------------------------------------------------------------------------------
 ###     실행 환경을 설정 한다.
 ### ------------------------------------------------------------------------------------------------
-SOFTWARE="RaspberryPi"
+SOFTWARE="SCADA"
 
 if [[ "z${HOME_SERVICE}z" == "zz" ]]; then
     export HOME_SERVICE="/service"
@@ -141,7 +141,7 @@ vi  ~/README.md
     pinout
     gpio readall
 
-    cd /work/appl/OBCon_RaspberryPi
+    cd /work/appl/obcon_iot
 
 apt  update
 apt  upgrade
@@ -226,8 +226,8 @@ apt  install  python3 python3-setuptools  python3-pip  python3-virtualenv  pytho
 apt  install  python3-pyqt5*  python3-pyqtgraph
 apt  install  python3-dateutil
 
-mkdir -p /work/appl/OBCon_RaspberryPi
-cd /work/appl/OBCon_RaspberryPi
+mkdir -p /work/appl/obcon_iot
+cd /work/appl/obcon_iot
 
 pip3 install configparser
 
@@ -253,14 +253,14 @@ pip3  install  pyserial
 # apt install arduino
 
 ### ------------------------------------------------------------------------------------------------
-###     OBCon_RaspberryPi 프로그램 로딩 후 설정
+###     obcon_iot 프로그램 로딩 후 설정
 ### ------------------------------------------------------------------------------------------------
-mkdir  -p  /work/appl/OBCon_RaspberryPi
-cd  /work/appl/OBCon_RaspberryPi
+mkdir  -p  /work/appl/obcon_iot
+cd  /work/appl/obcon_iot
 chmod  755 *.bash
 
 crontab -e
-    * * * * * /work/appl/OBCon_RaspberryPi/OBCon_SCADA_Daemon.bash  watchdog
+    * * * * * /work/appl/obcon_iot/OBCon_IoT_Daemon.bash  watchdog
 
 #--- Python을 서비스로 등록
 # vi /etc/systemd/system/obcon_daemon.service
@@ -268,7 +268,7 @@ crontab -e
 #     After=multi-user.target
 #     
 #     [Service]
-#     ExecStart=/usr/bin/python3 /work/appl/OBCon_RaspberryPi/OBCon_SCADA_Daemon.py
+#     ExecStart=/usr/bin/python3 /work/appl/obcon_iot/OBCon_IoT_Daemon.py
 #     
 #     [Install]
 #     WantedBy=default.target
@@ -281,6 +281,9 @@ crontab -e
 # apt  list  --installed
 # pip3  list
 # pip3  freeze
+
+cd /home/pi/Desktop
+ln -s /work/appl/obcon_iot/OBCon_IoT.bash OBCon_IoT.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     pigpio를 설정 한다.
@@ -359,7 +362,7 @@ unzip pyadda-master.zip
 #--- setup.py, wrapper.h, wrapper.c 파일을 interfaces/ADS1256/ADS1256/ 폴더로 복사 한다.
 
 #--- 테스트 및 모듈 제작
-cd /work/appl/OBCon_RaspberryPi/interfaces/ADS1256/ADS1256
+cd /work/appl/obcon_iot/interfaces/ADS1256/ADS1256
 make
 # gcc ads1256_test.c -o ads1256_test -lbcm2835
 ./ads1256_test
@@ -386,10 +389,24 @@ netstat -tln | grep 1883
 
 apt  install  paho-mqtt
 
+### ------------------------------------------------------------------------------------------------
+###     자동 실행 등록
+### ------------------------------------------------------------------------------------------------
+# vi  /etc/rc.local
+#     /usr/bin/sudo /work/appl/obcon_iot/OBCon_IoT_Daemon.bash watchdog
+/bin/cp  -f  /work/appl/obcon_iot/rc.local /etc/rc.local
 
+# /bin/cp  -f  /work/appl/obcon_iot/obcondaemon.service /lib/systemd/system
+# systemctl daemon-reload
+# systemctl enable obcondaemon.service
+# systemctl start  obcondaemon.service
 
+/bin/cp  -f  /work/appl/obcon_iot/OBCon.desktop  /etc/xdg/autostart
 
-
+# /bin/cp  -f  /work/appl/obcon_iot/obcon.service       /lib/systemd/system
+# systemctl daemon-reload
+# systemctl enable obcon.service
+# systemctl start  obcon.service
 
 
 
