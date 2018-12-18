@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_iot.bash, Version 0.00.010
+###     프로그램 명     : install_iot.bash, Version 0.00.011
 ###     프로그램 설명   : Raspbian을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.11.01 ~ 2018.12.11
+###     작성일          : 2018.11.01 ~ 2018.12.18
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -380,6 +380,14 @@ python3 ads1256_test.py
 ###     http://mosquitto.org/
 ### ------------------------------------------------------------------------------------------------
 apt  install  mosquitto
+
+vi  /etc/mosquitto/mosquitto.conf
+    allow_anonymous false
+    password_file /etc/mosquitto/passwd
+
+touch  /etc/mosquitto/passwd
+mosquitto_passwd -b /etc/mosquitto/passwd 아이디 비밀번호     #--- 사용자 추가/수정
+mosquitto_passwd -D /etc/mosquitto/passwd 아이디              #--- 사용자 삭제
 
 systemctl  restart  mosquitto.service
 systemctl  enable   mosquitto.service
