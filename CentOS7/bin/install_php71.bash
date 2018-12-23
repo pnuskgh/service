@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_php71.bash, Version 0.00.005
+###     프로그램 명     : install_php71.bash, Version 0.00.006
 ###     프로그램 설명   : PHP를 설치하고 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.24 ~ 2018.06.08
+###     작성일          : 2017.03.24 ~ 2018.12.19
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -60,10 +60,21 @@ chown -R nginx:nginx /var/opt/remi/php71/lib/php
 
 BASE_PHP71="/etc/opt/remi/php71"
 /usr/bin/cp ${TEMPLATE_DIR}/php.ini ${BASE_PHP71}
+# post_max_size = 20M
+# upload_max_filesize = 20M
+# date.timezone = Asia/Seoul
+# upload_tmp_dir = "/var/lib/php/upload"
+# session.save_path = "/var/lib/php/session"
 /usr/bin/cp ${TEMPLATE_DIR}/10-opcache.ini     ${BASE_PHP71}/php.d
 /usr/bin/cp ${TEMPLATE_DIR}/20-mbstring.ini    ${BASE_PHP71}/php.d
 /usr/bin/cp ${TEMPLATE_DIR}/20-mcrypt.ini      ${BASE_PHP71}/php.d
 /usr/bin/cp ${TEMPLATE_DIR}/www.conf           ${BASE_PHP71}/php-fpm.d
+# user = nginx
+# group = nginx
+# listen.owner = nginx
+# listen.group = nginx
+# listen.mode = 0660
+# security.limit_extensions = .php
 
 #--- PHP 7.1 기동
 chkconfig php71-php-fpm on
@@ -71,8 +82,8 @@ systemctl restart php71-php-fpm.service
 
 ### ------------------------------------------------------------------------------------------------
 ###     설치 정보 확인
-###         PHP 5.4.16 
-###         Zend Engine v2.4.0
+###         PHP 7.1.25
+###         Zend Engine v3.1.0
 ### ------------------------------------------------------------------------------------------------
 php71 -v
 

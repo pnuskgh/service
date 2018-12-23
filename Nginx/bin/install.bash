@@ -56,7 +56,7 @@ firewall-cmd --list-all
 
 ### ------------------------------------------------------------------------------------------------
 ###     설치 정보 확인
-###         nginx/1.10.2
+###         nginx/1.12.2
 ### ------------------------------------------------------------------------------------------------
 nginx -V
 
@@ -66,6 +66,7 @@ nginx -V
 SELINUX_TYPE=`getenforce`
 if [[ "${SELINUX_TYPE}" = "Enforcing" ]]; then
     cd ${DOCUMENT_ROOT}
+    # /usr/share/nginx/html
     # ps -efZ | grep nginx
     # ls -alZ *
     # chcon -R -t httpd_sys_rw_content_t *

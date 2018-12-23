@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_iot.bash, Version 0.00.011
+###     프로그램 명     : install_iot.bash, Version 0.00.013
 ###     프로그램 설명   : Raspbian을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.11.01 ~ 2018.12.18
+###     작성일          : 2018.11.01 ~ 2018.12.23
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -226,6 +226,8 @@ apt  install  python3 python3-setuptools  python3-pip  python3-virtualenv  pytho
 apt  install  python3-pyqt5*  python3-pyqtgraph
 apt  install  python3-dateutil
 
+apt  install  sqlite3
+
 mkdir -p /work/appl/obcon_iot
 cd /work/appl/obcon_iot
 
@@ -372,9 +374,6 @@ python3 setup.py install
 # python3 channel_read_example.py
 python3 ads1256_test.py
 
-#--- 부팅시 자동 실행
-#---     /etc/rc.local 파일에 실행 명령어 추가
-
 ### ------------------------------------------------------------------------------------------------
 ###     MQTT (Message Queuing Telemetry Transport) 환경 구성
 ###     http://mosquitto.org/
@@ -400,8 +399,6 @@ apt  install  paho-mqtt
 ### ------------------------------------------------------------------------------------------------
 ###     자동 실행 등록
 ### ------------------------------------------------------------------------------------------------
-# vi  /etc/rc.local
-#     /usr/bin/sudo /work/appl/obcon_iot/OBCon_IoT_Daemon.bash watchdog
 /bin/cp  -f  /work/appl/obcon_iot/rc.local /etc/rc.local
 
 # /bin/cp  -f  /work/appl/obcon_iot/obcondaemon.service /lib/systemd/system
@@ -416,6 +413,65 @@ apt  install  paho-mqtt
 # systemctl enable obcon.service
 # systemctl start  obcon.service
 
+### ------------------------------------------------------------------------------------------------
+###     절전 : 화면 보호기, Backlight off
+###     -   화면 보호기 default : 10분
+### ------------------------------------------------------------------------------------------------
+#--- 화면 보호기
+#---     https://wiki.archlinux.org/index.php/XScreenSaver
+apt install xscreensaver
+# "시작 > 기본 설정 > 화면보호기" 메뉴에서 설정
+#     표시 모드
+#         모드 : Disable Screen Saver
+
+# "시작 > 기본 설정 > 화면보호기" 메뉴에서 설정
+#     표시 모드
+#         모드 : Blank Screen Only
+#         화면 꺼지는 시간 : 1분
+#         화면 보호기 변경 시간 : 1분
+#     고급 설정
+#         전원 관리 사용 : 선택 않음
+#         Quick Power-off in Blank Only Mode : 선택
+#     vi  /home/pi/.xscreensaver
+
+# vi  /boot/cmdline.txt
+#     consoleblank=300                                        #--- 화면이 꺼지기까지 대기하는 초
+# cat /sys/module/kernel/parameters/consoleblank
+
+# vi  /etc/lightdm/lightdm.conf
+#     #--- -s 0  : Screen Saver timeout : 0
+#     #--- -dpms : Display Power Manager Service 끄기
+#     [SeatDefaults]
+#     # [Seat:*]
+#     xserver-command=X -s 0 -dpms
+
+#--- DPMS (Display Power Management)
+#---     https://wiki.archlinux.org/index.php/Display_Power_Management_Signaling
+apt install xfce4-power-manager
+# "시작 > 기본 설정 > 전원 관리자" 메뉴에서 설정
+
+#--- https://github.com/timothyhollabaugh/pi-touchscreen-timeout
+#---     주의 : 화면 보호기의 기능을 끄세요.
+# cd /work/download
+# git clone https://github.com/timothyhollabaugh/pi-touchscreen-timeout.git
+# cd pi-touchscreen-timeout
+
+cd  /work/appl/obcon_iot/interfaces/Touchscreen
+gcc timeout.c -o timeout
+
+cd  /work/appl/obcon_iot
+/bin/cp -f /work/appl/obcon_iot/rc.local /etc/rc.local
+# /bin/echo 0 > /sys/class/backlight/rpi_backlight/bl_power
+# /usr/bin/nice -n 19 /work/appl/obcon_iot/interfaces/Touchscreen/timeout 60 event0 &
+
+# setterm -powersave off -powerdown 0 -blank 0
+# xset q                                                      #--- 설정 조회
+# # xset dpms force off
+# systemctl status rpi-display-backlight
+# echo 0 > /sys/class/backlight/rpi_backlight/bl_power        #--- On
+# echo 1 > /sys/class/backlight/rpi_backlight/bl_power        #--- Off
+# 
+# cat  /sys/class/backlight/rpi_backlight/bl_power
 
 
 
