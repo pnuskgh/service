@@ -41,11 +41,13 @@ fi
 
 ### ------------------------------------------------------------------------------------------------
 ###     Raspbian 설치
+###         Raspbian Link : 2018.11.13 버전
 ###     Win32 Disk Imager : http://sourceforge.net/projects/win32diskimager/?source=directory
 ###     Raspbian Download : http://www.raspberrypi.org/downloads/
 ### ------------------------------------------------------------------------------------------------
 #--- Win32 Disk Imager 사이트에서 Win32DiskImager-0.9.5-install.exe 파일을 설치 합니다.
 #--- Raspberry Pi 다운로드 사이트에서 Raspbian 파일을 다운로드 합니다.
+#---     2018-11-13-raspbian-stretch.img
 #---     2018-10-09-raspbian-stretch.img      : GUI 모드  (설치)
 #---     2018-10-09-raspbian-stretch-lite.img : Text 모드 (보류)
 #--- Win32 Disk Imager로 Micro SD 카드에 img 파일을 설치 합니다.
@@ -62,6 +64,7 @@ passwd                                  #--- pi/raspberry 사용자의 비밀번
 
 ### ------------------------------------------------------------------------------------------------
 ###     Serial (UART)를 설정 한다.
+###     필요한 경우에만 설정 한다.
 ### ------------------------------------------------------------------------------------------------
 #--- USB to RS232 TTL 시리얼 변환 케이블 연결
 #---     VCC	: 5V (적색)			: 라즈베리파이 앞줄 2번째
@@ -100,8 +103,10 @@ reboot
 vi  ~/.bashrc
     alias dir='ls -alF'
     alias show='cat ~/README.md'
+    alias cdiot='cd /work/appl/obcon_iot'
 
 #--- WiFi 설정
+# cp ${TEMPLATE_DIR}/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 /usr/bin/wpa_passphrase myhome '비밀번호'
 
 vi  /etc/wpa_supplicant/wpa_supplicant.conf
@@ -143,13 +148,16 @@ vi  ~/README.md
 
     cd /work/appl/obcon_iot
 
+    tail -f /work/appl/obcon_iot/logs/OBCon_IoT.log
+    tail -f /work/appl/obcon_iot/logs/OBCon_IoT_Daemon.log
+
 apt  update
 apt  upgrade
-reboot
+# reboot
 
 # apt  install  fonts-unfonts-core  fonts-nanum  fonts-nanum-extra
 apt  install  fonts-nanum  fonts-nanum-coding  fonts-nanum-extra
-reboot 
+# reboot 
 
 #--- 한글 설정 (폰트 포함)
 #---     http://rpie.tistory.com/1
@@ -199,7 +207,7 @@ apt  install  nabi  imhangul-gtk2  imhangul-gtk3  im-config  zenity
 #--- 한글 키보드 : http://kalten.tistory.com/25
 #---     http://blog.naver.com/PostView.nhn?blogId=dowkim10&logNo=120109769191
 apt  install  matchbox-keyboard
-reboot
+# reboot
 # matchbox-keyboard                                         #--- OnScreen Keyboard를 화면에 표시
 # DISPLAY=:0.0 matchbox-keyboard
 
@@ -216,8 +224,8 @@ vi  raspberrypi.bash
 
 chmod  755  raspberrypi.bash
 
-crontab -e
-    * * * * * /work/bin/raspberrypi.bash
+# crontab -e
+#     * * * * * /work/bin/raspberrypi.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     Python3 개발 환경 구성
@@ -229,6 +237,7 @@ apt  install  python3-dateutil
 apt  install  sqlite3
 
 mkdir -p /work/appl/obcon_iot
+chown pi:pi /work/appl/obcon_iot
 cd /work/appl/obcon_iot
 
 pip3 install configparser
@@ -259,10 +268,18 @@ pip3  install  pyserial
 ### ------------------------------------------------------------------------------------------------
 mkdir  -p  /work/appl/obcon_iot
 cd  /work/appl/obcon_iot
-chmod  755 *.bash
 
-crontab -e
-    * * * * * /work/appl/obcon_iot/OBCon_IoT_Daemon.bash  watchdog
+cp config_override.conf_old config_override.conf
+chmod  755  *.bash
+
+cd /work/appl/obcon_iot/interfaces/Touchscreen
+chmod  755  timeout  run-timeout.bash
+
+
+# crontab -e
+#    * * * * * /work/bin/raspberrypi.bash
+#    0 1 * * * /usr/bin/python3 /work/appl/obcon_iot/WatchDog.py
+#    * * * * * /work/appl/obcon_iot/OBCon_IoT_Daemon.bash  watchdog
 
 #--- Python을 서비스로 등록
 # vi /etc/systemd/system/obcon_daemon.service
@@ -384,6 +401,7 @@ vi  /etc/mosquitto/mosquitto.conf
     allow_anonymous false
     password_file /etc/mosquitto/passwd
 
+# cp ${TEMPLATE_DIR}/passwd /etc/mosquitto/passwd
 touch  /etc/mosquitto/passwd
 mosquitto_passwd -b /etc/mosquitto/passwd 아이디 비밀번호     #--- 사용자 추가/수정
 mosquitto_passwd -D /etc/mosquitto/passwd 아이디              #--- 사용자 삭제
@@ -393,25 +411,8 @@ systemctl  enable   mosquitto.service
 
 netstat -tln | grep 1883
 
-
-apt  install  paho-mqtt
-
-### ------------------------------------------------------------------------------------------------
-###     자동 실행 등록
-### ------------------------------------------------------------------------------------------------
-/bin/cp  -f  /work/appl/obcon_iot/rc.local /etc/rc.local
-
-# /bin/cp  -f  /work/appl/obcon_iot/obcondaemon.service /lib/systemd/system
-# systemctl daemon-reload
-# systemctl enable obcondaemon.service
-# systemctl start  obcondaemon.service
-
-/bin/cp  -f  /work/appl/obcon_iot/OBCon.desktop  /etc/xdg/autostart
-
-# /bin/cp  -f  /work/appl/obcon_iot/obcon.service       /lib/systemd/system
-# systemctl daemon-reload
-# systemctl enable obcon.service
-# systemctl start  obcon.service
+pip3 install paho-mqtt
+# apt  install  paho-mqtt
 
 ### ------------------------------------------------------------------------------------------------
 ###     절전 : 화면 보호기, Backlight off
@@ -424,7 +425,7 @@ apt install xscreensaver
 #     표시 모드
 #         모드 : Disable Screen Saver
 
-# "시작 > 기본 설정 > 화면보호기" 메뉴에서 설정
+# nouse "시작 > 기본 설정 > 화면보호기" 메뉴에서 설정
 #     표시 모드
 #         모드 : Blank Screen Only
 #         화면 꺼지는 시간 : 1분
@@ -436,6 +437,7 @@ apt install xscreensaver
 
 # vi  /boot/cmdline.txt
 #     consoleblank=300                                        #--- 화면이 꺼지기까지 대기하는 초
+#     consoleblank=0                                          #--- 화면이 절대 꺼지지 않음
 # cat /sys/module/kernel/parameters/consoleblank
 
 # vi  /etc/lightdm/lightdm.conf
@@ -458,9 +460,12 @@ apt install xfce4-power-manager
 
 cd  /work/appl/obcon_iot/interfaces/Touchscreen
 gcc timeout.c -o timeout
+# dir /dev/input/event*
+# ./timeout 60 event1
+/bin/cp timeout /usr/local/bin/timeout
 
-cd  /work/appl/obcon_iot
-/bin/cp -f /work/appl/obcon_iot/rc.local /etc/rc.local
+# cd  /work/appl/obcon_iot
+# /bin/cp -f /work/appl/obcon_iot/rc.local /etc/rc.local
 # /bin/echo 0 > /sys/class/backlight/rpi_backlight/bl_power
 # /usr/bin/nice -n 19 /work/appl/obcon_iot/interfaces/Touchscreen/timeout 60 event0 &
 
@@ -473,15 +478,49 @@ cd  /work/appl/obcon_iot
 # 
 # cat  /sys/class/backlight/rpi_backlight/bl_power
 
+### ------------------------------------------------------------------------------------------------
+###     자동 실행 등록
+### ------------------------------------------------------------------------------------------------
+reboot 
 
+/bin/cp  -f  /work/appl/obcon_iot/rc.local /etc/rc.local
 
+# /bin/cp  -f  /work/appl/obcon_iot/obcondaemon.service /lib/systemd/system
+# systemctl daemon-reload
+# systemctl enable obcondaemon.service
+# systemctl start  obcondaemon.service
 
+/bin/cp  -f  /work/appl/obcon_iot/OBCon.desktop  /etc/xdg/autostart
 
+# /bin/cp  -f  /work/appl/obcon_iot/obcon.service       /lib/systemd/system
+# systemctl daemon-reload
+# systemctl enable obcon.service
+# systemctl start  obcon.service
 
+crontab -e
+    * * * * * /work/bin/raspberrypi.bash
+    0 1 * * * /usr/bin/python3 /work/appl/obcon_iot/WatchDog.py
+    * * * * * /work/appl/obcon_iot/OBCon_IoT_Daemon.bash  watchdog
 
+### ------------------------------------------------------------------------------------------------
+###     기본 설정
+### ------------------------------------------------------------------------------------------------
+# "시작 > 기본 설정" 메뉴에서 다음을 설정 한다.
+# "Raspberry Pi Configurationi > Interfaces" 메뉴를 선택 한다.
+#     SSH : Enable
+#     VNC : Enable
+#     SPI : Enable
+#     I2C : Enable
+#     Serial Port : Enable
+#     Serial Console : Enable
+#     Remote GPIO : Disable (사용할 경우에는 Enable로 설정)
+# "화면 보호기" 메뉴를 선택 한다.
+#     "표시 모드" 탭에서 "Disable Screen Saver" 모드를 선택 한다.
+# "전원 관리자" 메뉴를 선택 한다.
+#     "시스템" 탭에서 "시스템이 대기 상태에 진입할 때 화면 잠금"을 선택하지 않는다.
+#     "화면" 탭에서 "화면 전력 관리 조정"을 선택하지 않는다.
 
-
-
+# WiFi를 끄고 reboot 한다.
 
 
 
