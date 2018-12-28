@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_iot.bash, Version 0.00.013
+###     프로그램 명     : install_iot.bash, Version 0.00.015
 ###     프로그램 설명   : Raspbian을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.11.01 ~ 2018.12.23
+###     작성일          : 2018.11.01 ~ 2018.12.28
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -63,8 +63,7 @@ systemctl  enable  vncserver-x11-serviced.service
 passwd                                  #--- pi/raspberry 사용자의 비밀번호를 변경 한다. 
 
 ### ------------------------------------------------------------------------------------------------
-###     Serial (UART)를 설정 한다.
-###     필요한 경우에만 설정 한다.
+###     필요한 경우, Serial (UART)를 설정 한다.
 ### ------------------------------------------------------------------------------------------------
 #--- USB to RS232 TTL 시리얼 변환 케이블 연결
 #---     VCC	: 5V (적색)			: 라즈베리파이 앞줄 2번째
@@ -159,6 +158,39 @@ apt  upgrade
 apt  install  fonts-nanum  fonts-nanum-coding  fonts-nanum-extra
 # reboot 
 
+#--- IP 확인
+mkdir  -p  /work/bin
+cd  /work/bin
+vi  raspberrypi.bash
+    #!/usr/bin/env bash
+    IPADDR=`/sbin/ip addr list eth0  | /bin/grep 'inet ' | /usr/bin/awk '{print \$2}'`
+    /usr/bin/curl http://www.obcon.biz/raspberrypi.php?ip=raspbian2_eth0_${IPADDR}
+
+    IPADDR=`/sbin/ip addr list wlan0 | /bin/grep 'inet ' | /usr/bin/awk '{print \$2}'`
+    /usr/bin/curl http://www.obcon.biz/raspberrypi.php?ip=raspbian2_wlan0_${IPADDR}
+
+chmod  755  raspberrypi.bash
+
+# crontab -e
+#     * * * * * /work/bin/raspberrypi.bash
+
+### ------------------------------------------------------------------------------------------------
+###     시간 설정
+### ------------------------------------------------------------------------------------------------
+#--- RTC (Real Time Clock)을 사용할 예정이므로 ntp를 사용하지 않도록 설정 한다.
+timedatectl set-ntp false
+timedatectl status
+# timedatectl set-time "2018-07-24 16:40:00"
+
+# timedatectl list-timezones
+# timedatectl set-timezone "Asia/Seoul"
+
+# systemctl status systemd-timesyncd.service
+# vi  /etc/systemd/timesyncd.conf
+
+### ------------------------------------------------------------------------------------------------
+###     한글 설정과 keyboard 설정
+### ------------------------------------------------------------------------------------------------
 #--- 한글 설정 (폰트 포함)
 #---     http://rpie.tistory.com/1
 #---     사용 가능한 한글 입력기에는 ibus, nabi, fcitx 등의 한글 입력기가 있습니다.
@@ -211,22 +243,6 @@ apt  install  matchbox-keyboard
 # matchbox-keyboard                                         #--- OnScreen Keyboard를 화면에 표시
 # DISPLAY=:0.0 matchbox-keyboard
 
-#--- IP 확인
-mkdir  -p  /work/bin
-cd  /work/bin
-vi  raspberrypi.bash
-    #!/usr/bin/env bash
-    IPADDR=`/sbin/ip addr list eth0  | /bin/grep 'inet ' | /usr/bin/awk '{print \$2}'`
-    /usr/bin/curl http://www.obcon.biz/raspberrypi.php?ip=raspbian2_eth0_${IPADDR}
-
-    IPADDR=`/sbin/ip addr list wlan0 | /bin/grep 'inet ' | /usr/bin/awk '{print \$2}'`
-    /usr/bin/curl http://www.obcon.biz/raspberrypi.php?ip=raspbian2_wlan0_${IPADDR}
-
-chmod  755  raspberrypi.bash
-
-# crontab -e
-#     * * * * * /work/bin/raspberrypi.bash
-
 ### ------------------------------------------------------------------------------------------------
 ###     Python3 개발 환경 구성
 ### ------------------------------------------------------------------------------------------------
@@ -262,6 +278,17 @@ pip3  install  pyserial
 #--- http://thrillfighter.tistory.com/583
 #---     https://www.arduino.cc/en/Main/Software : arduino-1.8.7-windows.exe
 # apt install arduino
+
+#--- Touch Screen 사용 준비
+#---     https://github.com/linusg/rpi_backlight
+#---          /etc/udev/rules.d/backlight-permissions.rules
+pip3  install  rpi_backlight
+
+vi  /etc/udev/rules.d/backlight-permissions.rules
+    SUBSYSTEM=="backlight",RUN+="/bin/chmod 666 /sys/class/backlight/%k/brightness /sys/class/backlight/%k/bl_power"
+
+#--- Input Device 사용 준비
+pip3 install evdev
 
 ### ------------------------------------------------------------------------------------------------
 ###     obcon_iot 프로그램 로딩 후 설정
