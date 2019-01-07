@@ -185,6 +185,7 @@ timedatectl status
 # timedatectl list-timezones
 # timedatectl set-timezone "Asia/Seoul"
 
+systemctl disable systemd-timesyncd.service
 # systemctl status systemd-timesyncd.service
 # vi  /etc/systemd/timesyncd.conf
 

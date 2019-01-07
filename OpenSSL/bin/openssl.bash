@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : openssl.bash, Version 0.00.001
+###     프로그램 명     : openssl.bash, Version 0.00.002
 ###     프로그램 설명   : OpenSSL를 관리 합니다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 1995.02.20 ~ 2018.03.01
+###     작성일          : 1995.02.20 ~ 2019.01.07
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -70,9 +70,14 @@ case ${COMMAND} in
     install)
         # mkdir -p ${HOME_WORK}/upload
         cd ${HOME_WORK}/upload
-        wget http://mirror.centos.org/centos/7/os/x86_64/Packages/openssl-1.0.2k-8.el7.x86_64.rpm
-        wget http://mirror.centos.org/centos/7/os/x86_64/Packages/openssl-libs-1.0.2k-8.el7.x86_64.rpm
-        rpm -Uvh openssl-1.0.2k-8.el7.x86_64.rpm openssl-libs-1.0.2k-8.el7.x86_64.rpm
+        # wget http://mirror.centos.org/centos/7/os/x86_64/Packages/openssl-1.0.2k-8.el7.x86_64.rpm
+        # wget http://mirror.centos.org/centos/7/os/x86_64/Packages/openssl-libs-1.0.2k-8.el7.x86_64.rpm
+        # rpm -Uvh openssl-1.0.2k-8.el7.x86_64.rpm openssl-libs-1.0.2k-8.el7.x86_64.rpm
+
+        wget http://mirror.centos.org/centos/7/os/x86_64/Packages/openssl-1.0.2k-16.el7.x86_64.rpm
+        wget http://mirror.centos.org/centos/7/os/x86_64/Packages/openssl-libs-1.0.2k-16.el7.x86_64.rpm
+        rpm -Uvh openssl-*.rpm
+        openssl version
         ;;
     status)
         funcStatus

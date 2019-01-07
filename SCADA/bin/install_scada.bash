@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_scada.bash, Version 0.00.001
-###     프로그램 설명   : VirtualBox에 SCADA 환경을 구성 한다.
+###     프로그램 명     : install_scada.bash, Version 0.00.002
+###     프로그램 설명   : KT UCloud Biz와 VirtualBox에 SCADA 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.12.19 ~ 2018.12.19
+###     작성일          : 2018.12.19 ~ 2019.01.07
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
 ###     수정 내용       :
 ### --- [Copyright] --------------------------------------------------------------------------------
-###     Copyright (c) 1995~2018 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     Copyright (c) 1995~2019 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
 
@@ -33,11 +33,36 @@ else
 fi
 
 ### ------------------------------------------------------------------------------------------------
+###     설치 환경을 구성 한다.
+### ------------------------------------------------------------------------------------------------
+#--- KT UCloud Biz (https://ucloudbiz.kt.com/console/main)
+#---     "ucloud server > Server 네트워킹" 메뉴에서 IP를 추가로 신청 한다.
+#---     "ucloud server > 클라우드 서버리스트" 메뉴에서 가상 서버를 신청 한다.
+#---         Centos 7.2 64bit
+#---         1 vCore / 1 GB Memory / 20 GB Disk (22,500원/월)
+#---         Port : 22/tcp, 80/tcp, 3306/tcp, 502/tcp
+#---     211.252.87.34      scada.obcon.biz
+
+#--- VirtualBox 5.2.22
+#---     가상 서버
+#---         OBCon_SCADA, Linux, Red Hat (64-bit)
+#---         2 vCore / 2 GB Memory / 100 GB Disk
+#---     CentOS-7-x86_64-DVD-1804.iso
+#---     192.68.56.171      scada.obcon.co.kr
+
+#--- 호스팅케이알(www.hosting.kr)에서 hostname을 등록 한다.
+#---     "도메인 > 부가서비스 > 네임서버 설정 관리" 메뉴를 선택 한다.
+#---     도메인을 선택한 후 "조회/변경 신청" 버튼을 선택 한다.
+#---     
+#---     
+#---     "도메인 > 정보 변경 > 호스트 관리" 메뉴를 선택 한다.
+#---     211.252.87.34      scada.obcon.biz
+
+### ------------------------------------------------------------------------------------------------
 ###     CentOS 7 64 bits를 설치 한다.
 ### ------------------------------------------------------------------------------------------------
-#--- root 사용자 생성
-#--- centos 사용자 생성
 /service/CentOS7/bin/init.bash
+
 /service/CentOS7/bin/init_before.bash
 
 ### ------------------------------------------------------------------------------------------------
@@ -46,20 +71,13 @@ fi
 /service/MariaDB/bin/install.bash
 
 ### ------------------------------------------------------------------------------------------------
-###     PHP 7.1을 설치 한다.
+###     Python 3.4을 설치 한다.
 ### ------------------------------------------------------------------------------------------------
-/service/CentOS7/bin/install_php71.bash
+#--- KT UCloud Biz에서는 OpenSSL 1.0.2k를 설치 한다.
+/service/OpenSSL/bin/openssl.bash
 
-### ------------------------------------------------------------------------------------------------
-###     Nginx를 설치 한다.
-### ------------------------------------------------------------------------------------------------
-/service/Nginx/bin/install.bash
-
-### ------------------------------------------------------------------------------------------------
-###     SuiteCRM을 설치 한다.
-### ------------------------------------------------------------------------------------------------
-ppp
-/service/SuiteCRM/bin/install.bash
+# yum -y install python34 python34-*
+yum -y install python34
 
 ### ------------------------------------------------------------------------------------------------
 ###     Node.js를 설치 한다.
@@ -70,22 +88,23 @@ ppp
 ###     OBCon_SCADA를 구성 한다.
 ### ------------------------------------------------------------------------------------------------
 #--- /work/appl/obcon_scada/ 폴더 사용
-cd   /work/install
-wget  https://codeload.github.com/IoTKETI/Mobius/zip/master  -O  Mobius-master.zip
-unzip Mobius-master.zip
-mv   Mobius-master  /work/appl/obcon_scada
+# cd   /work/install
+# wget  https://codeload.github.com/IoTKETI/Mobius/zip/master  -O  Mobius-master.zip
+# unzip Mobius-master.zip
+# mv   Mobius-master  /work/appl/obcon_scada
 
+mkdir -p /work/appl/obcon_scada
+chown centos:centos /work/appl/obcon_scada
 cd  /work/appl/obcon_scada
-mkdir  -p  modbus/request  modbus/response  modbus/handler
-mkdir  -p  custom/modbus/request  custom/modbus/response  custom/modbus/handler
 
-mv  package-lock.json package-lock.json_org
-mv  conf.json  conf.json_org
-
-
+#--- FTP로 obcon_scada 파일을 업로드 합니다.
 vi  package.json
 
 npm  install
+
+### ------------------------------------------------------------------------------------------------
+###     Notebook에서 Database 접속 설정을 한다.
+### ------------------------------------------------------------------------------------------------
 
 ### ================================================================================================
 

@@ -76,6 +76,14 @@ firewall-cmd --list-all
 ### ------------------------------------------------------------------------------------------------
 ###     Network로 Database 접속 허용
 ### ------------------------------------------------------------------------------------------------
+#--- SELinux 설정 : Enforcing, Permissive, Disable
+getenforce 
+sestatus
+
+setenforce 0
+vim /etc/sysconfig/selinux
+    SELINUX=disabled
+
 # chcon -R -t httpd_sys_content_rw_t /var/www/html
 setsebool httpd_can_network_connect_db=on
 setsebool httpd_can_network_connect=on
