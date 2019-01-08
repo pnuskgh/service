@@ -85,6 +85,19 @@ yum -y install python34
 /service/Nodejs/bin/nodejs.bash
 
 ### ------------------------------------------------------------------------------------------------
+###     방화벽 설정
+###     https://www.lesstif.com/pages/viewpage.action?pageId=22053128
+###     Conf : /usr/lib/firewalld/
+### ------------------------------------------------------------------------------------------------
+systemctl start firewalld.service
+systemctl enable firewalld.service
+
+firewall-cmd --permanent --zone=public --add-port=80/tcp
+firewall-cmd --permanent --zone=public --add-port=502/tcp
+firewall-cmd --reload
+firewall-cmd --list-all
+
+### ------------------------------------------------------------------------------------------------
 ###     OBCon_SCADA를 구성 한다.
 ### ------------------------------------------------------------------------------------------------
 #--- /work/appl/obcon_scada/ 폴더 사용
@@ -105,6 +118,27 @@ npm  install
 ### ------------------------------------------------------------------------------------------------
 ###     Notebook에서 Database 접속 설정을 한다.
 ### ------------------------------------------------------------------------------------------------
+#--- Database 생성
+ROOTPASSWORD='ppp'
+DATABASE='scadadb'
+USER='scada'
+PASSWORD='ppp'
+
+mysql -uroot -p${ROOTPASSWORD} mysql <<+
+create database ${DATABASE};
+show databases;
+
+grant all privileges on ${DATABASE}.* to ${USER}@localhost identified by '${PASSWORD}';
+grant all privileges on ${DATABASE}.* to ${USER}@'%' identified by '${PASSWORD}';
+flush privileges;
+
+select Host, User, Password from user order by User, Host;
+select Host, Db, User from db order by User, Db, Host;
+exit
+
++
+
+#--- Windows의 DBeaver 5.3.2에서 접속 설정
 
 ### ================================================================================================
 
