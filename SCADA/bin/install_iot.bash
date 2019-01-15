@@ -331,6 +331,7 @@ chmod  755  timeout  run-timeout.bash
 
 cd /home/pi/Desktop
 ln -s /work/appl/obcon_iot/OBCon_IoT.bash OBCon_IoT.bash
+ln -s /work/appl/obcon_iot/OBCon_IoT_No.bash OBCon_IoT_No.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     pigpio를 설정 한다.

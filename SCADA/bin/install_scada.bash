@@ -64,6 +64,7 @@ fi
 /service/CentOS7/bin/init.bash
 
 /service/CentOS7/bin/init_before.bash
+/service/Chrony/bin/install.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     MariaDB를 설치 한다.
