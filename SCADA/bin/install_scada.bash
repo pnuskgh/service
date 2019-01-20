@@ -119,9 +119,29 @@ npm  install
 ### ------------------------------------------------------------------------------------------------
 ###     Notebook에서 Database 접속 설정을 한다.
 ### ------------------------------------------------------------------------------------------------
-#--- Database 생성
+#--- scadadb Database 생성
 ROOTPASSWORD='ppp'
 DATABASE='scadadb'
+USER='scada'
+PASSWORD='ppp'
+
+mysql -uroot -p${ROOTPASSWORD} mysql <<+
+create database ${DATABASE};
+show databases;
+
+grant all privileges on ${DATABASE}.* to ${USER}@localhost identified by '${PASSWORD}';
+grant all privileges on ${DATABASE}.* to ${USER}@'%' identified by '${PASSWORD}';
+flush privileges;
+
+select Host, User, Password from user order by User, Host;
+select Host, Db, User from db order by User, Db, Host;
+exit
+
++
+
+#--- scadadatadb Database 생성
+ROOTPASSWORD='ppp'
+DATABASE='scadadatadb'
 USER='scada'
 PASSWORD='ppp'
 
