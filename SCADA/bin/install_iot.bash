@@ -300,7 +300,7 @@ cd  /work/appl/obcon_iot
 cp config_override.conf_old config_override.conf
 chmod  755  *.bash
 
-cd /work/appl/obcon_iot/interfaces/Touchscreen
+cd /work/appl/obcon_iot/interfaces/TouchScreen
 chmod  755  timeout  run-timeout.bash
 
 
@@ -487,7 +487,7 @@ apt install xfce4-power-manager
 # git clone https://github.com/timothyhollabaugh/pi-touchscreen-timeout.git
 # cd pi-touchscreen-timeout
 
-cd  /work/appl/obcon_iot/interfaces/Touchscreen
+cd  /work/appl/obcon_iot/interfaces/TouchScreen
 gcc timeout.c -o timeout
 # dir /dev/input/event*
 # ./timeout 60 event1
