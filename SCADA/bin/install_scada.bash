@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_scada.bash, Version 0.00.002
+###     프로그램 명     : install_scada.bash, Version 0.00.005
 ###     프로그램 설명   : KT UCloud Biz와 VirtualBox에 SCADA 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
 ###     작성일          : 2018.12.19 ~ 2019.01.07
@@ -84,6 +84,9 @@ yum -y install python34
 ###     Node.js를 설치 한다.
 ### ------------------------------------------------------------------------------------------------
 /service/Nodejs/bin/nodejs.bash
+# npm  install  ~  --save
+# npm  install  -g ~  
+# npm  install                                              #--- package.json를 기준으로 설치
 
 ### ------------------------------------------------------------------------------------------------
 ###     방화벽 설정
