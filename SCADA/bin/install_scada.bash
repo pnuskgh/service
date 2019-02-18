@@ -36,6 +36,7 @@ fi
 ###     설치 환경을 구성 한다.
 ### ------------------------------------------------------------------------------------------------
 #--- KT UCloud Biz (https://ucloudbiz.kt.com/console/main)
+#---     위치 : KOR-Seoul M2
 #---     "ucloud server > Server 네트워킹" 메뉴에서 IP를 추가로 신청 한다.
 #---     "ucloud server > 클라우드 서버리스트" 메뉴에서 가상 서버를 신청 한다.
 #---         Centos 7.2 64bit
@@ -61,12 +62,16 @@ fi
 ### ------------------------------------------------------------------------------------------------
 ###     CentOS 7 64 bits를 설치 한다.
 ### ------------------------------------------------------------------------------------------------
+passwd
+passwd centos
+vi  ~centos/.ssh/authorized_keys
+
 /service/CentOS7/bin/init.bash
 
 /service/CentOS7/bin/init_before.bash
 /service/Chrony/bin/install.bash
 
-/service/Mosquitto/bin/install.bash                         //--- Process간 통신에 사용
+# /service/Mosquitto/bin/install.bash                         //--- Process간 통신에 사용
 
 # /service/Redis/bin/install.bash                           //--- Global Cache로 사용
 
