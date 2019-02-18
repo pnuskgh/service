@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_scada.bash, Version 0.00.006
+###     프로그램 명     : install_scada.bash, Version 0.00.007
 ###     프로그램 설명   : KT UCloud Biz와 VirtualBox에 SCADA 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2018.12.19 ~ 2019.02.01
+###     작성일          : 2018.12.19 ~ 2019.02.05
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -66,7 +66,9 @@ fi
 /service/CentOS7/bin/init_before.bash
 /service/Chrony/bin/install.bash
 
-# /service/Redis/bin/install.bash
+/service/Mosquitto/bin/install.bash                         //--- Process간 통신에 사용
+
+# /service/Redis/bin/install.bash                           //--- Global Cache로 사용
 
 ### ------------------------------------------------------------------------------------------------
 ###     MariaDB를 설치 한다.
