@@ -45,6 +45,7 @@ fi
 ###     Win32 Disk Imager : http://sourceforge.net/projects/win32diskimager/?source=directory
 ###     Raspbian Download : http://www.raspberrypi.org/downloads/
 ### ------------------------------------------------------------------------------------------------
+#--- SD Card Formatter 프로그램을 실행하여 디스크를 포맷 한다.
 #--- Win32 Disk Imager 사이트에서 Win32DiskImager-0.9.5-install.exe 파일을 설치 합니다.
 #--- Raspberry Pi 다운로드 사이트에서 Raspbian 파일을 다운로드 합니다.
 #---     2018-11-13-raspbian-stretch.img
@@ -61,6 +62,12 @@ systemctl  start   vncserver-x11-serviced.service
 systemctl  enable  vncserver-x11-serviced.service
 
 passwd                                  #--- pi/raspberry 사용자의 비밀번호를 변경 한다. 
+
+#--- root 폴더 확장
+rootfs-expand
+
+raspi-config --expand-rootfs
+reboot
 
 ### ------------------------------------------------------------------------------------------------
 ###     필요한 경우, Serial (UART)를 설정 한다.
@@ -304,11 +311,6 @@ cd /work/appl/obcon_iot/interfaces/TouchScreen
 chmod  755  timeout  run-timeout.bash
 
 
-# crontab -e
-#    * * * * * /work/bin/raspberrypi.bash
-#    0 1 * * * /usr/bin/python3 /work/appl/obcon_iot/WatchDog.py
-#    * * * * * /work/appl/obcon_iot/OBCon_IoT_Daemon.bash  watchdog
-
 #--- Python을 서비스로 등록
 # vi /etc/systemd/system/obcon_daemon.service
 #     [Unit]
@@ -450,19 +452,6 @@ pip3 install paho-mqtt
 #--- 화면 보호기
 #---     https://wiki.archlinux.org/index.php/XScreenSaver
 apt install xscreensaver
-# "시작 > 기본 설정 > 화면보호기" 메뉴에서 설정
-#     표시 모드
-#         모드 : Disable Screen Saver
-
-# nouse "시작 > 기본 설정 > 화면보호기" 메뉴에서 설정
-#     표시 모드
-#         모드 : Blank Screen Only
-#         화면 꺼지는 시간 : 1분
-#         화면 보호기 변경 시간 : 1분
-#     고급 설정
-#         전원 관리 사용 : 선택 않음
-#         Quick Power-off in Blank Only Mode : 선택
-#     vi  /home/pi/.xscreensaver
 
 # vi  /boot/cmdline.txt
 #     consoleblank=300                                        #--- 화면이 꺼지기까지 대기하는 초
@@ -479,7 +468,6 @@ apt install xscreensaver
 #--- DPMS (Display Power Management)
 #---     https://wiki.archlinux.org/index.php/Display_Power_Management_Signaling
 apt install xfce4-power-manager
-# "시작 > 기본 설정 > 전원 관리자" 메뉴에서 설정
 
 #--- https://github.com/timothyhollabaugh/pi-touchscreen-timeout
 #---     주의 : 화면 보호기의 기능을 끄세요.
