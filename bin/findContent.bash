@@ -68,9 +68,9 @@ fi
 ###     Main process
 ### ------------------------------------------------------------------------------------------------
 if [[ "${EXT}" = "" ]]; then
-    /usr/bin/find ${CONTENT_DIR} -name "*" -exec /bin/grep ${OPTION} "${CONTENT}" {} \; 2> /devnull
+    /usr/bin/find ${CONTENT_DIR} -name "*" -exec /bin/grep ${OPTION} "${CONTENT}" {} \; 2> /dev/null
 else
-    /usr/bin/find ${CONTENT_DIR} -name "*.${EXT}" -exec /bin/grep ${OPTION} "${CONTENT}" {} \; 2> /devnull
+    /usr/bin/find ${CONTENT_DIR} -name "*.${EXT}" -exec /bin/grep ${OPTION} "${CONTENT}" {} \; 2> /dev/null
 fi
 exit 0
 
