@@ -74,5 +74,6 @@ git pull
 * https://github.com/denysdovhan/bash-handbook/blob/master/translations/ko-KR/README.md
 
 # Github Page
-* http://pnuskgh.github.io/
+* https://pnuskgh.github.io/service/
+* https://pnuskgh.github.io/ : pnuskgh.github.io repository가 사용
 
