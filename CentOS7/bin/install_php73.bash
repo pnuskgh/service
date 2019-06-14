@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install_php71.bash, Version 0.00.006
+###     프로그램 명     : install_php73.bash, Version 0.00.007
 ###     프로그램 설명   : PHP를 설치하고 환경을 구성 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.03.24 ~ 2018.12.19
+###     작성일          : 2017.03.24 ~ 2019.06.14
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
 ###     수정 내용       :
 ### --- [Copyright] --------------------------------------------------------------------------------
-###     Copyright (c) 1995~2018 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     Copyright (c) 1995~2019 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
 
@@ -38,37 +38,43 @@ fi
 /bin/yum -y install wget
 
 #--- Remi repository 설치
-cd /work/install
-/bin/wget -q http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-/bin/rpm -Uvh remi-release-7.rpm
-/bin/yum repolist
+# cd /work/install
+# /bin/wget -q http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+# /bin/rpm -Uvh remi-release-7.rpm
+/bin/yum  install  http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+/bin/yum  install  yum-utils
+/bin/yum  repolist
 
-#--- PHP 7.1 설치
-/bin/yum -y install php71 php71-php php71-php-cli php71-php-common php71-php-fpm php71-php-gd php71-php-imap php71-php-json php71-php-mbstring php71-php-mysqlnd php71-php-opcache php71-php-pdo php71-php-pecl-crypto php71-php-mcrypt php71-php-pecl-zip php71-php-process php71-php-soap php71-php-xml php71-php-xmlrpc php71-runtime
+/bin/yum-config-manager --disable remi-php54
+/bin/yum-config-manager --enable remi-php73
+
+#--- PHP 7.3 설치
+/bin/yum -y install php73 php73-php php73-php-cli php73-php-common php73-php-fpm php73-php-gd php73-php-imap php73-php-json php73-php-mbstring php73-php-mysqlnd php73-php-opcache php73-php-pdo php73-php-pecl-crypto php73-php-mcrypt php73-php-pecl-zip php73-php-process php73-php-soap php73-php-xml php73-php-xmlrpc php73-runtime
 
 #--- Cache 설치
-/bin/yum -y install php71-php-pecl-apcu php71-php-pecl-apcu-devel
-# /bin/yum -y install php71-pecl-memcache php71-pecl-memcached
-# /bin/yum -y install php71-pecl-redis
+#---    apcu가 설치 오류가 나서 사용하지 않는다.
+# /bin/yum -y install php73-php-pecl-apcu php73-php-pecl-apcu-devel
+# /bin/yum -y install php73-pecl-memcache php73-pecl-memcached
+# /bin/yum -y install php73-pecl-redis
 
 #--- 환경 설정
 /bin/yum -y install nginx nginx-*
 mkdir -p /var/lib/php/session
 mkdir -p /var/lib/php/upload
 chown -R nginx:nginx /var/lib/php
-chown -R nginx:nginx /var/opt/remi/php71/lib/php
+chown -R nginx:nginx /var/opt/remi/php73/lib/php
 
-BASE_PHP71="/etc/opt/remi/php71"
-/usr/bin/cp ${TEMPLATE_DIR}/php.ini ${BASE_PHP71}
+BASE_PHP73="/etc/opt/remi/php73"
+/usr/bin/cp ${TEMPLATE_DIR}/php.ini ${BASE_PHP73}
 # post_max_size = 20M
 # upload_max_filesize = 20M
 # date.timezone = Asia/Seoul
 # upload_tmp_dir = "/var/lib/php/upload"
 # session.save_path = "/var/lib/php/session"
-/usr/bin/cp ${TEMPLATE_DIR}/10-opcache.ini     ${BASE_PHP71}/php.d
-/usr/bin/cp ${TEMPLATE_DIR}/20-mbstring.ini    ${BASE_PHP71}/php.d
-/usr/bin/cp ${TEMPLATE_DIR}/20-mcrypt.ini      ${BASE_PHP71}/php.d
-/usr/bin/cp ${TEMPLATE_DIR}/www.conf           ${BASE_PHP71}/php-fpm.d
+/usr/bin/cp ${TEMPLATE_DIR}/php73_10-opcache.ini     ${BASE_PHP73}/php.d
+/usr/bin/cp ${TEMPLATE_DIR}/20-mbstring.ini    ${BASE_PHP73}/php.d
+/usr/bin/cp ${TEMPLATE_DIR}/20-mcrypt.ini      ${BASE_PHP73}/php.d
+/usr/bin/cp ${TEMPLATE_DIR}/www.conf           ${BASE_PHP73}/php-fpm.d
 # user = nginx
 # group = nginx
 # listen.owner = nginx
@@ -76,16 +82,16 @@ BASE_PHP71="/etc/opt/remi/php71"
 # listen.mode = 0660
 # security.limit_extensions = .php
 
-#--- PHP 7.1 기동
-chkconfig php71-php-fpm on
-systemctl restart php71-php-fpm.service
+#--- PHP 7.3 기동
+chkconfig php73-php-fpm on
+systemctl restart php73-php-fpm.service
 
 ### ------------------------------------------------------------------------------------------------
 ###     설치 정보 확인
-###         PHP 7.1.25
-###         Zend Engine v3.1.0
+###         PHP 7.3.6
+###         Zend Engine v3.3.6
 ### ------------------------------------------------------------------------------------------------
-php71 -v
+php73 -v
 
 ### ================================================================================================
 

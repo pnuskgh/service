@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : install.bash, Version 0.00.004
+###     프로그램 명     : install.bash, Version 0.00.005
 ###     프로그램 설명   : SuiteCRM을 설치 한다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 2017.09.14 ~ 2018.09.10
+###     작성일          : 2017.09.14 ~ 2019.06.14
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
 ###     수정 내용       :
 ### --- [Copyright] --------------------------------------------------------------------------------
-###     Copyright (c) 1995~2017 pnuskgh, 오픈소스 비즈니스 컨설팅
+###     Copyright (c) 1995~2019 pnuskgh, 오픈소스 비즈니스 컨설팅
 ###     All rights reserved.
 ### ================================================================================================
 
@@ -25,12 +25,12 @@ source ${WORKING_DIR}/bin/config.bash
 
 ### ------------------------------------------------------------------------------------------------
 ###     사전 설치
-###     PHP 7.1 설치
+###     PHP 7.3 설치
 ###     Nginx 설치
 ###     MariaDB 설치
 ###     SuiteCRM 지원 플랫폼 : https://docs.suitecrm.com/admin/compatibility-matrix/
 ### ------------------------------------------------------------------------------------------------
-/service/CentOS7/bin/install_php71.bash
+/service/CentOS7/bin/install_php73.bash
 /service/Nginx/bin/install.bash
 /service/MariaDB/bin/install.bash
 
@@ -69,6 +69,10 @@ suitecrm_ready("SuiteCRM-7.10.6", "suitecrm710")
 
 cd /usr/share/nginx/html
 ls -alF
+
+crontab -e
+# #--- 분 (0-59) 시 (0-23) 일 (1-31) 월 (1-12) 요일 (0. 일요일, 6. 토요일) 명령어
+# */5 * * * * su nginx -s /bin/bash -c "cd /usr/share/nginx/html/suitecrm && /bin/php71 -f cron.php 2>&1"
 
 # crontab -e -u nginx
 #     * * * * * cd /usr/share/nginx/html/suitecrm; php -f cron.php > /dev/null 2>&1 
