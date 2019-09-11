@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 ### ================================================================================================
-###     프로그램 명     : show.bash, Version 0.00.007
+###     프로그램 명     : show.bash, Version 0.00.008
 ###     프로그램 설명   : 사용자에게 여러가지 정보를 제공 합니다.
 ###     작성자          : 산사랑 (pnuskgh@gmail.com, www.jopenbusiness.com)
-###     작성일          : 1995.02.20 ~ 2018.02.28
+###     작성일          : 1995.02.20 ~ 2019.09.02
 ### ----[History 관리]------------------------------------------------------------------------------
 ###     수정자          :
 ###     수정일          :
@@ -22,32 +22,22 @@ fi
 
 source ${HOME_SERVICE}/bin/config.bash > /dev/null 2>&1
 
+export HOME_work="/work"
+FILE_README="${HOME}/README.md"
+FILE_SOFTWARE="${HOME_work}/conf/software.md"
+
 ### ------------------------------------------------------------------------------------------------
 ###     사용법을 표시 합니다.
 ### ------------------------------------------------------------------------------------------------
 funcUsing() {
     echo "Using : show.bash [COMMAND]"
-    echo "        COMMAND              : help, info, status, ..."
+    echo "        COMMAND"
+    echo "            help             : 도움말 표시"
+    echo "            info             : 기본 정보 표시"
+    echo "            server           : Server 정보 표시"
+    echo "            software         : Software 정보 표시"
     echo " "
     exit 2
-}
-
-### ------------------------------------------------------------------------------------------------
-###     Show 명령어를 실행 합니다.
-### ------------------------------------------------------------------------------------------------
-funcRunCmd() {
-    local COMMAND
-
-    COMMAND=$1
-    CMD_FILE=${HOME_WORK}/bin/show_${COMMAND}.bash
-    if [[ -f ${CMD_FILE} ]]; then
-        exec bash ${CMD_FILE}
-    else
-        CMD_FILE=${HOME_SERVICE}/bin/show_${COMMAND}.bash
-        if [[ -f ${CMD_FILE} ]]; then
-            source ${CMD_FILE}
-        fi
-    fi
 }
 
 ### ------------------------------------------------------------------------------------------------
@@ -55,34 +45,27 @@ funcRunCmd() {
 ### ------------------------------------------------------------------------------------------------
 if [[ $# == 1 ]]; then
     COMMAND=$1
-    OPTIONS="null"
-elif [[ $# == 2 ]]; then
-    COMMAND=$1
-    OPTIONS=$2
 else
-    COMMAND="default"
-    OPTIONS="null"
+    COMMAND='default'
     # funcUsing
 fi
 
-# while getopts "d:e:lh" flag; do
-#     case $flag in
-#         d)      CONTENT_DIR=$OPTARG         ;;
-#         e)  EXT=$OPTARG                 ;;
-#         l)  OPTION="-l"                 ;;
-#         h)  funcUsing                   ;;
-#         : | ? | *)  funcUsing           ;;
-#     esac
-# done
-# shift $(($OPTIND - 1))
-# 
-# if [[ 0 < $# ]]; then
-#     CONTENT=$1
-# fi
-# 
-# if [[ "$CONTENT" = "" ]]; then
-#         funcUsing
-# fi
+### ------------------------------------------------------------------------------------------------
+###     Server 정보를 표시 한다.
+### ------------------------------------------------------------------------------------------------
+funcServer() {
+    echo 'Server information'
+    echo '    CentOS Ver.    :' `cat /etc/*-release | grep release | uniq`, `uname -p`
+    echo '    CPU 개수       :' `cat /proc/cpuinfo | grep processor | wc -l` CPU
+    echo '    Memory (MB)    :' `free -m | grep Mem | awk '{print $2}'` MB
+}
+
+### ------------------------------------------------------------------------------------------------
+###     Software 정보를 표시 한다.
+### ------------------------------------------------------------------------------------------------
+funcSoftware() {
+    cat ${FILE_SOFTWARE}
+}
 
 ### ------------------------------------------------------------------------------------------------
 ###     Main process
@@ -92,22 +75,27 @@ case ${COMMAND} in
         funcUsing
         ;;
     info)
-        cat ~/README.md
+        clear
+        cat ${FILE_README}
         ;;
     default)
         clear
         if [[ -f README.md ]]; then
             cat README.md
         else
-            cat ~/README.md
+            cat ${FILE_README}
         fi
         ;;
-    status)
-        ls -alF ${WORK_HOME}/bin/show_*.bash > /dev/null 2>&1
-        ls -alF ${SERVICE_HOME}/bin/show_*.bash > /dev/null 2>&1
+    server)
+        clear
+        funcServer
+        ;;
+    software)
+        clear
+        funcSoftware
         ;;
     *)
-        funcRunCmd ${COMMAND}
+        funcUsing
         ;;
 esac
 echo " "
